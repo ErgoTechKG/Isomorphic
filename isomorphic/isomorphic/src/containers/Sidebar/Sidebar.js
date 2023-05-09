@@ -1,0 +1,160 @@
+import React from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Layout } from 'antd';
+import options from './options';
+import Scrollbars from '@iso/components/utility/customScrollBar';
+import Menu from '@iso/components/uielements/menu';
+import IntlMessages from '@iso/components/utility/intlMessages';
+import appActions from '@iso/redux/app/actions';
+import Logo from '@iso/components/utility/logo';
+import SidebarWrapper from './Sidebar.styles';
+const { Sider } = Layout;
+
+const { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed } =
+  appActions;
+
+const stripTrailingSlash = (str) => {
+  if (str.substr(-1) === '/') {
+    return str.substr(0, str.length - 1);
+  }
+  return str;
+};
+
+export default function Sidebar() {
+  let match = useRouteMatch();
+  const url = stripTrailingSlash(match.url);
+
+  const dispatch = useDispatch();
+  const { view, openKeys, collapsed, openDrawer, current, height } =
+    useSelector((state) => state.App);
+  const customizedTheme = useSelector(
+    (state) => state.ThemeSwitcher.sidebarTheme
+  );
+
+  function handleClick(e) {
+    dispatch(changeCurrent([e.key]));
+    if (view === 'MobileView') {
+      setTimeout(() => {
+        dispatch(toggleCollapsed());
+        // dispatch(toggleOpenDrawer());
+      }, 100);
+
+      // clearTimeout(timer);
+    }
+  }
+  function onOpenChange(newOpenKeys) {
+    const latestOpenKey = newOpenKeys.find(
+      (key) => !(openKeys.indexOf(key) > -1)
+    );
+    const latestCloseKey = openKeys.find(
+      (key) => !(newOpenKeys.indexOf(key) > -1)
+    );
+    let nextOpenKeys = [];
+    if (latestOpenKey) {
+      nextOpenKeys = getAncestorKeys(latestOpenKey).concat(latestOpenKey);
+    }
+    if (latestCloseKey) {
+      nextOpenKeys = getAncestorKeys(latestCloseKey);
+    }
+    dispatch(changeOpenKeys(nextOpenKeys));
+  }
+  const getAncestorKeys = (key) => {
+    const map = {
+      sub3: ['sub2'],
+    };
+    return map[key] || [];
+  };
+
+  const isCollapsed = collapsed && !openDrawer;
+  const mode = isCollapsed === true ? 'vertical' : 'inline';
+  const onMouseEnter = (event) => {
+    if (collapsed && openDrawer === false) {
+      dispatch(toggleOpenDrawer());
+    }
+    return;
+  };
+  const onMouseLeave = () => {
+    if (collapsed && openDrawer === true) {
+      dispatch(toggleOpenDrawer());
+    }
+    return;
+  };
+  const styling = {
+    backgroundColor: customizedTheme.backgroundColor,
+  };
+  const submenuColor = {
+    color: customizedTheme.textColor,
+  };
+
+  const sidebarItems = options.map(({ key, label, leftIcon, children }) => {
+    if (children) {
+      return {
+        key,
+        label: (
+          <span className="isoMenuHolder" style={submenuColor}>
+            <i className={leftIcon} />
+            <span className="nav-text">
+              <IntlMessages id={label} />
+            </span>
+          </span>
+        ),
+        children: children.map((child) => {
+          const linkTo = child.withoutDashboard
+            ? `/${child.key}`
+            : `${url}/${child.key}`;
+          return {
+            key: child.key,
+            label: (
+              <Link style={submenuColor} to={linkTo}>
+                <IntlMessages id={child.label} />
+              </Link>
+            ),
+          };
+        }),
+      };
+    }
+    return {
+      key,
+      label: (
+        <Link to={`${url}/${key}`}>
+          <span className="isoMenuHolder" style={submenuColor}>
+            <i className={leftIcon} />
+            <span className="nav-text">
+              <IntlMessages id={label} />
+            </span>
+          </span>
+        </Link>
+      ),
+    };
+  });
+
+  return (
+    <SidebarWrapper>
+      <Sider
+        trigger={null}
+        collapsible={true}
+        collapsed={isCollapsed}
+        width={240}
+        className="isomorphicSidebar"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        style={styling}
+      >
+        <Logo collapsed={isCollapsed} />
+        <Scrollbars style={{ height: height - 70 }}>
+          <Menu
+            items={sidebarItems}
+            onClick={handleClick}
+            theme="dark"
+            className="isoDashboardMenu"
+            mode={mode}
+            openKeys={isCollapsed ? [] : openKeys}
+            selectedKeys={current}
+            onOpenChange={onOpenChange}
+          />
+        </Scrollbars>
+      </Sider>
+    </SidebarWrapper>
+  );
+}
