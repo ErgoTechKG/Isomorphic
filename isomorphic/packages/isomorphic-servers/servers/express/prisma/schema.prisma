@@ -1,11 +1,137 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+//https://prismaliser.app?code=ZGF0YXNvdXJjZSBkYiB7CiAgcHJvdmlkZXIgPSAicG9zdGdyZXNxbCIKICB1cmwgICAgICA9IGVudigiREFUQUJBU0VfVVJMIikKfQoKZ2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKfQoKbW9kZWwgVXNlciB7CiAgaWQgICAgICAgICAgICAgICAgICAgIEludCAgICAgICAgICAgICAgICAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkKICBlbWFpbCAgICAgICAgICAgICAgICAgU3RyaW5nICAgICAgICAgICAgICAgICBAdW5pcXVlCiAgcGFzc3dvcmQgICAgICAgICAgICAgIFN0cmluZwogIGZpcnN0TmFtZSAgICAgICAgICAgICBTdHJpbmcKICBsYXN0TmFtZSAgICAgICAgICAgICAgU3RyaW5nPwogIGFkZHJlc3MgICAgICAgICAgICAgICBTdHJpbmc_CiAgcm9sZSAgICAgICAgICAgICAgICAgIFVzZXJSb2xlICAgICAgICAgICAgICAgQGRlZmF1bHQoVVNFUikKICBjcmVhdGVkQXQgICAgICAgICAgICAgRGF0ZVRpbWUgICAgICAgICAgICAgICBAZGVmYXVsdChub3coKSkKICB1cGRhdGVkQXQgICAgICAgICAgICAgRGF0ZVRpbWUgICAgICAgICAgICAgICBAdXBkYXRlZEF0CiAgcHJvZmlsZSAgICAgICAgICAgICAgIFByb2ZpbGU_CiAgZmluYW5jaWFsVHJhbnNhY3Rpb25zIEZpbmFuY2lhbFRyYW5zYWN0aW9uW10KICBzZWxsZXJPcmRlcnMgICAgICAgICAgT3JkZXJbXSAgICAgICAgICAgICAgICBAcmVsYXRpb24oInNlbGxlciIpCiAgY2xpZW50T3JkZXJzICAgICAgICAgIE9yZGVyW10gICAgICAgICAgICAgICAgQHJlbGF0aW9uKCJjbGllbnQiKQp9Cgptb2RlbCBQcm9maWxlIHsKICBpZCAgICAgSW50ICAgICBAaWQgQGRlZmF1bHQoYXV0b2luY3JlbWVudCgpKQogIGF2YXRhciBTdHJpbmc_CiAgYmlvICAgIFN0cmluZz8KICB1c2VySWQgSW50ICAgICBAdW5pcXVlCiAgdXNlciAgIFVzZXIgICAgQHJlbGF0aW9uKGZpZWxkczogW3VzZXJJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCn0KCm1vZGVsIENhdGVnb3J5IHsKICBpZCAgICAgICAgICBJbnQgICAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkKICBuYW1lICAgICAgICBTdHJpbmcKICBkZXNjcmlwdGlvbiBTdHJpbmc_CiAgY3JlYXRlZEF0ICAgRGF0ZVRpbWUgIEBkZWZhdWx0KG5vdygpKQogIHVwZGF0ZWRBdCAgIERhdGVUaW1lICBAdXBkYXRlZEF0CiAgcHJvZHVjdHMgICAgUHJvZHVjdFtdCn0KCm1vZGVsIFByb2R1Y3QgewogIGlkICAgICAgICAgIEludCAgICAgIEBpZCBAZGVmYXVsdChhdXRvaW5jcmVtZW50KCkpCiAgbmFtZSAgICAgICAgU3RyaW5nCiAgZGVzY3JpcHRpb24gU3RyaW5nPwogIHByaWNlICAgICAgIEZsb2F0PwogIGltYWdlVXJsICAgIFN0cmluZz8KICBpc0ZlYXR1cmVkICBCb29sZWFuPyBAZGVmYXVsdChmYWxzZSkKCiAgY29sb3IgICAgICAgICBTdHJpbmc_CiAgZ3JhbSAgICAgICAgICBGbG9hdD8KICB3aWR0aCAgICAgICAgIEZsb2F0PwogIHN0b2NrQ291bnQgICAgSW50PyAgICAgICAgICAgQGRlZmF1bHQoMCkKICBjcmVhdGVkQXQgICAgIERhdGVUaW1lICAgICAgIEBkZWZhdWx0KG5vdygpKQogIHVwZGF0ZWRBdCAgICAgRGF0ZVRpbWUgICAgICAgQHVwZGF0ZWRBdAogIGNhdGVnb3J5SWQgICAgSW50CiAgY2F0ZWdvcnkgICAgICBDYXRlZ29yeSAgICAgICBAcmVsYXRpb24oZmllbGRzOiBbY2F0ZWdvcnlJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCiAgb3JkZXJQcm9kdWN0cyBPcmRlclByb2R1Y3RbXQp9Cgptb2RlbCBPcmRlciB7CiAgaWQgICAgICAgICAgICAgICAgICAgSW50ICAgICAgICAgICAgICAgICAgICBAaWQgQGRlZmF1bHQoYXV0b2luY3JlbWVudCgpKQogIGNyZWF0ZWRBdCAgICAgICAgICAgIERhdGVUaW1lICAgICAgICAgICAgICAgQGRlZmF1bHQobm93KCkpCiAgdXBkYXRlZEF0ICAgICAgICAgICAgRGF0ZVRpbWUgICAgICAgICAgICAgICBAdXBkYXRlZEF0CiAgc3RhdHVzICAgICAgICAgICAgICAgT3JkZXJTdGF0dXMgICAgICAgICAgICBAZGVmYXVsdChQRU5ESU5HKQogIHRvdGFsICAgICAgICAgICAgICAgIEZsb2F0CiAgc3RyaXBlQ2hhcmdlSWQgICAgICAgU3RyaW5nPwogIHNlbGxlcklkICAgICAgICAgICAgIEludAogIHNlbGxlciAgICAgICAgICAgICAgIFVzZXIgICAgICAgICAgICAgICAgICAgQHJlbGF0aW9uKCJzZWxsZXIiLCBmaWVsZHM6IFtzZWxsZXJJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCiAgY2xpZW50SWQgICAgICAgICAgICAgSW50CiAgY2xpZW50ICAgICAgICAgICAgICAgVXNlciAgICAgICAgICAgICAgICAgICBAcmVsYXRpb24oImNsaWVudCIsIGZpZWxkczogW2NsaWVudElkXSwgcmVmZXJlbmNlczogW2lkXSkKICBvcmRlclByb2R1Y3RzICAgICAgICBPcmRlclByb2R1Y3RbXQogIGxvZ2lzdGljU3RhdHVzICAgICAgIExvZ2lzdGljU3RhdHVzCiAgc29sZEF0UHJpY2UgICAgICAgICAgRmxvYXQgICAgICAgICAgICAgICAgICBAZGVmYXVsdCgwKQogIGNvc3RBdFByaWNlICAgICAgICAgIEZsb2F0ICAgICAgICAgICAgICAgICAgQGRlZmF1bHQoMCkKICBmaW5hbmNpYWxUcmFuc2FjdGlvbiBGaW5hbmNpYWxUcmFuc2FjdGlvbltdCn0KCm1vZGVsIE9yZGVyUHJvZHVjdCB7CiAgaWQgICAgICAgICAgICAgSW50ICAgICAgICAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkKICBjcmVhdGVkQXQgICAgICBEYXRlVGltZSAgICAgICBAZGVmYXVsdChub3coKSkKICB1cGRhdGVkQXQgICAgICBEYXRlVGltZSAgICAgICBAdXBkYXRlZEF0CiAgcXVhbnRpdHkgICAgICAgSW50CiAgb3JkZXJJZCAgICAgICAgSW50CiAgb3JkZXIgICAgICAgICAgT3JkZXIgICAgICAgICAgQHJlbGF0aW9uKGZpZWxkczogW29yZGVySWRdLCByZWZlcmVuY2VzOiBbaWRdKQogIHByb2R1Y3RJZCAgICAgIEludAogIHByb2R1Y3QgICAgICAgIFByb2R1Y3QgICAgICAgIEByZWxhdGlvbihmaWVsZHM6IFtwcm9kdWN0SWRdLCByZWZlcmVuY2VzOiBbaWRdKQogIHNvbGRBdFByaWNlICAgIEZsb2F0CiAgbG9naXN0aWNTdGF0dXMgTG9naXN0aWNTdGF0dXMKfQoKbW9kZWwgRmluYW5jaWFsVHJhbnNhY3Rpb24gewogIGlkICAgICAgICAgIEludCAgICAgICAgICAgICAgIEBpZCBAZGVmYXVsdChhdXRvaW5jcmVtZW50KCkpCiAgY3JlYXRlZEF0ICAgRGF0ZVRpbWUgICAgICAgICAgQGRlZmF1bHQobm93KCkpCiAgc3RhdHVzICAgICAgVHJhbnNhY3Rpb25TdGF0dXMKICBkZXNjcmlwdGlvbiBTdHJpbmcKICBhbW91bnQgICAgICBGbG9hdAogIHVzZXJJZCAgICAgIEludAogIG9yZGVySWQgICAgIEludD8KICBvcmRlciAgICAgICBPcmRlcj8gICAgICAgICAgICBAcmVsYXRpb24oZmllbGRzOiBbb3JkZXJJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCiAgdXNlciAgICAgICAgVXNlciAgICAgICAgICAgICAgQHJlbGF0aW9uKGZpZWxkczogW3VzZXJJZF0sIHJlZmVyZW5jZXM6IFtpZF0pCn0KCmVudW0gVXNlclJvbGUgewogIEFETUlOCiAgVVNFUgogIENMSUVOVAogIElOS1VTRVIKICBCSVNIS0VLVVNFUgogIENISU5FU0VVU0VSCn0KCmVudW0gT3JkZXJTdGF0dXMgewogIFBFTkRJTkcKICBQQUlECiAgU0hJUFBFRAogIERFTElWRVJFRAp9CgplbnVtIFRyYW5zYWN0aW9uU3RhdHVzIHsKICBQRU5ESU5HCiAgUEFJRAogIFNISVBQRUQKICBERUxJVkVSRUQKfQoKZW51bSBMb2dpc3RpY1N0YXR1cyB7CiAgV2FyZUhvdXNlSW5DaGluYQogIFdhcmVIb3VzZUxvZ2lzdGljCiAgT25lVGhlV2F5CiAgV2FyZUhvdXNlSW5CaXNoa2VrCiAgRGVsaXZlcmVkCn0K
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model User {
+  id                    Int                    @id @default(autoincrement())
+  email                 String                 @unique
+  password              String
+  firstName             String
+  lastName              String?
+  address               String?
+  role                  UserRole               @default(USER)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  profile               Profile?
+  financialTransactions FinancialTransaction[]
+  sellerOrders          Order[]                @relation("seller")
+  clientOrders          Order[]                @relation("client")
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  avatar String?
+  bio    String?
+  userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float?
+  imageUrl    String?
+  isFeatured  Boolean? @default(false)
+
+  color         String?
+  gram          Float?
+  width         Float?
+  stockCount    Int?           @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  categoryId    Int
+  category      Category       @relation(fields: [categoryId], references: [id])
+  orderProducts OrderProduct[]
+}
+
+model Order {
+  id                   Int                    @id @default(autoincrement())
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  status               OrderStatus            @default(PENDING)
+  total                Float
+  stripeChargeId       String?
+  sellerId             Int
+  seller               User                   @relation("seller", fields: [sellerId], references: [id])
+  clientId             Int
+  client               User                   @relation("client", fields: [clientId], references: [id])
+  orderProducts        OrderProduct[]
+  logisticStatus       LogisticStatus
+  soldAtPrice          Float                  @default(0)
+  costAtPrice          Float                  @default(0)
+  financialTransaction FinancialTransaction[]
+}
+
+model OrderProduct {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  quantity       Int
+  orderId        Int
+  order          Order          @relation(fields: [orderId], references: [id])
+  productId      Int
+  product        Product        @relation(fields: [productId], references: [id])
+  soldAtPrice    Float
+  logisticStatus LogisticStatus
+}
+
+model FinancialTransaction {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  status      TransactionStatus
+  description String
+  amount      Float
+  userId      Int
+  orderId     Int?
+  order       Order?            @relation(fields: [orderId], references: [id])
+  user        User              @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  CLIENT
+  INKUSER
+  BISHKEKUSER
+  CHINESEUSER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+}
+
+enum TransactionStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+}
+
+enum LogisticStatus {
+  WareHouseInChina
+  WareHouseLogistic
+  OneTheWay
+  WareHouseInBishkek
+  Delivered
 }
