@@ -4,11 +4,18 @@ import jsonwebtoken from 'jsonwebtoken';
 import cors from 'cors';
 import Config from './config';
 import { authenticate, authError } from './middleware';
+import dotenv from 'dotenv'
+import routes from './routes';
+
+dotenv.config()
 
 const { port, secretKey, expiredAfter } = Config;
 const app = express();
 
+// Connect to the database
+
 function doesUserExists(username, password) {
+	console.log(username, password)
 	const user = {
 		id: 1,
 		username: 'demo@gmail.com',
@@ -25,11 +32,14 @@ app
 	.use(bodyParser.json())
 	.use(cors());
 
-app.get('/', (req, res) => {
-	res.json({ status: 'OK' });
-});
+
+
+// Set up routes
+app.use('/api', routes);
+
 
 app.post('/api/login', (req, res) => {
+	console.log(req.body)
 	const { username, password } = req.body;
 	const response = {};
 	// You can use DB checking here
