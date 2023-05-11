@@ -1,11 +1,12 @@
-import { all, takeEvery, put, fork } from 'redux-saga/effects';
+import { all, takeEvery, put, fork, call } from 'redux-saga/effects';
 import { createBrowserHistory } from 'history';
 
 import { getToken, clearToken } from '@iso/lib/helpers/utility';
+import AuthHelper from '@iso/lib/helpers/authHelper'
 import actions from './actions';
 
+
 const history = createBrowserHistory();
-const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
@@ -17,10 +18,12 @@ export function* loginRequest() {
         profile: 'Profile',
       });
     } else {
-      if (fakeApiCall) {
+      const { username, password } = payload;
+      const { error, token } = yield call(AuthHelper.login, { username, password });
+      if (!error) {
         yield put({
           type: actions.LOGIN_SUCCESS,
-          token: 'secret token',
+          token: token,
           profile: 'Profile',
         });
       } else {
