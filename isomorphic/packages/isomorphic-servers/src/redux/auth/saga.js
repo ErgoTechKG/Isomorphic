@@ -2,7 +2,7 @@ import { all, takeEvery, put, fork, call } from 'redux-saga/effects';
 import { createBrowserHistory } from 'history';
 
 import { getToken, clearToken } from '@iso/lib/helpers/utility';
-import AuthHelper from '@iso/lib/helpers/authHelper'
+import AuthHelper from '../../library/helpers/authHelper'
 import actions from './actions';
 
 
@@ -10,6 +10,7 @@ const history = createBrowserHistory();
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
+    
     const { token } = payload;
     if (token) {
       yield put({
