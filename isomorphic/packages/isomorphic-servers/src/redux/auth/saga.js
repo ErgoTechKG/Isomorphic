@@ -19,6 +19,7 @@ export function* loginRequest() {
         profile: 'Profile',
       });
     } else {
+      console.log(payload)
       const { username, password } = payload;
       const { error, token } = yield call(AuthHelper.login, { username, password });
       if (!error) {
@@ -28,6 +29,7 @@ export function* loginRequest() {
           profile: 'Profile',
         });
       } else {
+        console.log('TODO: actions.LOGIN_ERROR ')
         yield put({ type: actions.LOGIN_ERROR });
       }
     }

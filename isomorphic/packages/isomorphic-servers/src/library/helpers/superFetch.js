@@ -7,7 +7,8 @@ const customHeader = () => ({
 });
 
 const base = (method, url, data = {}) => {
-  console.log('method, url, data', method, url, data)
+  console.log('method', method)
+  console.log("${jwtConfig.fetchUrl}${url}", `${jwtConfig.fetchUrl}${url}`)
   return fetch(`${jwtConfig.fetchUrl}${url}`, {
     method,
     headers: customHeader(),
@@ -20,6 +21,7 @@ const base = (method, url, data = {}) => {
 
 const SuperFetch = {};
 ['get', 'post', 'put', 'delete'].forEach(method => {
+  console.log(`SuperFetch`, method);
   SuperFetch[method] = base.bind(null, method);
 });
 export default SuperFetch;

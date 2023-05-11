@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from "react";
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '@iso/components/uielements/input';
@@ -19,6 +20,8 @@ const { login } = authAction;
 const { clearMenu } = appAction;
 
 export default function SignIn() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   let history = useHistory();
   let location = useLocation();
   const dispatch = useDispatch();
@@ -33,11 +36,12 @@ export default function SignIn() {
 
   function handleLogin(e, token = false) {
     e.preventDefault();
-    console.log('token1: ' + token);
+    console.log('token', token);
+    console.log("username,password", username, password);
     if (token) {
       dispatch(login(token));
     } else {
-      dispatch(login());
+      dispatch(login(username, password));
     }
     dispatch(clearMenu());
     history.push('/dashboard');
@@ -63,6 +67,9 @@ export default function SignIn() {
                   size="large"
                   placeholder="Username"
                   autoComplete="true"
+                  onChange={e => {
+                    setUsername(e.target.value)
+                  }}
                 />
               </div>
 
@@ -72,6 +79,9 @@ export default function SignIn() {
                   type="password"
                   placeholder="Password"
                   autoComplete="false"
+                  onChange={e => {
+                    setPassword(e.target.value)
+                  }}
                 />
               </div>
 
