@@ -29,7 +29,6 @@ export function* loginRequest() {
           profile: 'Profile',
         });
       } else {
-        console.log('TODO: actions.LOGIN_ERROR ')
         yield put({ type: actions.LOGIN_ERROR });
       }
     }
@@ -44,6 +43,33 @@ export function* loginSuccess() {
 
 export function* loginError() {
   yield takeEvery(actions.LOGIN_ERROR, function*() {});
+}
+
+
+export function* signupRequest() {
+  yield takeEvery('SIGNUP_REQUEST', function*({ payload }) {
+    const {username, password, name, email} = payload;
+    const { error, token } = yield call(AuthHelper.signup, {username, password, name, email});
+    if (!error) {
+      yield put({
+        type: actions.LOGIN_SUCCESS,
+        token: token,
+        profile: 'Profile',
+      });
+    } else {
+      yield put({ type: actions.LOGIN_ERROR });
+    }
+  });
+}
+
+export function* signupSuccess() {
+  yield takeEvery(actions.SIGNUP_SUCCESS, function*(payload) {
+    yield localStorage.setItem('id_token', payload.token);
+  });
+}
+
+export function* signupError() {
+  yield takeEvery(actions.SIGNUP_ERROR, function*() {});
 }
 
 export function* logout() {
@@ -70,6 +96,9 @@ export default function* rootSaga() {
     fork(loginRequest),
     fork(loginSuccess),
     fork(loginError),
+    fork(signupRequest),
+    fork(signupSuccess),
+    fork(signupError),
     fork(logout),
   ]);
 }

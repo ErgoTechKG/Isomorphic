@@ -26,7 +26,7 @@ const publicRoutes = [
   },
   {
     path: PUBLIC_ROUTE.SIGN_UP,
-    component: lazy(() => import('@iso/containers/Pages/SignUp/SignUp')),
+    component: lazy(() => import('./containers/Pages/SignUp/SignUp')),
   },
   {
     path: PUBLIC_ROUTE.AUTH0_CALLBACK,

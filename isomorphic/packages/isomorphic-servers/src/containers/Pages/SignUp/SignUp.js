@@ -1,30 +1,30 @@
 import React from 'react';
+import { useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Input from '@iso/components/uielements/input';
 import Checkbox from '@iso/components/uielements/checkbox';
 import Button from '@iso/components/uielements/button';
-import FirebaseSignUpForm from '../../FirebaseForm/FirebaseForm';
 import authAction from '@iso/redux/auth/actions';
 import appActions from '@iso/redux/app/actions';
-import Auth0 from '../../Authentication/Auth0/Auth0';
 import IntlMessages from '@iso/components/utility/intlMessages';
 import SignUpStyleWrapper from './SignUp.styles';
 
-const { login } = authAction;
+const { signup } = authAction;
 const { clearMenu } = appActions;
 
 export default function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleLogin = (token = false) => {
-    console.log(token, 'handlelogin');
-    if (token) {
-      dispatch(login(token));
-    } else {
-      dispatch(login());
-    }
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleLogin = () => {
+    console.log('handlelogin', {username, password, name, email});
+    dispatch(signup({username, password, name, email}));
     dispatch(clearMenu());
     history.push('/dashboard');
   };
@@ -40,20 +40,19 @@ export default function SignUp() {
 
           <div className="isoSignUpForm">
             <div className="isoInputWrapper isoLeftRightComponent">
-              <Input size="large" placeholder="First name" />
-              <Input size="large" placeholder="Last name" />
+              <Input size="large" placeholder="name" onChange={e => {setName(e.target.value)}}/>
             </div>
 
             <div className="isoInputWrapper">
-              <Input size="large" placeholder="Username" />
+              <Input size="large" placeholder="Username" onChange={e => {setUsername(e.target.value)}}/>
             </div>
 
             <div className="isoInputWrapper">
-              <Input size="large" placeholder="Email" />
+              <Input size="large" placeholder="Email" onChange={e => {setEmail(e.target.value)}}/>
             </div>
 
             <div className="isoInputWrapper">
-              <Input size="large" type="password" placeholder="Password" />
+              <Input size="large" type="password" placeholder="Password" onChange={e => {setPassword(e.target.value)}}/>
             </div>
 
             <div className="isoInputWrapper">
@@ -71,40 +70,9 @@ export default function SignUp() {
             </div>
 
             <div className="isoInputWrapper">
-              <Button type="primary">
+              <Button type="primary" onClick={handleLogin}>
                 <IntlMessages id="page.signUpButton" />
               </Button>
-            </div>
-            <div className="isoInputWrapper isoOtherLogin">
-              <Button
-                onClick={handleLogin}
-                type="primary"
-                className="btnFacebook"
-              >
-                <IntlMessages id="page.signUpFacebook" />
-              </Button>
-              <Button
-                onClick={handleLogin}
-                type="primary"
-                className="btnGooglePlus"
-              >
-                <IntlMessages id="page.signUpGooglePlus" />
-              </Button>
-              <Button
-                onClick={() => {
-                  Auth0.login();
-                }}
-                type="primary"
-                className="btnAuthZero"
-              >
-                <IntlMessages id="page.signUpAuth0" />
-              </Button>
-
-              <FirebaseSignUpForm
-                signup={true}
-                history={history}
-                login={() => dispatch(login())}
-              />
             </div>
             <div className="isoInputWrapper isoCenterComponent isoHelperWrapper">
               <Link to="/signin">

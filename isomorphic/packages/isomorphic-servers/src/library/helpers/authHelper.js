@@ -7,7 +7,14 @@ class AuthHelper {
       return { error: 'please fill in the input' };
     }
     return await SuperFetch.post('login', userInfo).then(response => {
-      console.log('response', response);
+      return this.checkExpirity(response.token);
+    });
+  };
+  signup = async userInfo => {
+    if (!userInfo.username || !userInfo.password) {
+      return { error: 'please fill in the input' };
+    }
+    return await SuperFetch.post('signup', userInfo).then(response => {
       return this.checkExpirity(response.token);
     });
   };
