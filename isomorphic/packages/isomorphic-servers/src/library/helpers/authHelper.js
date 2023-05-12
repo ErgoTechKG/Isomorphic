@@ -6,11 +6,13 @@ class AuthHelper {
     if (!userInfo.username || !userInfo.password) {
       return { error: 'please fill in the input' };
     }
+    console.log('login')
     return await SuperFetch.post('login', userInfo).then(response => {
       return this.checkExpirity(response.token);
     });
   };
   signup = async userInfo => {
+    console.log('signup')
     if (!userInfo.username || !userInfo.password) {
       return { error: 'please fill in the input' };
     }

@@ -10,7 +10,7 @@ const history = createBrowserHistory();
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
-    
+    console.log('LOGIN_REQUEST')
     const { token } = payload;
     if (token) {
       yield put({
@@ -19,7 +19,6 @@ export function* loginRequest() {
         profile: 'Profile',
       });
     } else {
-      console.log(payload)
       const { username, password } = payload;
       const { error, token } = yield call(AuthHelper.login, { username, password });
       if (!error) {
@@ -48,6 +47,7 @@ export function* loginError() {
 
 export function* signupRequest() {
   yield takeEvery('SIGNUP_REQUEST', function*({ payload }) {
+    console.log('SIGNUP_REQUEST')
     const {username, password, name, email} = payload;
     const { error, token } = yield call(AuthHelper.signup, {username, password, name, email});
     if (!error) {

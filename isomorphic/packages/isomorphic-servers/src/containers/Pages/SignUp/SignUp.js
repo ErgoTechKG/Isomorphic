@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import Input from '@iso/components/uielements/input';
 import Checkbox from '@iso/components/uielements/checkbox';
 import Button from '@iso/components/uielements/button';
-import authAction from '@iso/redux/auth/actions';
+import authAction from '../../../redux/auth/actions';
 import appActions from '@iso/redux/app/actions';
 import IntlMessages from '@iso/components/utility/intlMessages';
 import SignUpStyleWrapper from './SignUp.styles';
@@ -23,7 +23,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
 
   const handleLogin = () => {
-    console.log('handlelogin', {username, password, name, email});
+    console.log('handlesignup', {username, password, name, email});
     dispatch(signup({username, password, name, email}));
     dispatch(clearMenu());
     history.push('/dashboard');

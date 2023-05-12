@@ -13,7 +13,7 @@ const actions = {
     payload: { username, password, token },
   }),
   signup: ({username, password, name, email}) => ({
-    type: actions.LOGIN_REQUEST,
+    type: actions.SIGNUP_REQUEST,
     payload: {username, password, name, email},
   }),
   logout: () => ({
