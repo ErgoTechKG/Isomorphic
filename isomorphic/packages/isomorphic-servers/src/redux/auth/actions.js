@@ -12,9 +12,9 @@ const actions = {
     type: actions.LOGIN_REQUEST,
     payload: { username, password, token },
   }),
-  signup: ({username, password, name, email}) => ({
+  signup: ({password, name, email}) => ({
     type: actions.SIGNUP_REQUEST,
-    payload: {username, password, name, email},
+    payload: {password, name, email},
   }),
   logout: () => ({
     type: actions.LOGOUT,

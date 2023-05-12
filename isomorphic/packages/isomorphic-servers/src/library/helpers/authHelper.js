@@ -3,17 +3,15 @@ import SuperFetch from './superFetch';
 
 class AuthHelper {
   login = async userInfo => {
-    if (!userInfo.username || !userInfo.password) {
+    if (!userInfo.email || !userInfo.password) {
       return { error: 'please fill in the input' };
     }
-    console.log('login')
     return await SuperFetch.post('login', userInfo).then(response => {
       return this.checkExpirity(response.token);
     });
   };
   signup = async userInfo => {
-    console.log('signup')
-    if (!userInfo.username || !userInfo.password) {
+    if (!userInfo.email || !userInfo.password) {
       return { error: 'please fill in the input' };
     }
     return await SuperFetch.post('signup', userInfo).then(response => {
