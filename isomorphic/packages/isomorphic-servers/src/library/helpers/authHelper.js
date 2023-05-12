@@ -3,10 +3,12 @@ import SuperFetch from './superFetch';
 
 class AuthHelper {
   login = async userInfo => {
+    console.log('userInfo', userInfo)
     if (!userInfo.email || !userInfo.password) {
       return { error: 'please fill in the input' };
     }
     return await SuperFetch.post('login', userInfo).then(response => {
+      console.log(response)
       return this.checkExpirity(response.token);
     });
   };
@@ -37,7 +39,7 @@ class AuthHelper {
     }
     try {
       const profile = jwtDecode(token);
-
+      console.log('profile', profile);
       const expiredAt = profile.expiredAt || profile.exp * 1000;
 
       if (expiredAt > new Date().getTime()) {

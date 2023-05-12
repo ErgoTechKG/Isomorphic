@@ -12,10 +12,42 @@ router.get("/", (req, res) => {
   res.json({ status: "OK1" });
 });
 
-router.post("/login", (req, res) => {
-  console.log("req.body", req.body);
-  res.json({ status: "OK2" });
-});
+// router.post("/login", (req, res) => {
+//   console.log("req.body", req.body);
+//   res.json({ status: "OK2" });
+// });
+
+
+router.post('/login', async (req, res) => {
+	try {
+	  const { email, password } = req.body;
+  
+	  // Check if the user exists
+	  const user = await prisma.user.findUnique({
+		  where: { email },
+	  });
+	  if (!user) {
+		  return res.status(401).json({ error: 'Invalid username or password' });
+	  }
+
+	  // Verify the password
+	  const isPasswordValid = await argon2.verify(user.password, password);
+    console.log('isPasswordValid', isPasswordValid)
+	  if (!isPasswordValid) {
+		return res.status(401).json({ error: 'Invalid username or password' });
+	  }
+  
+	  // Generate a JWT token
+	  const token = jwt.sign({ email: user.email, name:user.name, role:user.role }, 'your-secret-key');
+    console.log('token', token);
+	  // Return the token to the client
+	  res.json({ token });
+	} catch (error) {
+	  console.error('Error logging in:', error);
+	  res.status(500).json({ error: 'An error occurred while logging in' });
+	}
+  });
+  
 
 // Define a signup endpoint
 router.post("/signup", async (req, res) => {
@@ -42,7 +74,7 @@ router.post("/signup", async (req, res) => {
       },
     });
     // Generate a JWT token
-    const token = jwt.sign({ userId: newUser.id }, "your-secret-key");
+    const token = jwt.sign({ email: newUser.email, name:newUser.name, role:newUser.role }, "your-secret-key");
 
     // Return the token to the client
     res.json({ token });

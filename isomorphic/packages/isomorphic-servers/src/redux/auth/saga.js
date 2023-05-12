@@ -18,8 +18,8 @@ export function* loginRequest() {
         profile: 'Profile',
       });
     } else {
-      const { username, password } = payload;
-      const { error, token } = yield call(AuthHelper.login, { username, password });
+      const { email, password } = payload;
+      const { error, token } = yield call(AuthHelper.login, { email, password });
       if (!error) {
         yield put({
           type: actions.LOGIN_SUCCESS,

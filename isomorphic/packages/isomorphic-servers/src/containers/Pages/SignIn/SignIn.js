@@ -20,7 +20,7 @@ const { login } = authAction;
 const { clearMenu } = appAction;
 
 export default function SignIn() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let history = useHistory();
   let location = useLocation();
@@ -37,11 +37,11 @@ export default function SignIn() {
   function handleLogin(e, token = false) {
     e.preventDefault();
     console.log('token', token);
-    console.log("username,password", username, password);
+    console.log("email,password", email, password);
     if (token) {
       dispatch(login(token));
     } else {
-      dispatch(login(username, password));
+      dispatch(login(email, password));
     }
     dispatch(clearMenu());
     history.push('/dashboard');
@@ -65,10 +65,10 @@ export default function SignIn() {
               <div className="isoInputWrapper">
                 <Input
                   size="large"
-                  placeholder="Username"
+                  placeholder="Email"
                   autoComplete="true"
                   onChange={e => {
-                    setUsername(e.target.value)
+                    setEmail(e.target.value)
                   }}
                 />
               </div>

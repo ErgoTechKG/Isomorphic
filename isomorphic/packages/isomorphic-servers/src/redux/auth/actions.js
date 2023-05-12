@@ -8,9 +8,9 @@ const actions = {
   SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',
   SIGNUP_ERROR: 'SIGNUP_ERROR',
   checkAuthorization: () => ({ type: actions.CHECK_AUTHORIZATION }),
-  login: (username, password, token = false) => ({
+  login: (email, password, token = false) => ({
     type: actions.LOGIN_REQUEST,
-    payload: { username, password, token },
+    payload: { email, password, token },
   }),
   signup: ({password, name, email}) => ({
     type: actions.SIGNUP_REQUEST,
