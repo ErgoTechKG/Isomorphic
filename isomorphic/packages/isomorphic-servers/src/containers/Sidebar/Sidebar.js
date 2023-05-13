@@ -152,7 +152,6 @@ export default function Sidebar() {
             openKeys={isCollapsed ? [] : openKeys}
             selectedKeys={current}
             onOpenChange={onOpenChange}
-            inlineCollapsed={isCollapsed}
           />
         </Scrollbars>
       </Sider>

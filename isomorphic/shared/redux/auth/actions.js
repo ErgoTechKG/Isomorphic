@@ -16,7 +16,7 @@ const actions = {
     type: actions.LOGIN_REQUEST,
     payload: {username, password, name, email},
   }),
-  logout: () => c({
+  logout: () => ({
     type: actions.LOGOUT,
   }),
 };
