@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import themes from '@iso/config/theme/theme.config';
-import AppLocale from '@iso/config/translation';
+import AppLocale from './config/translation';
 
 export default function AppProvider({ children }) {
   const { locale } = useSelector(state => state.LanguageSwitcher.language);

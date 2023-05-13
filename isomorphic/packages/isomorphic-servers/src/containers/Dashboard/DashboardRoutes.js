@@ -17,6 +17,10 @@ const routes = [
     path: 'authCheck',
     component: lazy(() => import('../AuthCheck')),
   },
+  {
+    path: 'user',
+    component: lazy(() => import('../User')),
+  },
 ];
 
 export default function AppRouter() {

@@ -12,5 +12,10 @@ const options = [
     label: 'sidebar.authCheck',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'user',
+    label: 'sidebar.userPage',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
 ];
 export default options;
