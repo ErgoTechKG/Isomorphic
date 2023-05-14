@@ -19,9 +19,25 @@ router.get("/", (req, res) => {
 // });
 
 
-router.get("/users", (req, res) => {
+router.get("/users",async (req, res) => {
   console.log("req.body", req.body);
-  res.json({ status: "OK2" });
+  try {
+    const users = await prisma.user.findMany(
+      {select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        role: true,
+        createdAt: true,
+        profile: true,
+      },}
+    );
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching users.' });
+  }
 });
 
 

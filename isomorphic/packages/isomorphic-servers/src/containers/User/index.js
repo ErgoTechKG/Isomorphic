@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
-
+import UserForm from './UserForm';
 const MyComponent = () => {
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
         console.log(response)
-        //setData(response.data);
+        setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -30,20 +41,20 @@ const MyComponent = () => {
       key: 'name',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
     },
     {
       title: 'Action',
       dataIndex: '',
-      key: 'x',
-      render: (x) => <a id={x.id}>Delete</a>,
+      key: 'action',
+      render: (x) => <a id={x.id}>Edit</a>,
     },
   ];
 
@@ -56,8 +67,15 @@ const MyComponent = () => {
   return (
     <LayoutContentWrapper style={{ height: '100vh' }}>
       <LayoutContent>
+        <Button type="primary" onClick={showModal}>
+          Open Modal
+        </Button>
+        <Modal title="Basic Modal" open={isModalOpen} footer={null}>
+          <UserForm setIsModalOpen={setIsModalOpen}></UserForm>
+        </Modal>
         <Table
           columns={columns}
+          rowKey={(record) => record.id}
           expandable={{
             expandedRowRender,
             rowExpandable,
