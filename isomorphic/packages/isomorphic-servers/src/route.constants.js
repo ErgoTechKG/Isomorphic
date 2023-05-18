@@ -78,4 +78,5 @@ export const PRIVATE_ROUTE = {
   SWIPER_SLIDER: '/swiperslider',
 
   USER: '/user',
+  FINANCIALTRANSACTION: '/financialTransaction',
 };
