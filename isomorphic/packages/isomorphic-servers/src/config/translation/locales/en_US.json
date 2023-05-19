@@ -583,7 +583,7 @@
   "Swiper.custom.customScrollTitle": "Custom view with all Naviation",
   "Swiper.custom.basicNavTitle": "Basic Naviation",
   "Swiper.custom.buttonNavTitle": "Custom Naviation", 
-
   "sidebar.userPage": "User Page",
-  "sidebar.productList": "Product List"
+  "sidebar.productList": "Product List",
+  "sidebar.financialTransaction": "Financial Transaction"
 }

@@ -22,5 +22,10 @@ const options = [
     label: 'sidebar.productList',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'financialTransaction',
+    label: 'sidebar.financialTransaction',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
 ];
 export default options;
