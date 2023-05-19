@@ -15,7 +15,7 @@ const MyComponent = () => {
     console.log('data',data )
     let user = data.find( user => user.id === userId)
     console.log('user', user)
-    setUser(user);
+    setRecord(user);
   };
 
   useEffect(() => {
