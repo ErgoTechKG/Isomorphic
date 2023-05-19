@@ -21,6 +21,10 @@ const routes = [
     path: 'user',
     component: lazy(() => import('../User')),
   },
+  {
+    path: 'productlist',
+    component: lazy(() => import('../Product/ProductList')),
+  },
 ];
 
 export default function AppRouter() {

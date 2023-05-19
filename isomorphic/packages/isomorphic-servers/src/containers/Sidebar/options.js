@@ -17,5 +17,10 @@ const options = [
     label: 'sidebar.userPage',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'productList',
+    label: 'sidebar.productList',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
 ];
 export default options;

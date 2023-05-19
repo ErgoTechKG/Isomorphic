@@ -584,5 +584,6 @@
   "Swiper.custom.basicNavTitle": "Basic Naviation",
   "Swiper.custom.buttonNavTitle": "Custom Naviation", 
 
-  "sidebar.userPage": "User Page"
+  "sidebar.userPage": "User Page",
+  "sidebar.productList": "Product List"
 }

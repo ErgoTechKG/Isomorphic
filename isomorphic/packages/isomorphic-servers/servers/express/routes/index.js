@@ -18,6 +18,25 @@ router.get("/", (req, res) => {
 //   res.json({ status: "OK2" });
 // });
 
+router.put("/user",async (req, res) => {
+  
+  const { body } = req;
+
+  Object.keys(body).forEach((key) => {
+    if (body[key] === null) {
+      body[key] = undefined;
+    }
+  });
+
+  const updateUser = await prisma.user.update({
+    where: {
+      id: body.id,
+    },
+    data: body,
+  })
+
+  res.json(updateUser);
+})
 
 router.get("/users",async (req, res) => {
   console.log("req.body", req.body);

@@ -8,10 +8,8 @@ import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
 const MyComponent = (props) => {
-  console.log('props', props)
-  // State variables
-  //const [count, setCount] = useState(0);
-  const [user, setUser] = useState(props.user);
+
+  const [user, setUser] = useState(props.product);
 
   // Effect hook
   useEffect(() => {
@@ -59,49 +57,10 @@ const MyComponent = (props) => {
 
   return (
     <div>
-      <Input placeholder="Email" defaultValue={props.user.email} onChange={value => updateEmail(value)}/>
-      <Input placeholder="Name" defaultValue={props.user.name} onChange={value => updateName(value)}/>
-      <Input placeholder="Address" defaultValue={props.user.address} onChange={value => updateAddress(value)}/>
-      <Select
-        defaultValue={props.user.role}
-        style={{
-          width: 120,
-        }}
-        onChange={updateRole}
-        
-        
-        options={[
-          {
-            value: 'ADMIN',
-            label: 'ADMIN',
-          },
-          {
-            value: 'USER',
-            label: 'USER',
-          },
-          {
-            value: 'CLIENT',
-            label: 'CLIENT',
-          },
-          {
-            value: 'INKUSER',
-            label: 'INKUSER',
-            disabled: true,
-          },
-          {
-            value: 'BISHKEKUSER',
-            label: 'BISHKEKUSER',
-          },
-          {
-            value: 'CHINESEUSER',
-            label: 'CHINESEUSER',
-          },
-          {
-            value: 'PENDING',
-            label: 'PENDING',
-          },
-        ]}
-      />
+      <Input placeholder="Name" defaultValue={props.product?props.product.name:null} onChange={value => updateEmail(value)}/>
+      <Input placeholder="Description" defaultValue={props.product?props.product.description:null} onChange={value => updateName(value)}/>
+      <Input placeholder="ImageUrl" defaultValue={props.product?props.product.ImageUrl:null} onChange={value => updateAddress(value)}/>
+
       <Button onClick={handleClick}>Cancel</Button>
       <Button onClick={handleSave}>Save</Button>
     </div>
