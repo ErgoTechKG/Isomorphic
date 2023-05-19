@@ -21,7 +21,8 @@ const MyComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); 
+        console.log('response', response)
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -33,19 +34,9 @@ const MyComponent = () => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: 'Action',
