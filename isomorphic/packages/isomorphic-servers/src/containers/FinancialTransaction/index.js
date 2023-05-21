@@ -10,19 +10,16 @@ const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [record, setRecord] = useState(null);
-  const clickEdit = (userId) => {
+  const clickEdit = (recordId) => {
     setIsModalOpen(true);
-    console.log('data',data )
-    let user = data.find( user => user.id === userId)
-    console.log('user', user)
+    let user = data.find( record => record.id === recordId)
     setRecord(user);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); 
-        console.log('response', response)
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -34,9 +31,19 @@ const MyComponent = () => {
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
     },
     {
       title: 'Action',
