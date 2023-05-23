@@ -58,7 +58,9 @@ const MyComponent = () => {
   );
 
   const rowExpandable = (record) => record.name !== 'Not Expandable';
-
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const handleAdd = () => {
     setIsModalOpen(true);
   };
@@ -66,7 +68,7 @@ const MyComponent = () => {
     <LayoutContentWrapper style={{ height: '100vh' }}>
       <LayoutContent>
         <Button type="primary" onClick={handleAdd} >Add new</Button>
-        <Modal title="Basic Modal" open={isModalOpen} footer={null}>
+        <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
           <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
         </Modal>
         <Table

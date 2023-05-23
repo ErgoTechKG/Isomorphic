@@ -39,7 +39,6 @@ router.put("/user",async (req, res) => {
 })
 
 router.get("/users",async (req, res) => {
-  console.log("req.body", req.body);
   try {
     const users = await prisma.user.findMany(
       {select: {
@@ -61,7 +60,7 @@ router.get("/users",async (req, res) => {
 
 
 router.get("/financialTransactions",async (req, res) => {
-  console.log("req.body", req.body);
+
   try {
     const records = await prisma.financialTransaction.findMany(
     );
