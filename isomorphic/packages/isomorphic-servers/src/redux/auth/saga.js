@@ -4,7 +4,7 @@ import { createBrowserHistory } from 'history';
 import { getToken, clearToken } from '@iso/lib/helpers/utility';
 import AuthHelper from '../../library/helpers/authHelper'
 import actions from './actions';
-
+import { message } from 'antd';
 
 const history = createBrowserHistory();
 
@@ -40,7 +40,9 @@ export function* loginSuccess() {
 }
 
 export function* loginError() {
-  yield takeEvery(actions.LOGIN_ERROR, function*() {});
+  yield takeEvery(actions.LOGIN_ERROR, function*() {
+    message.error('Invalid email or password');
+  });
 }
 
 
