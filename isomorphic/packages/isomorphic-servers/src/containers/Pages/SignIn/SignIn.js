@@ -15,12 +15,13 @@ import {
   signInWithFacebook,
 } from '@iso/lib/firebase/firebase.authentication.util';
 import SignInStyleWrapper from './SignIn.styles';
-
+import { Spin } from 'antd';
 const { login } = authAction;
 const { clearMenu } = appAction;
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState("");
   const [password, setPassword] = useState("");
   let history = useHistory();
   let location = useLocation();
@@ -34,25 +35,33 @@ export default function SignIn() {
     }
   }, [isLoggedIn]);
 
+  React.useEffect(() => {
+    console.log('loading',loading);
+  }, [loading]);
+
   function handleLogin(e, token = false) {
     e.preventDefault();
-    console.log('token', token);
-    console.log("email,password", email, password);
-    if (token) {
-      dispatch(login(token));
-    } else {
-      dispatch(login(email, password));
-    }
-    dispatch(clearMenu());
-    history.push('/dashboard');
+    
+      setLoading(true);
+      if (token) {
+        dispatch(login(token));
+      } else {
+        dispatch(login(email, password));
+      }
+      dispatch(clearMenu());
+      history.push('/dashboard');
+
+    
+
   }
   let { from } = location.state || { from: { pathname: '/dashboard' } };
 
   if (redirectToReferrer) {
     return <Redirect to={from} />;
   }
-  return (
+  return (<Spin spinning={loading}>
     <SignInStyleWrapper className="isoSignInPage">
+       
       <div className="isoLoginContentWrapper">
         <div className="isoLoginContent">
           <div className="isoLogoWrapper">
@@ -140,6 +149,8 @@ export default function SignIn() {
           </div>
         </div>
       </div>
+     
     </SignInStyleWrapper>
+    </Spin>
   );
 }

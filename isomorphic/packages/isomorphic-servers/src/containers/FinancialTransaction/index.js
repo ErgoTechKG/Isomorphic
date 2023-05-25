@@ -12,14 +12,14 @@ const MyComponent = () => {
   const [record, setRecord] = useState(null);
   const clickEdit = (recordId) => {
     setIsModalOpen(true);
-    let user = data.find( record => record.id === recordId)
-    setRecord(user);
+    let selectedRecord = data.find(i => {return i.id === recordId})
+    setRecord(selectedRecord);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); // Replace with your actual API endpoint
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -27,23 +27,39 @@ const MyComponent = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isModalOpen]);
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: 'From',
+      dataIndex: 'userFrom',
+      key: 'userFrom',
+      render: (record) => {
+        return record.name
+      }
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: 'To',
+      dataIndex: 'userTo',
+      key: 'userTo',
+      render: (record) => {
+        return record.name
+      }
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
     },
     {
       title: 'Action',
@@ -62,6 +78,7 @@ const MyComponent = () => {
     setIsModalOpen(false);
   };
   const handleAdd = () => {
+    setRecord(null)
     setIsModalOpen(true);
   };
   return (

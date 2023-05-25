@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Input, Button, Select, Space, InputNumber, Form } from "antd";
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 const MyComponent = (props) => {
 
   const [form] = Form.useForm();
-  const [record, setRecord] = useState(props.record);
+  //const [record, setRecord] = useState(props.record);
+  const Auth = useSelector((state) => state.Auth);
   const [userDropdownlistValue, setUserDropdownlistValue] = useState([]);
   const tailLayout = {
     wrapperCol: {
@@ -22,9 +24,24 @@ const MyComponent = (props) => {
       span: 16,
     },
   };
-  // Effect hook
-  useEffect(() => {
 
+  useEffect(() => {
+    if(props.record){
+      form.setFieldsValue({
+        description: props.record.description,
+        userFrom: props.record.userFromId,
+        userTo: props.record.userToId,
+        amount: props.record.amount,
+        status: props.record.status,
+      })
+    }
+    else{
+      form.resetFields()
+    }
+  }, [props.record]);
+
+
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -41,29 +58,22 @@ const MyComponent = (props) => {
       }
     };
     fetchUserData();
-
-    const fetchData = async () => {
-      try {
-        //const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
-        //setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-
-
   }, []);
+
+
 
   const handleChange = () => {
     //TODO: Handle SELECT events
   };
 
-
-  const onFinish = (values) => {
-
-    console.log(values);
-    props.setIsModalOpen(false);
+  const onFinish = async (values) => {
+    const newFinancialTransaction = {...values, ...Auth}
+    const response = await axios.post(`${jwtConfig.fetchUrlSecret}financialTransaction`,newFinancialTransaction, axiosConfig).catch(function (error) {
+      console.log(error)
+    });
+    if(response && response.data && response.status === 200) {
+      props.setIsModalOpen(false);
+    }
   };
 
   const onReset = () => {
@@ -73,7 +83,12 @@ const MyComponent = (props) => {
   return (
     <div>
       <Space style={{ width: "100%" }} direction="vertical">
-        <Form form={form} name="control-hooks" onFinish={onFinish} {...layout} initialValues={{}}>
+        <Form
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          {...layout}
+        >
           <Form.Item
             name="userFrom"
             label="Select From which User"
@@ -111,9 +126,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input
-              placeholder="Description"
-            />
+            <Input placeholder="Description" />
           </Form.Item>
           <Form.Item
             name="amount"
@@ -124,9 +137,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber
-              placeholder="Amount"
-            />
+            <InputNumber placeholder="Amount" />
           </Form.Item>
           <Form.Item
             name="status"
@@ -169,11 +180,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Select
-              placeholder="Order"
-              onChange={handleChange}
-              options={[]}
-            />
+            <Select placeholder="Order" onChange={handleChange} options={[]} />
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">

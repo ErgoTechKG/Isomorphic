@@ -31,9 +31,7 @@ const MyComponent = (props) => {
   };
 
   const handleSave = async () => {
-    console.log('user', user)
     const response = await axios.put(`${jwtConfig.fetchUrlSecret}user`, user, axiosConfig); // Replace with your actual API endpoint
-    console.log('response', response)
   };
 
   const updateEmail = (value) => {
