@@ -1,23 +1,28 @@
 import React, { useState } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Image } from "antd";
 import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
 import LayoutContent from "@iso/components/utility/layoutContent";
 import ProductForm from "./ProductForm";
 const columns = [
+  {
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
+  },
   {
     title: "Name",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Description",
+    dataIndex: "description",
+    key: "description",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
   },
   {
     title: "Action",
@@ -64,6 +69,11 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleAdd = (e) => {
     setIsModalOpen(true);
+    //TODO: set Record
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
   return (
     <LayoutContentWrapper style={{ height: "100vh" }}>
@@ -71,7 +81,7 @@ const App = () => {
         <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
           Add a new product
         </Button>
-        <Modal title="Product Form" open={isModalOpen} footer={null}>
+        <Modal title="Product Form" open={isModalOpen} footer={null} onCancel={handleCancel}>
           <ProductForm
             setIsModalOpen={setIsModalOpen}
             product={product}
@@ -86,7 +96,10 @@ const App = () => {
                   margin: 0,
                 }}
               >
-                {record.description}
+                <Image
+                  width={200}
+                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                />
               </p>
             ),
             rowExpandable: (record) => record.name !== "Not Expandable",

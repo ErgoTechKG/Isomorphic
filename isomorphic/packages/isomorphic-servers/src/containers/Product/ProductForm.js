@@ -1,66 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Input,
-  Button,
-  Select
-} from 'antd';
-import axios from 'axios';
-import jwtConfig from '@iso/config/jwt.config';
-import axiosConfig from '../../library/helpers/axios';
+import React, { useState, useEffect } from "react";
+import { Input, Button, Form, Upload, Select } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
+
 const MyComponent = (props) => {
-
-  const [user, setUser] = useState(props.product);
-
-  // Effect hook
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}users`, axiosConfig); // Replace with your actual API endpoint
-       //setData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Event handler
-  const handleClick = () => {
-    props.setIsModalOpen(false);
+  const [form] = Form.useForm();
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
   };
 
-  const handleSave = async () => {
-    const response = await axios.put(`${jwtConfig.fetchUrlSecret}user`, user, axiosConfig); // Replace with your actual API endpoint
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
   };
 
-  const updateEmail = (value) => {
-    //value is new email
-    //date props.user.email to new email
-    setUser(prevUser => ({ ...prevUser, email: value }));
-  }
-  const updateName = (value) => {
-    //value is new email
-    //date props.user.email to new email
-    setUser(prevUser => ({ ...prevUser, email: value }));
-  }
-  const updateAddress = (value) => {
-    setUser(prevUser => ({ ...prevUser, address: value }));
-  }
-  
-  const updateRole = (value) => {
-    setUser(prevUser => ({ ...prevUser, role: value }));
-  }
+  const onFinish = async (values) => {
+    console.log('values', values);
+    //TODO: what to do after clicking save button
+  };
 
+  const onReset = () => {
+    form.resetFields();
+  };
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
 
   return (
     <div>
-      <Input placeholder="Name" defaultValue={props.product?props.product.name:null} onChange={value => updateEmail(value)}/>
-      <Input placeholder="Description" defaultValue={props.product?props.product.description:null} onChange={value => updateName(value)}/>
-      <Input placeholder="ImageUrl" defaultValue={props.product?props.product.ImageUrl:null} onChange={value => updateAddress(value)}/>
+      <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
+        <Form.Item
+          name="name"
+          label="Name"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+           <Input placeholder="Name" />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+           <Input placeholder="Description" />
+        </Form.Item>
+        <Form.Item label="Category" name="category">
+          <Select>
+            <Select.Option value="demo">Demo</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
+          <Upload action="/upload.do" listType="picture-card">
+            <div>
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </Upload>
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <Button htmlType="button" onClick={onReset}>
+              Reset
+            </Button>
+            </Form.Item>
+      </Form>
 
-      <Button onClick={handleClick}>Cancel</Button>
-      <Button onClick={handleSave}>Save</Button>
     </div>
   );
 };
