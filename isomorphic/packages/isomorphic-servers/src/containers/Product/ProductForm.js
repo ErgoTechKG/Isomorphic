@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Form, Upload, Select } from "antd";
+import { Input, Button, Form, Upload, Select, message } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import jwtConfig from "@iso/config/jwt.config";
 
@@ -22,6 +22,8 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
+    
+    values.uploadUrl = values.upload.map(i => i.response.fileId)
     console.log('values', values);
     //TODO: what to do after clicking save button
   };
@@ -30,12 +32,34 @@ const MyComponent = (props) => {
     form.resetFields();
   };
 
+  const uploadProps = {
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+        
+      }
+      if (info.file.status === 'done') {
+        const aprops = form.getFieldsValue()
+        console.log('aprops', aprops)
+        //form.setFieldValue('file', info.response.fileId)
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+      console.log('info', info);
+    },
+  };
+
   const normFile = (e) => {
+    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
+
+  const fileList = [];
+
   return (
     <div>
       <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
@@ -66,9 +90,15 @@ const MyComponent = (props) => {
             <Select.Option value="demo">Demo</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
+        <Form.Item label="Upload"
+              name="upload"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+        >
           <Upload action={jwtConfig.uploadUrl} 
-          listType="picture-card" name='file'>
+          listType="picture-card" name='file'
+          {...uploadProps}
+          >
             <div>
               <PlusOutlined />
               <div

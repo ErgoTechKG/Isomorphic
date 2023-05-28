@@ -29,14 +29,14 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     const uploadUrl = await b2.getUploadUrl('07e749e3246869198e840e1a');
 
-    await b2.uploadFile({
+    const fileInfo =  await b2.uploadFile({
       uploadUrl:uploadUrl.data.uploadUrl,
       uploadAuthToken: uploadUrl.data.authorizationToken,
       fileName: uploadedFile.originalname,
       data: req.file.buffer,
     });
-    console.log('done')
-    res.status(200).json({ status: "OK1" });
+    console.log('done', fileInfo.data)
+    res.status(200).json(fileInfo.data);
   } catch (error) {
     console.error('Error uploading file to Backblaze B2:', error);
     res.status(500).send('Error uploading file');
