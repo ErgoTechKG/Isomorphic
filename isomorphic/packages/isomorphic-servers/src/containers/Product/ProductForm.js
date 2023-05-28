@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Form, Upload, Select } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
+import jwtConfig from "@iso/config/jwt.config";
 
 const MyComponent = (props) => {
   const [form] = Form.useForm();
@@ -35,7 +36,6 @@ const MyComponent = (props) => {
     }
     return e?.fileList;
   };
-
   return (
     <div>
       <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
@@ -67,7 +67,8 @@ const MyComponent = (props) => {
           </Select>
         </Form.Item>
         <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
-          <Upload action="/upload.do" listType="picture-card">
+          <Upload action={jwtConfig.uploadUrl} 
+          listType="picture-card" name='file'>
             <div>
               <PlusOutlined />
               <div

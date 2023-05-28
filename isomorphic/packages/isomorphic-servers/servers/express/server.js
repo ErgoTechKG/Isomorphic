@@ -5,6 +5,7 @@ import Config from "./config";
 import { authenticate, authError } from "./middleware";
 import dotenv from "dotenv";
 import routes from "./routes";
+import uploadRoute from './routes/upload.js';
 import winston from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
@@ -134,6 +135,9 @@ app.post("/signup", async (req, res) => {
 
 // Set up routes
 app.use("/api", [authenticate, authError, routes]);
+
+// Route for handling file uploads
+app.use('/upload', uploadRoute);
 
 app.use("/api/secret", [authenticate, authError]);
 app.post("/api/secret/test", (req, res) => {
