@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Form, Upload, Select, message } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { Input, Button, Form, Upload, Select, message, InputNumber, Space } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import jwtConfig from "@iso/config/jwt.config";
+import axiosConfig from "../../library/helpers/axios";
+import axios from "axios";
 
+const { Option } = Select;
 const MyComponent = (props) => {
   const [form] = Form.useForm();
   const layout = {
@@ -22,9 +25,16 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
-    
-    values.uploadUrl = values.upload.map(i => i.response.fileId)
-    console.log('values', values);
+    if (values.upload)
+      values.uploadUrl = values.upload.map((i) => i.response.fileId);
+    console.log("values", values);
+
+    const response = await axios.post(`${jwtConfig.fetchUrlSecret}product`,values, axiosConfig).catch(function (error) {
+      console.log(error)
+    });
+    if(response && response.data && response.status === 200) {
+      props.setIsModalOpen(false);
+    }
     //TODO: what to do after clicking save button
   };
 
@@ -34,24 +44,23 @@ const MyComponent = (props) => {
 
   const uploadProps = {
     onChange(info) {
-      if (info.file.status !== 'uploading') {
+      if (info.file.status !== "uploading") {
         console.log(info.file, info.fileList);
-        
       }
-      if (info.file.status === 'done') {
-        const aprops = form.getFieldsValue()
-        console.log('aprops', aprops)
+      if (info.file.status === "done") {
+        const aprops = form.getFieldsValue();
+        console.log("aprops", aprops);
         //form.setFieldValue('file', info.response.fileId)
         message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
+      } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
-      console.log('info', info);
+      console.log("info", info);
     },
   };
 
   const normFile = (e) => {
-    console.log('Upload event:', e);
+    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -72,32 +81,137 @@ const MyComponent = (props) => {
             },
           ]}
         >
-           <Input placeholder="Name" />
+          <Input placeholder="Name" />
         </Form.Item>
         <Form.Item
-          name="description"
-          label="Description"
+          name="codeFromSupplier"
+          label="Code From Supplier"
           rules={[
             {
               required: true,
             },
           ]}
         >
-           <Input placeholder="Description" />
+          <Input placeholder="codeFromSupplier" />
+        </Form.Item>
+        <Form.Item
+          name="codeGenerated"
+          label="Code Generated"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="codeGenerated" disabled={true} />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="Description" />
+        </Form.Item>
+        <Form.Item
+          name="usage"
+          label="Usage"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+
+        <Form.Item
+          name="price"
+          label="Price"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="price" />
+        </Form.Item>
+        <Form.Item
+          name="gram"
+          label="Gram"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="gram" />
+        </Form.Item>
+        <Form.Item
+          name="width"
+          label="Width"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="width" />
+        </Form.Item>
+        <Form.Item
+          name="stockCount"
+          label="Stock Count"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="stockCount" disabled={true} />
         </Form.Item>
         <Form.Item label="Category" name="category">
           <Select>
             <Select.Option value="demo">Demo</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="Upload"
-              name="upload"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
+        <Form.Item label="Usage" name="usage">
+          <Select mode="multiple" allowClear placeholder="Please select usage" />
+        </Form.Item>
+        <Form.Item label="Ingredient">
+      <Space.Compact>
+        <Form.Item
+          name={['ingredient', 'name']}
+          noStyle
+          rules={[]}
         >
-          <Upload action={jwtConfig.uploadUrl} 
-          listType="picture-card" name='file'
-          {...uploadProps}
+          <Select placeholder="Select province">
+            <Option value="Zhejiang">Zhejiang</Option>
+            <Option value="Jiangsu">Jiangsu</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name={['ingredient', 'percentage']}
+          noStyle
+          rules={[]}
+        >
+          <Input style={{ width: '50%' }} placeholder="Input street" />
+        </Form.Item>
+      </Space.Compact>
+    </Form.Item>
+        <Form.Item
+          label="Upload"
+          name="upload"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload
+            action={jwtConfig.uploadUrl}
+            listType="picture-card"
+            name="file"
+            {...uploadProps}
           >
             <div>
               <PlusOutlined />
@@ -112,15 +226,14 @@ const MyComponent = (props) => {
           </Upload>
         </Form.Item>
         <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            <Button htmlType="button" onClick={onReset}>
-              Reset
-            </Button>
-            </Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+            Reset
+          </Button>
+        </Form.Item>
       </Form>
-
     </div>
   );
 };

@@ -123,5 +123,44 @@ router.post("/financialTransaction",async (req, res) => {
   }
 });
 
+router.post("/product",async (req, res) => {
+
+  try {
+    console.log('req.body', req.body)
+
+
+    
+    const {
+      userFrom,
+      userTo,
+      description,
+      amount,
+      status,
+      idToken
+    } = req.body;
+    const profile = jwtDecode(idToken);
+    console.log(
+      'profile', profile
+    )
+
+    const record = await prisma.product.create({
+      data: {
+        userFromId: userFrom,
+        userToId: userTo,
+        description,
+        amount,
+        status,
+        inputerId:profile.id
+      },
+    });
+
+
+    res.json(record);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
+  }
+});
+
 //router.post('/', createUser);
 export default router;

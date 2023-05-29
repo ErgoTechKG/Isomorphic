@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Button, Select, Space, InputNumber, Form } from "antd";
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 const MyComponent = (props) => {
