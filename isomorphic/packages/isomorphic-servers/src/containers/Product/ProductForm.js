@@ -32,6 +32,7 @@ const MyComponent = (props) => {
     const response = await axios.post(`${jwtConfig.fetchUrlSecret}product`,values, axiosConfig).catch(function (error) {
       console.log(error)
     });
+    console.log('response', response)
     if(response && response.data && response.status === 200) {
       props.setIsModalOpen(false);
     }
