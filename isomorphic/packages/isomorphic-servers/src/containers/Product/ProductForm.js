@@ -26,7 +26,7 @@ const MyComponent = (props) => {
 
   const onFinish = async (values) => {
     if (values.upload)
-      values.uploadUrl = values.upload.map((i) => i.response.fileId);
+      values.imageUrl = values.upload.map((i) => i.response.fileId);
     console.log("values", values);
 
     const response = await axios.post(`${jwtConfig.fetchUrlSecret}product`,values, axiosConfig).catch(function (error) {
@@ -50,7 +50,6 @@ const MyComponent = (props) => {
       }
       if (info.file.status === "done") {
         const aprops = form.getFieldsValue();
-        console.log("aprops", aprops);
         //form.setFieldValue('file', info.response.fileId)
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {

@@ -3,6 +3,8 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import Config from "../config";
 import jwtDecode from 'jwt-decode';
+import shortid from 'shortid';
+
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
@@ -130,7 +132,7 @@ router.post("/product",async (req, res) => {
       name,
       codeFromSupplier,
       ingredient,
-      uploadUrl,
+      imageUrl,
     } = req.body;
     // const profile = jwtDecode(idToken);
     // console.log(
@@ -140,9 +142,11 @@ router.post("/product",async (req, res) => {
     const record = await prisma.product.create({
       data: {
         name,
+        codeGenerated:shortid.generate(),
         codeFromSupplier,
         ingredient,
-        uploadUrl,
+        imageUrl,
+        
       },
     });
 
