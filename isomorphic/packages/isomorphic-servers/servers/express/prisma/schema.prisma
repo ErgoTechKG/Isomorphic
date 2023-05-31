@@ -72,8 +72,8 @@ model Product {
   categoryId       Int?
   category         Category?      @relation(fields: [categoryId], references: [id])
   orderProducts    OrderProduct[]
-  inputerId        Int
-  inputer          User           @relation("inputer", fields: [inputerId], references: [id])
+  inputerId        Int?
+  inputer          User?          @relation("inputer", fields: [inputerId], references: [id])
 }
 
 model Order {
