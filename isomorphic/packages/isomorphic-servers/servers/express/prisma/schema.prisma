@@ -1,6 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-//
+//https://prismaliser.app/
 
 //https://cloud.prisma.io/projects
 //https://www.tpu-ptfe.com/post/6329.html
@@ -162,10 +162,11 @@ enum LogisticStatus {
 
 model Garments {
   id          Int       @id @default(autoincrement())
-  name        String
   englishName String
   chineseName String
   russionName String
+  fabric      String
+  season      String
   products    Product[]
 }
 

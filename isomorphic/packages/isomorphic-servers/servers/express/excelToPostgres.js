@@ -1,5 +1,7 @@
 import ExcelJS from 'exceljs';
 
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 async function parseExcelFile(file) {
     const workbook = new ExcelJS.Workbook();
@@ -15,19 +17,22 @@ async function parseExcelFile(file) {
   
     // Process the rows and save to PostgreSQL via Prisma
     for (const row of rows) {
+      if (row === undefined || row === null) {
+        continue;
+      }
       // Skip empty rows
       if (row.every(cell => cell === undefined || cell === null || cell.trim() === '')) {
         continue;
       }
   
-      const [column1, column2, column3] = row; // Assuming 3 columns in the Excel file
-  
+      const [column1, column2, column3, column4] = row; // Assuming 3 columns in the Excel file
+      console.log(column2, column3, column4)
       try {
-        await prisma.tableName.create({
+        await prisma.material.create({
           data: {
-            column1,
-            column2,
-            column3,
+            code:column2,
+            englishName:column3,
+            chineseName:column4,
           },
         });
       } catch (error) {
