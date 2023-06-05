@@ -2,9 +2,8 @@ import express from "express";
 
 import { PrismaClient } from "@prisma/client";
 import Config from "../config";
-import jwtDecode from 'jwt-decode';
-import shortid from 'shortid';
-
+import jwtDecode from "jwt-decode";
+import shortid from "shortid";
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
@@ -21,8 +20,7 @@ router.get("/", (req, res) => {
 //   res.json({ status: "OK2" });
 // });
 
-router.put("/user",async (req, res) => {
-  
+router.put("/user", async (req, res) => {
   const { body } = req;
 
   Object.keys(body).forEach((key) => {
@@ -36,15 +34,15 @@ router.put("/user",async (req, res) => {
       id: body.id,
     },
     data: body,
-  })
+  });
 
   res.json(updateUser);
-})
+});
 
-router.get("/users",async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
-    const users = await prisma.user.findMany(
-      {select: {
+    const users = await prisma.user.findMany({
+      select: {
         id: true,
         name: true,
         email: true,
@@ -52,59 +50,51 @@ router.get("/users",async (req, res) => {
         role: true,
         createdAt: true,
         profile: true,
-      },}
-    );
+      },
+    });
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching users.' });
+    res.status(500).json({ error: "An error occurred while fetching users." });
   }
 });
 
-
-router.get("/financialTransactions",async (req, res) => {
-
+router.get("/financialTransactions", async (req, res) => {
   try {
     const records = await prisma.financialTransaction.findMany({
       include: {
-        userFrom:  {
+        userFrom: {
           select: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
-        userTo:  {
+        userTo: {
           select: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
       },
     });
     res.json(records);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
   }
 });
 
-router.post("/financialTransaction",async (req, res) => {
-
+router.post("/financialTransaction", async (req, res) => {
   try {
-    console.log('req.body', req.body)
+    console.log("req.body", req.body);
 
-    const {
-      userFrom,
-      userTo,
-      description,
-      amount,
-      status,
-      idToken
-    } = req.body;
+    const { userFrom, userTo, description, amount, status, idToken } = req.body;
     const profile = jwtDecode(idToken);
-    console.log(
-      'profile', profile
-    )
+    console.log("profile", profile);
 
     const record = await prisma.financialTransaction.create({
       data: {
@@ -113,80 +103,46 @@ router.post("/financialTransaction",async (req, res) => {
         description,
         amount,
         status,
-        inputerId:profile.id
+        inputerId: profile.id,
       },
     });
-
 
     res.json(record);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
   }
 });
 
-router.post("/product",async (req, res) => {
+router.post("/product", async (req, res) => {
+  console.log("req.body", req.body);
+  const { name, codeFromSupplier, ingredient, imageUrl } = req.body;
+  // const profile = jwtDecode(idToken);
+  // console.log(
+  //   'profile', profile
+  // )
 
-  console.log('req.body', req.body)
-    const {
+  const record = await prisma.product.create({
+    data: {
       name,
+      codeGenerated: shortid.generate(),
       codeFromSupplier,
-      ingredient,
       imageUrl,
-    } = req.body;
-    // const profile = jwtDecode(idToken);
-    // console.log(
-    //   'profile', profile
-    // )
+    },
+  });
+  const updatedIngredients = ingredient.map((element) => {
+    return Object.assign({}, element, { productId: record.id });
+  });
+  // // Create posts associated with the user
+  const posts = await prisma.ingredient.createMany({
+    data: updatedIngredients,
+  });
 
-    const record = await prisma.product.create({
-      data: {
-        name,
-        codeGenerated:shortid.generate(),
-        codeFromSupplier,
-        ingredient,
-        imageUrl,
-        
-      },
-    });
-
-
-    res.json(record);
-  // try {
-  //   console.log('req.body', req.body)
-
-
-    
-  //   const {
-  //     userFrom,
-  //     userTo,
-  //     description,
-  //     amount,
-  //     status,
-  //     idToken
-  //   } = req.body;
-  //   const profile = jwtDecode(idToken);
-  //   console.log(
-  //     'profile', profile
-  //   )
-
-  //   const record = await prisma.product.create({
-  //     data: {
-  //       userFromId: userFrom,
-  //       userToId: userTo,
-  //       description,
-  //       amount,
-  //       status,
-  //       inputerId:profile.id
-  //     },
-  //   });
-
-
-  //   res.json(record);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
-  // }
+  res.json(record);
 });
 
 //router.post('/', createUser);

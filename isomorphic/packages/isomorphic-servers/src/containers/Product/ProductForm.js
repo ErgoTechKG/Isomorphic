@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button, Form, Upload, Select, message, InputNumber, Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 import axios from "axios";
@@ -180,27 +180,54 @@ const MyComponent = (props) => {
         <Form.Item label="Usage" name="usage">
           <Select mode="multiple" allowClear placeholder="Please select usage" />
         </Form.Item>
-        <Form.Item label="Ingredient">
-      <Space.Compact>
-        <Form.Item
-          name={['ingredient', 'name']}
-          noStyle
-          rules={[]}
-        >
-          <Select placeholder="Select province">
-            <Option value="Zhejiang">Zhejiang</Option>
-            <Option value="Jiangsu">Jiangsu</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name={['ingredient', 'percentage']}
-          noStyle
-          rules={[]}
-        >
-          <Input style={{ width: '50%' }} placeholder="Input street" />
-        </Form.Item>
-      </Space.Compact>
-    </Form.Item>
+    <Form.List name="ingredient" label="Ingredient">
+      {(fields, { add, remove }) => (
+        <>
+          {fields.map(({ key, name, ...restField }) => (
+            <Space
+              key={key}
+              style={{
+                display: 'flex',
+                marginBottom: 8,
+              }}
+              align="baseline"
+            >
+              <Form.Item
+                {...restField}
+                label="Ingredient"
+                name={[name, 'name']}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Missing name',
+                  },
+                ]}
+              >
+                <Input placeholder="Name" />
+              </Form.Item>
+              <Form.Item
+                {...restField}
+                name={[name, 'percentage']}
+                rules={[
+                  {
+                    required: false,
+                    message: 'Missing percentage',
+                  },
+                ]}
+              >
+                <InputNumber placeholder="Percentage" />
+              </Form.Item>%
+              <MinusCircleOutlined onClick={() => remove(name)} />
+            </Space>
+          ))}
+          <Form.Item>
+            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+              Add ingredients
+            </Button>
+          </Form.Item>
+        </>
+      )}
+    </Form.List>
         <Form.Item
           label="Upload"
           name="upload"
