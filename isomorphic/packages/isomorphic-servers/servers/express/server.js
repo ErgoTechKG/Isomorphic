@@ -5,11 +5,12 @@ import Config from "./config";
 import { authenticate, authError } from "./middleware";
 import dotenv from "dotenv";
 import routes from "./routes";
-import uploadRoute from './routes/upload.js';
+import uploadRoute from "./routes/upload.js";
 import winston from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { PrismaClient } from "@prisma/client";
+import { parseExcelFile } from "./excelToPostgres";
 
 
 const prisma = new PrismaClient();
@@ -137,7 +138,7 @@ app.post("/signup", async (req, res) => {
 app.use("/api", [authenticate, authError, routes]);
 
 // Route for handling file uploads
-app.use('/upload', uploadRoute);
+app.use("/upload", uploadRoute);
 
 app.use("/api/secret", [authenticate, authError]);
 app.post("/api/secret/test", (req, res) => {
@@ -150,3 +151,19 @@ app.post("/api/secret/test", (req, res) => {
 app.listen(port, () => {
   logger.info("Isomorphic JWT login " + port);
 });
+
+app.get("/excel", async (req, res) => {
+  const excelFile = "./test/file.xlsx";
+
+  try {
+    await parseExcelFile(excelFile);
+    res.send("Data imported successfully.");
+  } catch (error) {
+    console.error("Error parsing Excel file:", error);
+    res.status(500).send("Error parsing Excel file.");
+  } finally {
+    // Remove the uploaded file
+    fs.unlinkSync(excelFile);
+  }
+});
+
