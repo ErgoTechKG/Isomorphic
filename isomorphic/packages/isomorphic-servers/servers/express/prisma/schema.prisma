@@ -7,6 +7,7 @@
 //npx prisma db push  
 //email:eric.liu@gmail.com
 //psw:Baza7183!
+//eric.dev.liu@gmail.com
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -64,6 +65,10 @@ model Product {
   ingredient       Ingredient[]
   price            Float?
   cost             Float?
+  maketPrice       Float?
+  sampleSource       String?
+  provider       String?
+  unit             String?
   imageUrl         String[]
   isFeatured       Boolean?       @default(false)
   color            String?

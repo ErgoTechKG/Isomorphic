@@ -167,7 +167,7 @@ const MyComponent = (props) => {
           label="Name"
           rules={[
             {
-              required: true,
+              required: false,
             },
           ]}
         >
@@ -178,7 +178,7 @@ const MyComponent = (props) => {
           label="Code From Supplier"
           rules={[
             {
-              required: true,
+              required: false,
             },
           ]}
         >
@@ -228,6 +228,28 @@ const MyComponent = (props) => {
           ]}
         >
           <InputNumber placeholder="price" />
+        </Form.Item>
+        <Form.Item
+          name="cost"
+          label="Cost"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="cost" />
+        </Form.Item>
+        <Form.Item
+          name="marketPrice"
+          label="Market Price"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <InputNumber placeholder="Market Price" />
         </Form.Item>
         <Form.Item
           name="gram"
