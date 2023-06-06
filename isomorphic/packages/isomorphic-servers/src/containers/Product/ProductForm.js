@@ -207,6 +207,29 @@ const MyComponent = (props) => {
           <Input placeholder="Description" />
         </Form.Item>
         <Form.Item
+          name="sampleSource"
+          label="Sample Source"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="Sample Source" />
+        </Form.Item>
+        <Form.Item
+          name="provider"
+          label="Provider"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="Provider" />
+        </Form.Item>
+
+        <Form.Item
           name="usage"
           label="Usage"
           rules={[
@@ -250,6 +273,20 @@ const MyComponent = (props) => {
           ]}
         >
           <InputNumber placeholder="Market Price" />
+        </Form.Item>
+        <Form.Item
+          name="unit"
+          label="Unit"
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Select>
+            <Select.Option value="KG"></Select.Option>
+            <Select.Option value="Meter"></Select.Option>
+            </Select>
         </Form.Item>
         <Form.Item
           name="gram"
