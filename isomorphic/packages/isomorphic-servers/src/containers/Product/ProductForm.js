@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Input, Button, Form, Upload, Select, message, InputNumber, Space } from "antd";
+import {
+  Input,
+  Button,
+  Form,
+  Upload,
+  Select,
+  message,
+  InputNumber,
+  Space,
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const { Option } = Select;
 const MyComponent = (props) => {
+  const { locale } = useSelector((state) => state.LanguageSwitcher.language);
+  const [usageDropdownlist, setUsageDropdownlistValue] = useState([]);
+  const [catagoryDropdownlist, setCatagoryDropdownlistValue] = useState([]);
+  const [materialDropdownlist, setMaterialDropdownlistValue] = useState([]);
   const [form] = Form.useForm();
   const layout = {
     labelCol: {
@@ -24,16 +37,93 @@ const MyComponent = (props) => {
     },
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}usages`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        const usageDropdownlist = response.data.map((a) => {
+          const languageName =
+            {
+              en: a.englishName,
+              cn: a.chineseName,
+              ru: a.russianName,
+            }[locale] || "";
+
+          return {
+            value: a.id,
+            label: `${languageName}-${a.fabric}-${a.season}`,
+          };
+        });
+        setUsageDropdownlistValue(usageDropdownlist);
+
+        const responseCatagory = await axios.get(
+          `${jwtConfig.fetchUrlSecret}catagories`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        const catagoryDropdownlist = response.data.map((a) => {
+          const languageName =
+            {
+              en: a.englishName,
+              cn: a.chineseName,
+              ru: a.russianName,
+            }[locale] || "";
+
+          return {
+            value: a.id,
+            label: `${languageName}-${a.fabric}-${a.season}`,
+          };
+        });
+        console.log("responseCatagory", responseCatagory);
+        setCatagoryDropdownlistValue(catagoryDropdownlist);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}materials`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        const materialDropdownlist = response.data.map((a) => {
+          const languageName =
+            {
+              en: a.englishName,
+              cn: a.chineseName,
+              ru: a.russianName,
+            }[locale] || "";
+
+          return {
+            value: a.id,
+            label: `${a.code}-${languageName}`,
+          };
+        });
+        console.log("material", response);
+        setMaterialDropdownlistValue(materialDropdownlist);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   const onFinish = async (values) => {
     if (values.upload)
       values.imageUrl = values.upload.map((i) => i.response.fileId);
-    console.log("values", values);
 
-    const response = await axios.post(`${jwtConfig.fetchUrlSecret}product`,values, axiosConfig).catch(function (error) {
-      console.log(error)
-    });
-    console.log('response', response)
-    if(response && response.data && response.status === 200) {
+    const response = await axios
+      .post(`${jwtConfig.fetchUrlSecret}product`, values, axiosConfig)
+      .catch(function (error) {
+        console.log(error);
+      });
+    if (response && response.data && response.status === 200) {
       props.setIsModalOpen(false);
     }
     //TODO: what to do after clicking save button
@@ -125,7 +215,7 @@ const MyComponent = (props) => {
             },
           ]}
         >
-          <Select mode="multiple" allowClear />
+          <Select mode="multiple" allowClear options={usageDropdownlist} />
         </Form.Item>
 
         <Form.Item
@@ -173,61 +263,62 @@ const MyComponent = (props) => {
           <InputNumber placeholder="stockCount" disabled={true} />
         </Form.Item>
         <Form.Item label="Category" name="category">
-          <Select>
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
+          <Select options={catagoryDropdownlist} />
         </Form.Item>
-        <Form.Item label="Usage" name="usage">
-          <Select mode="multiple" allowClear placeholder="Please select usage" />
-        </Form.Item>
-    <Form.List name="ingredient" label="Ingredient">
-      {(fields, { add, remove }) => (
-        <>
-          {fields.map(({ key, name, ...restField }) => (
-            <Space
-              key={key}
-              style={{
-                display: 'flex',
-                marginBottom: 8,
-              }}
-              align="baseline"
-            >
-              <Form.Item
-                {...restField}
-                label="Ingredient"
-                name={[name, 'name']}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Missing name',
-                  },
-                ]}
-              >
-                <Input placeholder="Name" />
+        <Form.List name="ingredient" label="Ingredient">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space
+                  key={key}
+                  style={{
+                    display: "flex",
+                    marginBottom: 8,
+                  }}
+                  align="baseline"
+                >
+                  <Form.Item
+                    {...restField}
+                    label="Ingredient"
+                    name={[name, "name"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Missing name",
+                      },
+                    ]}
+                  >
+                    <Select options={materialDropdownlist} />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "percentage"]}
+                    rules={[
+                      {
+                        required: false,
+                        message: "Missing percentage",
+                      },
+                    ]}
+                  >
+                    <InputNumber placeholder="Percentage" />
+                  </Form.Item>
+                  %
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add ingredients
+                </Button>
               </Form.Item>
-              <Form.Item
-                {...restField}
-                name={[name, 'percentage']}
-                rules={[
-                  {
-                    required: false,
-                    message: 'Missing percentage',
-                  },
-                ]}
-              >
-                <InputNumber placeholder="Percentage" />
-              </Form.Item>%
-              <MinusCircleOutlined onClick={() => remove(name)} />
-            </Space>
-          ))}
-          <Form.Item>
-            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-              Add ingredients
-            </Button>
-          </Form.Item>
-        </>
-      )}
-    </Form.List>
+            </>
+          )}
+        </Form.List>
         <Form.Item
           label="Upload"
           name="upload"

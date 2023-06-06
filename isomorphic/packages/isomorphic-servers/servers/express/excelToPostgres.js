@@ -25,16 +25,14 @@ async function parseExcelFile(file) {
         continue;
       }
   
-      const [column1, column2, column3, column4, column5, column6] = row; // Assuming 3 columns in the Excel file
-      console.log(column2, column3, column4, column5, column6)
+      const [column1, column2, column3, column4] = row; // Assuming 3 columns in the Excel file
+      console.log(column2, column4, column3)
       try {
-        await prisma.garments.create({
+        await prisma.category.create({
           data: {
             englishName:column2, 
-            chineseName:column3, 
-            russionName:column4, 
-            fabric: column5, 
-            season: column6, 
+            chineseName:column4, 
+            russionName:column3, 
           },
         });
       } catch (error) {

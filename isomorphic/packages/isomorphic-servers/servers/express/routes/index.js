@@ -145,5 +145,50 @@ router.post("/product", async (req, res) => {
   res.json(record);
 });
 
+router.get("/usages", async (req, res) => {
+  try {
+    const records = await prisma.Garments.findMany({
+    });
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
+});
+
+router.get("/catagories", async (req, res) => {
+  try {
+    const records = await prisma.Category.findMany({
+    });
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
+});
+
+router.get("/materials", async (req, res) => {
+  try {
+    const records = await prisma.Material.findMany({
+    });
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
+});
+
 //router.post('/', createUser);
 export default router;
