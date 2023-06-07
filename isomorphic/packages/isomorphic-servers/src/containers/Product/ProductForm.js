@@ -63,7 +63,7 @@ const MyComponent = (props) => {
           `${jwtConfig.fetchUrlSecret}catagories`,
           axiosConfig
         ); // Replace with your actual API endpoint
-        const catagoryDropdownlist = response.data.map((a) => {
+        const catagoryDropdownlist = responseCatagory.data.map((a) => {
           const languageName =
             {
               en: a.englishName,
@@ -73,17 +73,16 @@ const MyComponent = (props) => {
 
           return {
             value: a.id,
-            label: `${languageName}-${a.fabric}-${a.season}`,
+            label: `${languageName}`,
           };
         });
-        console.log("responseCatagory", responseCatagory);
         setCatagoryDropdownlistValue(catagoryDropdownlist);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchUserData();
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -105,15 +104,14 @@ const MyComponent = (props) => {
             label: `${a.code}-${languageName}`,
           };
         });
-        console.log("material", response);
+
         setMaterialDropdownlistValue(materialDropdownlist);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchUserData();
-  }, []);
-
+  }, [locale]);
   const onFinish = async (values) => {
     if (values.upload)
       values.imageUrl = values.upload.map((i) => i.response.fileId);
@@ -139,8 +137,6 @@ const MyComponent = (props) => {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
-        const aprops = form.getFieldsValue();
-        //form.setFieldValue('file', info.response.fileId)
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
@@ -157,7 +153,6 @@ const MyComponent = (props) => {
     return e?.fileList;
   };
 
-  const fileList = [];
 
   return (
     <div>
@@ -242,7 +237,6 @@ const MyComponent = (props) => {
         </Form.Item>
 
         <Form.Item
-          name="price"
           label="Price"
           rules={[
             {
@@ -250,10 +244,47 @@ const MyComponent = (props) => {
             },
           ]}
         >
-          <InputNumber placeholder="price" />
+          <Form.Item name={["price", "USDAmount"]} label="USDAmount">
+            <InputNumber placeholder="USDAmount" />
+          </Form.Item>
+          <Form.Item
+            name={["price", "localCurrencyAmount"]}
+            label="local Currency Amount"
+          >
+            <InputNumber placeholder="local Currency Amount" />
+          </Form.Item>
+          <Form.Item
+            name={["price", "currencyName"]}
+            label="Currency Name"
+            rules={[
+              {
+                required: false,
+                message:
+                  "if localCurrencyAmount exists, currencyName is required",
+              },
+            ]}
+          >
+            <Select placeholder="Select Currency Name">
+              <Select.Option value="USD">USD</Select.Option>
+              <Select.Option value="RMB">RMB</Select.Option>
+              <Select.Option value="SOM">SOM</Select.Option>
+              <Select.Option value="RUB">RUB</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name={["price", "realExchangeRate"]}
+            label="Real ExchangeRate"
+          >
+            <InputNumber placeholder="Real ExchangeRate" />
+          </Form.Item>
+          <Form.Item
+            name={["price", "autoExchangeRate"]}
+            label="Auto ExchangeRate"
+          >
+            <InputNumber placeholder="Auto ExchangeRate" disabled={true} />
+          </Form.Item>
         </Form.Item>
         <Form.Item
-          name="cost"
           label="Cost"
           rules={[
             {
@@ -261,10 +292,47 @@ const MyComponent = (props) => {
             },
           ]}
         >
-          <InputNumber placeholder="cost" />
+          <Form.Item name={["cost", "USDAmount"]} label="USDAmount">
+            <InputNumber placeholder="USDAmount" />
+          </Form.Item>
+          <Form.Item
+            name={["cost", "localCurrencyAmount"]}
+            label="local Currency Amount"
+          >
+            <InputNumber placeholder="local Currency Amount" />
+          </Form.Item>
+          <Form.Item
+            name={["cost", "currencyName"]}
+            label="Currency Name"
+            rules={[
+              {
+                required: false,
+                message:
+                  "if localCurrencyAmount exists, currencyName is required",
+              },
+            ]}
+          >
+            <Select placeholder="Select Currency Name">
+              <Select.Option value="USD">USD</Select.Option>
+              <Select.Option value="RMB">RMB</Select.Option>
+              <Select.Option value="SOM">SOM</Select.Option>
+              <Select.Option value="RUB">RUB</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name={["cost", "realExchangeRate"]}
+            label="Real ExchangeRate"
+          >
+            <InputNumber placeholder="Real ExchangeRate" />
+          </Form.Item>
+          <Form.Item
+            name={["cost", "autoExchangeRate"]}
+            label="Auto ExchangeRate"
+          >
+            <InputNumber placeholder="Auto ExchangeRate" disabled={true} />
+          </Form.Item>
         </Form.Item>
         <Form.Item
-          name="marketPrice"
           label="Market Price"
           rules={[
             {
@@ -272,7 +340,45 @@ const MyComponent = (props) => {
             },
           ]}
         >
-          <InputNumber placeholder="Market Price" />
+          <Form.Item name={["marketPrice", "USDAmount"]} label="USDAmount">
+            <InputNumber placeholder="USDAmount" />
+          </Form.Item>
+          <Form.Item
+            name={["marketPrice", "localCurrencyAmount"]}
+            label="local Currency Amount"
+          >
+            <InputNumber placeholder="local Currency Amount" />
+          </Form.Item>
+          <Form.Item
+            name={["marketPrice", "currencyName"]}
+            label="Currency Name"
+            rules={[
+              {
+                required: false,
+                message:
+                  "if localCurrencyAmount exists, currencyName is required",
+              },
+            ]}
+          >
+            <Select placeholder="Select Currency Name">
+              <Select.Option value="USD">USD</Select.Option>
+              <Select.Option value="RMB">RMB</Select.Option>
+              <Select.Option value="SOM">SOM</Select.Option>
+              <Select.Option value="RUB">RUB</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name={["marketPrice", "realExchangeRate"]}
+            label="Real ExchangeRate"
+          >
+            <InputNumber placeholder="Real ExchangeRate" />
+          </Form.Item>
+          <Form.Item
+            name={["marketPrice", "autoExchangeRate"]}
+            label="Auto ExchangeRate"
+          >
+            <InputNumber placeholder="Auto ExchangeRate" disabled={true} />
+          </Form.Item>
         </Form.Item>
         <Form.Item
           name="unit"
@@ -286,7 +392,7 @@ const MyComponent = (props) => {
           <Select>
             <Select.Option value="KG"></Select.Option>
             <Select.Option value="Meter"></Select.Option>
-            </Select>
+          </Select>
         </Form.Item>
         <Form.Item
           name="gram"
