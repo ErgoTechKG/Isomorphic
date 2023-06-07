@@ -63,11 +63,11 @@ model Product {
   description      String?
   usage            Garments[]
   ingredient       Ingredient[]
-  price            Float?
-  cost             Float?
-  maketPrice       Float?
-  sampleSource       String?
-  provider       String?
+  price            Price?         @relation("price", fields: [priceId], references: [id])
+  cost             Price?         @relation("cost", fields: [costId], references: [id])
+  maketPrice       Price?         @relation("maketPrice", fields: [marketPriceId], references: [id])
+  sampleSource     String?
+  provider         String?
   unit             String?
   imageUrl         String[]
   isFeatured       Boolean?       @default(false)
@@ -82,6 +82,9 @@ model Product {
   orderProducts    OrderProduct[]
   inputerId        Int?
   inputer          User?          @relation("inputer", fields: [inputerId], references: [id])
+  priceId          Int?
+  costId           Int?
+  marketPriceId    Int?
 }
 
 model Order {
@@ -191,4 +194,16 @@ model Material {
   chineseName String?
   russionName String?
   ingredient  Ingredient[]
+}
+
+model Price {
+  id                  Int       @id @default(autoincrement())
+  USDAmount           Float?
+  localCurrencyAmount Float?
+  currencyName        String?
+  realExchangeRate    Float?
+  autoExchangeRate    Float?
+  productPrice        Product[] @relation("price")
+  productCost         Product[] @relation("cost")
+  productMaketPrice   Product[] @relation("maketPrice")
 }
