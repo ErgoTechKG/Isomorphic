@@ -38,6 +38,7 @@ const MyComponent = (props) => {
   };
 
   useEffect(() => {
+    console.log('locale', locale)
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -48,7 +49,7 @@ const MyComponent = (props) => {
           const languageName =
             {
               en: a.englishName,
-              cn: a.chineseName,
+              zh: a.chineseName,
               ru: a.russianName,
             }[locale] || "";
 
@@ -67,7 +68,7 @@ const MyComponent = (props) => {
           const languageName =
             {
               en: a.englishName,
-              cn: a.chineseName,
+              zh: a.chineseName,
               ru: a.russianName,
             }[locale] || "";
 
@@ -85,6 +86,7 @@ const MyComponent = (props) => {
   }, [locale]);
 
   useEffect(() => {
+    
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -95,7 +97,7 @@ const MyComponent = (props) => {
           const languageName =
             {
               en: a.englishName,
-              cn: a.chineseName,
+              zh: a.chineseName,
               ru: a.russianName,
             }[locale] || "";
 
