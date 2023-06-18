@@ -27,5 +27,10 @@ const options = [
     label: 'sidebar.financialTransaction',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'inkOrder',
+    label: 'sidebar.inkOrder',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
 ];
 export default options;

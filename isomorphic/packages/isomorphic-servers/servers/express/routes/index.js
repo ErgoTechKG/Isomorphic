@@ -134,6 +134,8 @@ router.post("/product", async (req, res) => {
       imageUrl,
     },
   });
+
+  console.log('ingredient', ingredient)
   const updatedIngredients = ingredient.map((element) => {
     return Object.assign({}, element, { productId: record.id });
   });

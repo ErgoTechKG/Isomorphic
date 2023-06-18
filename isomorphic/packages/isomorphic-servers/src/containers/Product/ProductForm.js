@@ -38,7 +38,6 @@ const MyComponent = (props) => {
   };
 
   useEffect(() => {
-    console.log('locale', locale)
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
@@ -117,9 +116,11 @@ const MyComponent = (props) => {
   const onFinish = async (values) => {
     if (values.upload)
       values.imageUrl = values.upload.map((i) => i.response.fileId);
+    console.log("Upload finished", values)
 
+    const {upload,...rest} = values;
     const response = await axios
-      .post(`${jwtConfig.fetchUrlSecret}product`, values, axiosConfig)
+      .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
       .catch(function (error) {
         console.log(error);
       });

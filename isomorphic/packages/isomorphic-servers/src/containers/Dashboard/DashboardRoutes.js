@@ -29,6 +29,10 @@ const routes = [
     path: 'financialTransaction',
     component: lazy(() => import('../FinancialTransaction')),
   },
+  {
+    path: 'inkOrder',
+    component: lazy(() => import('../InkOrder')),
+  },
 ];
 
 export default function AppRouter() {

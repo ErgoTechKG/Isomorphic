@@ -585,5 +585,6 @@
   "Swiper.custom.buttonNavTitle": "Custom Naviation", 
   "sidebar.userPage": "User Page",
   "sidebar.productList": "Product List",
-  "sidebar.financialTransaction": "Financial Transaction"
+  "sidebar.financialTransaction": "Financial Transaction",
+  "sidebar.inkOrder": "Ink Order"
 }

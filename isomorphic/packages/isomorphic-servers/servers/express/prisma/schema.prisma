@@ -34,6 +34,7 @@ model User {
   clientOrders                 Order[]                @relation("client")
   orderInputer                 OrderProduct[]         @relation("inputer")
   productInputer               Product[]              @relation("inputer")
+  InkPayment                   InkPayment[]           @relation("inputer")
 }
 
 model Profile {
@@ -57,9 +58,9 @@ model Category {
 
 model Product {
   id               Int            @id @default(autoincrement())
-  codeFromSupplier String
-  codeGenerated    String
-  name             String
+  codeFromSupplier String?
+  codeGenerated    String?
+  name             String?
   description      String?
   usage            Garments[]
   ingredient       Ingredient[]
@@ -153,6 +154,17 @@ enum OrderStatus {
   DELIVERED
 }
 
+enum IntPaymentStatus {
+  BankPaymentComplete
+  CashPaymentComplete
+  PENDING
+}
+
+model PaymentStatusNote {
+  id   Int     @id @default(autoincrement())
+  note String?
+}
+
 enum TransactionStatus {
   PENDING
   PAID
@@ -206,4 +218,63 @@ model Price {
   productPrice        Product[] @relation("price")
   productCost         Product[] @relation("cost")
   productMaketPrice   Product[] @relation("maketPrice")
+}
+
+model InkOrder {
+  id                     Int               @id @default(autoincrement())
+  inkProduct             InkProduct?       @relation(fields: [inkProductId], references: [id])
+  inkProductId           Int?
+  inkProductCat          InkProductCat?    @relation(fields: [inkProductCatId], references: [id])
+  inkProductCatId        Int?
+  amount                 Float?            @default(0)
+  unit                   String?
+  orderDate              DateTime?         @default(now())
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  paymentStatus          IntPaymentStatus? @default(PENDING)
+  unitSoldAtPriceUSD     Float?            @default(0)
+  confirmedFromInventory Boolean?          @default(false)
+  newClientName          String?
+  inkClient              InkClient?        @relation("inkClient", fields: [inkClientId], references: [id])
+  inkClientId            Int?
+  InkPayment             InkPayment[]      @relation("inkOrder")
+}
+
+model InkClient {
+  id         Int          @id @default(autoincrement())
+  email      String?      @unique
+  name       String?
+  address    String?
+  whatApp    String?
+  ig         String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  inkOrder   InkOrder[]   @relation("inkClient")
+  InkPayment InkPayment[] @relation("InkClientFrom")
+}
+
+model InkPayment {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  status      TransactionStatus
+  description String
+  amount      Float
+  orderId     Int?
+  order       InkOrder?         @relation("inkOrder", fields: [orderId], references: [id])
+  userFromId  Int?
+  userFrom    InkClient?        @relation("InkClientFrom", fields: [userFromId], references: [id])
+  inputerId   Int?
+  inputer     User?             @relation("inputer", fields: [inputerId], references: [id])
+}
+
+model InkProduct {
+  id       Int        @id @default(autoincrement())
+  name     String?
+  InkOrder InkOrder[]
+}
+
+model InkProductCat {
+  id       Int        @id @default(autoincrement())
+  name     String?
+  InkOrder InkOrder[]
 }
