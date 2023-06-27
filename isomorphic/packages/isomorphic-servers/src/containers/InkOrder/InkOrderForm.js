@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { Input, Button, Select, Space, InputNumber, Form } from "antd";
+import { Input, Button, Select, Space, InputNumber, Form, DatePicker } from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
@@ -90,8 +90,8 @@ const MyComponent = (props) => {
           {...layout}
         >
           <Form.Item
-            name="userFrom"
-            label="Select From which User"
+            name="inkProduct"
+            label="Product"
             rules={[
               {
                 required: false,
@@ -99,13 +99,13 @@ const MyComponent = (props) => {
             ]}
           >
             <Select
-              placeholder="Select From which User"
+              placeholder="Select Product"
               options={userDropdownlistValue}
             />
           </Form.Item>
           <Form.Item
-            name="userTo"
-            label="Select To which User"
+            name="inkProductCat"
+            label="Select Catagary"
             rules={[
               {
                 required: false,
@@ -113,20 +113,9 @@ const MyComponent = (props) => {
             ]}
           >
             <Select
-              placeholder="Select To which User"
+              placeholder="Select Catagary"
               options={userDropdownlistValue}
             />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input placeholder="Description" />
           </Form.Item>
           <Form.Item
             name="amount"
@@ -140,8 +129,19 @@ const MyComponent = (props) => {
             <InputNumber placeholder="Amount" />
           </Form.Item>
           <Form.Item
-            name="status"
-            label="Status"
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <InputNumber placeholder="Amount" />
+          </Form.Item>
+          <Form.Item
+            name="unit"
+            label="Unit"
             rules={[
               {
                 required: false,
@@ -149,38 +149,33 @@ const MyComponent = (props) => {
             ]}
           >
             <Select
-              placeholder="Status"
-              onChange={handleChange}
+              placeholder="unit"
               options={[
                 {
-                  label: "PENDING",
-                  value: "PENDING",
+                  label: "KG",
+                  value: "KG",
                 },
                 {
-                  label: "PAID",
-                  value: "PAID",
+                  label: "M",
+                  value: "M",
                 },
                 {
-                  label: "SHIPPED",
-                  value: "SHIPPED",
-                },
-                {
-                  label: "DELIVERED",
-                  value: "DELIVERED",
+                  label: "AD",
+                  value: "AD",
                 },
               ]}
             />
           </Form.Item>
           <Form.Item
-            name="order"
-            label="Order"
+            name="orderDate"
+            label="Order Date"
             rules={[
               {
                 required: false,
               },
             ]}
           >
-            <Select placeholder="Order" onChange={handleChange} options={[]} />
+            <DatePicker/>
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
