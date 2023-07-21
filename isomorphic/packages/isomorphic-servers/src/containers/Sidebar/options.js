@@ -32,5 +32,10 @@ const options = [
     label: 'sidebar.inkOrder',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'temporary',
+    label: 'sidebar.temporary',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
 ];
 export default options;

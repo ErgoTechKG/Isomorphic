@@ -192,5 +192,16 @@ router.get("/materials", async (req, res) => {
   }
 });
 
+
+
+
+router.post("/temporary-upload", async (req, res) => {
+
+  const {  imageUrl } = req.body;
+
+
+  res.json(record);
+});
+
 //router.post('/', createUser);
 export default router;

@@ -81,4 +81,6 @@ export const PRIVATE_ROUTE = {
   PRODUCT_LIST: '/productList',
   FINANCIALTRANSACTION: '/financialTransaction',
   INKORDER: '/inkOrder',
+  Temporary: '/temporary',
+
 };

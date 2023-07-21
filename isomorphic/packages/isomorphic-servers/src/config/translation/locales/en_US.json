@@ -586,5 +586,6 @@
   "sidebar.userPage": "User Page",
   "sidebar.productList": "Product List",
   "sidebar.financialTransaction": "Financial Transaction",
-  "sidebar.inkOrder": "Ink Order"
+  "sidebar.inkOrder": "Ink Order", 
+  "sidebar.temporary": "Temporary"
 }

@@ -33,6 +33,10 @@ const routes = [
     path: 'inkOrder',
     component: lazy(() => import('../InkOrder')),
   },
+  {
+    path: 'temporary',
+    component: lazy(() => import('../Temporary')),
+  },
 ];
 
 export default function AppRouter() {

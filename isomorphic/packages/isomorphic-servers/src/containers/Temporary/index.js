@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button, Space } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
-import InkOrderForm from './InkOrderForm';
+import FinancialTransactionForm from './Form';
 const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,12 +18,12 @@ const MyComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // try {
-      //   const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); // Replace with your actual API endpoint
-      //   setData(response.data);
-      // } catch (error) {
-      //   console.error('Error fetching data:', error);
-      // }
+      try {
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); // Replace with your actual API endpoint
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
     fetchData();
@@ -84,13 +84,9 @@ const MyComponent = () => {
   return (
     <LayoutContentWrapper style={{ height: '100vh' }}>
       <LayoutContent>
-      <Space>
-        <Button type="primary" onClick={handleAdd} >Add New Order</Button>
-        <Button type="primary" onClick={handleAdd} >Add New Client</Button>
-        <Button type="primary" onClick={handleAdd} >Add New Payment</Button>
-        </Space>
+        <Button type="primary" onClick={handleAdd} >Add new image</Button>
         <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
-          <InkOrderForm setIsModalOpen={setIsModalOpen} record={record}></InkOrderForm>
+          <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
         </Modal>
         <Table
           columns={columns}
