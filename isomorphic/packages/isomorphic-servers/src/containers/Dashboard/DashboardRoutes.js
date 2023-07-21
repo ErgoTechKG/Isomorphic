@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: 'productlist',
-    component: lazy(() => import('../Product/ProductList')),
+    component: lazy(() => import('../Product')),
   },
   {
     path: 'financialTransaction',

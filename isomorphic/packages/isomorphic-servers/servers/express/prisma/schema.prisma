@@ -16,3 +16,73 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      UserRole @default(VISITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile   Profile?
+}
+
+model Profile {
+  id       Int     @id @default(autoincrement())
+  name     String?
+  address  String?
+  phone    String?
+  whatsapp String?
+  note     String?
+  userId   Int     @unique
+  user     User    @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  ADMIN
+  VISITOR
+  BISHKEKSTAFF
+  CHINESESTAFF
+  CLIENT
+  INKCLIENT
+}
+
+model Product {
+  id              Int     @id @default(autoincrement())
+  source          String?
+  codeKent        String
+  codeChina       String?
+  nameRussian     String?
+  nameChinese     String?
+  nameEnglish     String?
+  subCat          String?
+  priceChinaKG    Float?   @default(0)
+  priceChinaMeter Float?   @default(0)
+  width           Float?   @default(0)
+  gram            Float?   @default(0)
+  marketPrice Float?   @default(0)
+  priceHitory PriceHistory[]
+  imageURL  String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model PriceHistory {
+  id        Int      @id @default(autoincrement())
+  price     Float
+  date      DateTime
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+//exchange, logistic, profit%
+model Variables {
+  id        Int      @id @default(autoincrement())
+  name      String
+  value     Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+

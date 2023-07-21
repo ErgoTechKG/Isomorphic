@@ -99,9 +99,10 @@ app.post("/login", async (req, res) => {
 // Define a signup endpoint
 app.post("/signup", async (req, res) => {
   try {
-    const { email, password, name } = req.body;
 
-    // Check if the username already exists
+    const { email, password } = req.body;
+
+    // Check if the email already exists
     const existingEmail = await prisma.user.findUnique({
       where: { email },
     });
@@ -117,12 +118,11 @@ app.post("/signup", async (req, res) => {
       data: {
         email,
         password: hashedPassword,
-        name,
       },
     });
     // Generate a JWT token
     const token = jwt.sign(
-      { email: newUser.email, name: newUser.name, role: newUser.role },
+      { email: newUser.email, role: newUser.role },
       "your-secret-key"
     );
 
