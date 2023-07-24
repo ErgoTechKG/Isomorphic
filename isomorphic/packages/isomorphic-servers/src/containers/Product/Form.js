@@ -46,8 +46,24 @@ const MyComponent = (props) => {
     form.resetFields();
   };
 
-  const onGenerateCode = (value) => console.log(value);
-
+  const onGenerateCode = async (value) => {
+    if (value) {
+      console.log(value);
+    } else {
+      const response = await axios
+        .get(
+          `${jwtConfig.fetchUrlSecret}product/generateCode`,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        console.log(response.data)
+        //props.setIsModalOpen(false);
+      }
+    }
+  };
 
   const uploadProps = {
     onChange(info) {
@@ -62,7 +78,6 @@ const MyComponent = (props) => {
       console.log("info", info);
     },
   };
-
 
   const normFile = (e) => {
     console.log("Upload event:", e);
@@ -198,12 +213,16 @@ const MyComponent = (props) => {
             <InputNumber addonAfter="$/M" placeholder="Market Price" />
           </Form.Item>
 
-          <Form.Item label="Upload" name="upload" valuePropName="fileList">
+          <Form.Item
+            label="Upload"
+            name="upload"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+          >
             <Upload
               action={jwtConfig.uploadUrl}
               listType="picture-card"
               name="file"
-              getValueFromEvent={normFile}
               {...uploadProps}
             >
               <div>

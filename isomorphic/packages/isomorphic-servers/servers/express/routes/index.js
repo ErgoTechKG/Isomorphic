@@ -3,13 +3,16 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import Config from "../config";
 import jwtDecode from "jwt-decode";
-import shortid from "shortid";
+import productRouter from './product.js';
+
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
 const prisma = new PrismaClient();
 
 const router = express.Router();
+
+router
 
 router.get("/", (req, res) => {
   res.json({ status: "OK1" });
@@ -118,34 +121,34 @@ router.post("/financialTransaction", async (req, res) => {
   }
 });
 
-router.post("/product", async (req, res) => {
-  console.log("req.body", req.body);
-  const { name, codeFromSupplier, ingredient, imageUrl } = req.body;
-  // const profile = jwtDecode(idToken);
-  // console.log(
-  //   'profile', profile
-  // )
+// router.post("/product", async (req, res) => {
+//   console.log("req.body", req.body);
+//   const { name, codeFromSupplier, ingredient, imageUrl } = req.body;
+//   // const profile = jwtDecode(idToken);
+//   // console.log(
+//   //   'profile', profile
+//   // )
 
-  const record = await prisma.product.create({
-    data: {
-      name,
-      codeGenerated: shortid.generate(),
-      codeFromSupplier,
-      imageUrl,
-    },
-  });
+//   const record = await prisma.product.create({
+//     data: {
+//       name,
+//       codeGenerated: shortid.generate(),
+//       codeFromSupplier,
+//       imageUrl,
+//     },
+//   });
 
-  console.log('ingredient', ingredient)
-  const updatedIngredients = ingredient.map((element) => {
-    return Object.assign({}, element, { productId: record.id });
-  });
-  // // Create posts associated with the user
-  const posts = await prisma.ingredient.createMany({
-    data: updatedIngredients,
-  });
+//   console.log('ingredient', ingredient)
+//   const updatedIngredients = ingredient.map((element) => {
+//     return Object.assign({}, element, { productId: record.id });
+//   });
+//   // // Create posts associated with the user
+//   const posts = await prisma.ingredient.createMany({
+//     data: updatedIngredients,
+//   });
 
-  res.json(record);
-});
+//   res.json(record);
+// });
 
 router.get("/usages", async (req, res) => {
   try {
@@ -203,5 +206,7 @@ router.post("/temporary-upload", async (req, res) => {
   res.json(record);
 });
 
-//router.post('/', createUser);
+
+router.use('/product', productRouter);
+
 export default router;
