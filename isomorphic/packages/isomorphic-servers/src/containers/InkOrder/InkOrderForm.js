@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { Input, Button, Select, Space, InputNumber, Form } from "antd";
+import { Input, Button, Select, Space, InputNumber, Form, DatePicker } from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
@@ -90,97 +90,92 @@ const MyComponent = (props) => {
           {...layout}
         >
           <Form.Item
-            name="userFrom"
-            label="Select From which User"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Select From which User"
-              options={userDropdownlistValue}
-            />
-          </Form.Item>
-          <Form.Item
-            name="userTo"
-            label="Select To which User"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Select To which User"
-              options={userDropdownlistValue}
-            />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input placeholder="Description" />
-          </Form.Item>
-          <Form.Item
-            name="amount"
-            label="Amount"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber placeholder="Amount" />
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="Status"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Status"
-              onChange={handleChange}
-              options={[
-                {
-                  label: "PENDING",
-                  value: "PENDING",
-                },
-                {
-                  label: "PAID",
-                  value: "PAID",
-                },
-                {
-                  label: "SHIPPED",
-                  value: "SHIPPED",
-                },
-                {
-                  label: "DELIVERED",
-                  value: "DELIVERED",
-                },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item
-            name="order"
-            label="Order"
+            name="inkProduct"
+            label="Product"
             rules={[
               {
                 required: false,
               },
             ]}
           >
-            <Select placeholder="Order" onChange={handleChange} options={[]} />
+            <Select
+              placeholder="Select Product"
+              options={userDropdownlistValue}
+            />
+          </Form.Item>
+          <Form.Item
+            name="inkProductCat"
+            label="Select Catagary"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select Catagary"
+              options={userDropdownlistValue}
+            />
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <InputNumber placeholder="Amount" />
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <InputNumber placeholder="Amount" />
+          </Form.Item>
+          <Form.Item
+            name="unit"
+            label="Unit"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Select
+              placeholder="unit"
+              options={[
+                {
+                  label: "KG",
+                  value: "KG",
+                },
+                {
+                  label: "M",
+                  value: "M",
+                },
+                {
+                  label: "AD",
+                  value: "AD",
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            name="orderDate"
+            label="Order Date"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <DatePicker/>
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">

@@ -28,7 +28,7 @@ const columns = [
     title: "Action",
     dataIndex: "",
     key: "x",
-    render: () => <a>Delete</a>,
+    render: () => <h1>Delete</h1>,
   },
 ];
 const data = [

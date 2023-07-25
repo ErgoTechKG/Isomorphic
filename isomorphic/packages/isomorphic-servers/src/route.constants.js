@@ -80,4 +80,7 @@ export const PRIVATE_ROUTE = {
   USER: '/user',
   PRODUCT_LIST: '/productList',
   FINANCIALTRANSACTION: '/financialTransaction',
+  INKORDER: '/inkOrder',
+  Temporary: '/temporary',
+
 };

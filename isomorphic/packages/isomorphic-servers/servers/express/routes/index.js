@@ -2,8 +2,8 @@ import express from "express";
 
 import { PrismaClient } from "@prisma/client";
 import Config from "../config";
-import jwtDecode from 'jwt-decode';
-import shortid from 'shortid';
+import jwtDecode from "jwt-decode";
+import productRouter from './product.js';
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -11,6 +11,8 @@ const { port, secretKey, expiredAfter } = Config;
 const prisma = new PrismaClient();
 
 const router = express.Router();
+
+router
 
 router.get("/", (req, res) => {
   res.json({ status: "OK1" });
@@ -21,8 +23,7 @@ router.get("/", (req, res) => {
 //   res.json({ status: "OK2" });
 // });
 
-router.put("/user",async (req, res) => {
-  
+router.put("/user", async (req, res) => {
   const { body } = req;
 
   Object.keys(body).forEach((key) => {
@@ -36,15 +37,15 @@ router.put("/user",async (req, res) => {
       id: body.id,
     },
     data: body,
-  })
+  });
 
   res.json(updateUser);
-})
+});
 
-router.get("/users",async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
-    const users = await prisma.user.findMany(
-      {select: {
+    const users = await prisma.user.findMany({
+      select: {
         id: true,
         name: true,
         email: true,
@@ -52,59 +53,51 @@ router.get("/users",async (req, res) => {
         role: true,
         createdAt: true,
         profile: true,
-      },}
-    );
+      },
+    });
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching users.' });
+    res.status(500).json({ error: "An error occurred while fetching users." });
   }
 });
 
-
-router.get("/financialTransactions",async (req, res) => {
-
+router.get("/financialTransactions", async (req, res) => {
   try {
     const records = await prisma.financialTransaction.findMany({
       include: {
-        userFrom:  {
+        userFrom: {
           select: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
-        userTo:  {
+        userTo: {
           select: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
       },
     });
     res.json(records);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
   }
 });
 
-router.post("/financialTransaction",async (req, res) => {
-
+router.post("/financialTransaction", async (req, res) => {
   try {
-    console.log('req.body', req.body)
+    console.log("req.body", req.body);
 
-    const {
-      userFrom,
-      userTo,
-      description,
-      amount,
-      status,
-      idToken
-    } = req.body;
+    const { userFrom, userTo, description, amount, status, idToken } = req.body;
     const profile = jwtDecode(idToken);
-    console.log(
-      'profile', profile
-    )
+    console.log("profile", profile);
 
     const record = await prisma.financialTransaction.create({
       data: {
@@ -113,81 +106,107 @@ router.post("/financialTransaction",async (req, res) => {
         description,
         amount,
         status,
-        inputerId:profile.id
+        inputerId: profile.id,
       },
     });
-
 
     res.json(record);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
   }
 });
 
-router.post("/product",async (req, res) => {
+// router.post("/product", async (req, res) => {
+//   console.log("req.body", req.body);
+//   const { name, codeFromSupplier, ingredient, imageUrl } = req.body;
+//   // const profile = jwtDecode(idToken);
+//   // console.log(
+//   //   'profile', profile
+//   // )
 
-  console.log('req.body', req.body)
-    const {
-      name,
-      codeFromSupplier,
-      ingredient,
-      imageUrl,
-    } = req.body;
-    // const profile = jwtDecode(idToken);
-    // console.log(
-    //   'profile', profile
-    // )
+//   const record = await prisma.product.create({
+//     data: {
+//       name,
+//       codeGenerated: shortid.generate(),
+//       codeFromSupplier,
+//       imageUrl,
+//     },
+//   });
 
-    const record = await prisma.product.create({
-      data: {
-        name,
-        codeGenerated:shortid.generate(),
-        codeFromSupplier,
-        ingredient,
-        imageUrl,
-        
-      },
+//   console.log('ingredient', ingredient)
+//   const updatedIngredients = ingredient.map((element) => {
+//     return Object.assign({}, element, { productId: record.id });
+//   });
+//   // // Create posts associated with the user
+//   const posts = await prisma.ingredient.createMany({
+//     data: updatedIngredients,
+//   });
+
+//   res.json(record);
+// });
+
+router.get("/usages", async (req, res) => {
+  try {
+    const records = await prisma.Garments.findMany({
     });
-
-
-    res.json(record);
-  // try {
-  //   console.log('req.body', req.body)
-
-
-    
-  //   const {
-  //     userFrom,
-  //     userTo,
-  //     description,
-  //     amount,
-  //     status,
-  //     idToken
-  //   } = req.body;
-  //   const profile = jwtDecode(idToken);
-  //   console.log(
-  //     'profile', profile
-  //   )
-
-  //   const record = await prisma.product.create({
-  //     data: {
-  //       userFromId: userFrom,
-  //       userToId: userTo,
-  //       description,
-  //       amount,
-  //       status,
-  //       inputerId:profile.id
-  //     },
-  //   });
-
-
-  //   res.json(record);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'An error occurred while fetching financialTransactions.' });
-  // }
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
 });
 
-//router.post('/', createUser);
+router.get("/catagories", async (req, res) => {
+  try {
+    const records = await prisma.Category.findMany({
+    });
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
+});
+
+router.get("/materials", async (req, res) => {
+  try {
+    const records = await prisma.Material.findMany({
+    });
+    res.json(records);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching financialTransactions.",
+      });
+  }
+});
+
+
+
+
+router.post("/temporary-upload", async (req, res) => {
+
+  const {  imageUrl } = req.body;
+
+
+  res.json(record);
+});
+
+
+router.use('/product', productRouter);
+
 export default router;

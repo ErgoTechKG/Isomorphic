@@ -17,12 +17,11 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("")
   const [email, setEmail] = useState("");
 
   const handleLogin = () => {
-    dispatch(signup({password, name, email}));
+    dispatch(signup({password, email}));
     dispatch(clearMenu());
     history.push('/dashboard');
   };
@@ -37,9 +36,6 @@ export default function SignUp() {
           </div>
 
           <div className="isoSignUpForm">
-            <div className="isoInputWrapper isoLeftRightComponent">
-              <Input size="large" placeholder="name" onChange={e => {setName(e.target.value)}}/>
-            </div>
 
             <div className="isoInputWrapper">
               <Input size="large" placeholder="Email" onChange={e => {setEmail(e.target.value)}}/>

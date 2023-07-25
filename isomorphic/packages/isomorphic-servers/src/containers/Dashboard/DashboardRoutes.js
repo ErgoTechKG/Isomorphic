@@ -23,11 +23,19 @@ const routes = [
   },
   {
     path: 'productlist',
-    component: lazy(() => import('../Product/ProductList')),
+    component: lazy(() => import('../Product')),
   },
   {
     path: 'financialTransaction',
     component: lazy(() => import('../FinancialTransaction')),
+  },
+  {
+    path: 'inkOrder',
+    component: lazy(() => import('../InkOrder')),
+  },
+  {
+    path: 'temporary',
+    component: lazy(() => import('../Temporary')),
   },
 ];
 
