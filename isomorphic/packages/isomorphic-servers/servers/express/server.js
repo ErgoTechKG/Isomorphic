@@ -57,6 +57,10 @@ app
   .use(bodyParser.json())
   .use(cors());
 
+app.get("/test", (req, res) => {
+  res.send('test!!');
+})
+
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
