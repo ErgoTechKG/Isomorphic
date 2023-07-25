@@ -51,6 +51,7 @@ model Product {
   id              Int     @id @default(autoincrement())
   source          String?
   codeKent        String
+  codeKent0        String?
   codeChina       String?
   nameRussian     String?
   nameChinese     String?

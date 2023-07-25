@@ -9,6 +9,7 @@ import axiosConfig from "../../library/helpers/axios";
 const { Search } = Input;
 
 const MyComponent = (props) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const Auth = useSelector((state) => state.Auth);
   const tailLayout = {
@@ -27,19 +28,23 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
-    // const newFinancialTransaction = { ...values, ...Auth };
-    // const response = await axios
-    //   .post(
-    //     `${jwtConfig.fetchUrlSecret}financialTransaction`,
-    //     newFinancialTransaction,
-    //     axiosConfig
-    //   )
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // if (response && response.data && response.status === 200) {
-    //   props.setIsModalOpen(false);
-    // }
+    console.log("values", values);
+
+    if (values.upload)
+      values.imageURL = values.upload.map((i) => i.response.fileId);
+
+    const { upload, ...rest } = values;
+
+    console.log("rest", rest);
+
+    const response = await axios
+      .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
+      .catch(function (error) {
+        console.log(error);
+      });
+    if (response && response.data && response.status === 200) {
+      props.setIsModalOpen(false);
+    }
   };
 
   const onReset = () => {
@@ -48,18 +53,35 @@ const MyComponent = (props) => {
 
   const onGenerateCode = async (value) => {
     if (value) {
-      console.log(value);
-    } else {
+      console.log({ value: value });
       const response = await axios
-        .get(
-          `${jwtConfig.fetchUrlSecret}product/generateCode`,
+        .post(
+          `${jwtConfig.fetchUrlSecret}product/generateCodeValidation`,
+          { value: value },
           axiosConfig
         )
         .catch(function (error) {
           console.log(error);
         });
       if (response && response.data && response.status === 200) {
-        console.log(response.data)
+        messageApi.open({
+          type: "success",
+          content: "Your Kent code is available",
+        });
+
+        //props.setIsModalOpen(false);
+      }
+    } else {
+      const response = await axios
+        .get(`${jwtConfig.fetchUrlSecret}product/generateCode`, axiosConfig)
+        .catch(function (error) {
+          console.log(error);
+        });
+      console.log("response", response);
+      if (response && response.data && response.status === 200) {
+        console.log(response.data);
+        form.setFieldsValue({ codeKent: response.data });
+        //fill the generate value to the form
         //props.setIsModalOpen(false);
       }
     }
@@ -88,6 +110,7 @@ const MyComponent = (props) => {
   };
   return (
     <div>
+      {contextHolder}
       <Space style={{ width: "100%" }} direction="vertical">
         <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
           <Form.Item
