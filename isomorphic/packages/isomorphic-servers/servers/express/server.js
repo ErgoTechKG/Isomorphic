@@ -57,8 +57,9 @@ app
   .use(bodyParser.json())
   .use(cors());
 
-app.get("/test", (req, res) => {
-  res.send('test!!');
+app.get("/test", async (req, res) => {
+  const test = await prisma.variables.findMany();
+  res.send(test);
 })
 
 app.post("/login", async (req, res) => {
