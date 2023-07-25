@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button } from 'antd';
+import { Table, Modal, Button, Card, Col, Row,  } from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
@@ -29,37 +29,50 @@ const MyComponent = () => {
     // fetchData();
   }, [isModalOpen]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}product/all`, axiosConfig); // Replace with your actual API endpoint
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      title: 'Kent Code',
+      dataIndex: 'codeKent',
+      key: 'codeKent',
     },
     {
-      title: 'From',
-      dataIndex: 'userFrom',
-      key: 'userFrom',
-      render: (record) => {
-        return record.name
-      }
+      title: 'Kent Code(Old)',
+      dataIndex: 'codeKent0',
+      key: 'codeKent0',
     },
     {
-      title: 'To',
-      dataIndex: 'userTo',
-      key: 'userTo',
-      render: (record) => {
-        return record.name
-      }
+      title: 'China Code',
+      dataIndex: 'codeChina',
+      key: 'codeChina',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Russian Name',
+      dataIndex: 'nameRussian',
+      key: 'nameRussian',
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: 'width',
+      dataIndex: 'width',
+      key: 'width',
+    },
+    {
+      title: 'gram',
+      dataIndex: 'gram',
+      key: 'gram',
     },
     {
       title: 'Action',
@@ -70,7 +83,23 @@ const MyComponent = () => {
   ];
 
   const expandedRowRender = (record) => (
-    <p style={{ margin: 0 }}>{record.description}</p>
+  <Row gutter={16}>
+    <Col span={8}>
+      <Card title="Price" bordered={false}>
+        {record.codeKent}
+      </Card>
+    </Col>
+    <Col span={8}>
+      <Card title="Market Price" bordered={false}>
+        {record.price}
+      </Card>
+    </Col>
+    <Col span={8}>
+      <Card title="Card title" bordered={false}>
+        Card content
+      </Card>
+    </Col>
+  </Row>
   );
 
   const rowExpandable = (record) => record.name !== 'Not Expandable';
@@ -82,7 +111,7 @@ const MyComponent = () => {
     setIsModalOpen(true);
   };
   return (
-    <LayoutContentWrapper style={{ height: '100vh' }}>
+    <LayoutContentWrapper>
       <LayoutContent>
         <Button type="primary" onClick={handleAdd} >Add New Product</Button>
         <Modal title="Create New Product" open={isModalOpen} onCancel={handleCancel} footer={null}>

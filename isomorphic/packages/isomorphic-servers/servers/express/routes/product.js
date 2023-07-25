@@ -23,6 +23,18 @@ router.get("/", (req, res) => {
   res.send("Product API");
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const products = await prisma.product.findMany();
+    console.log(products);
+    res.send(products);
+  } catch (error) {
+    console.error('Error retrieving products:', error);
+  } 
+
+  
+});
+
 router.post("/", async (req, res) => {
   console.log("req.body", req.body);
 

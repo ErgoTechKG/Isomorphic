@@ -66,6 +66,8 @@ model Product {
   imageURL  String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  note      String?
+  currentPrice Float?   @default(0)
 }
 
 

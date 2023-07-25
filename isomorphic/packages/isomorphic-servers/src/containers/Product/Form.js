@@ -28,14 +28,11 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
-    console.log("values", values);
 
     if (values.upload)
       values.imageURL = values.upload.map((i) => i.response.fileId);
 
     const { upload, ...rest } = values;
-
-    console.log("rest", rest);
 
     const response = await axios
       .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
@@ -53,7 +50,6 @@ const MyComponent = (props) => {
 
   const onGenerateCode = async (value) => {
     if (value) {
-      console.log({ value: value });
       const response = await axios
         .post(
           `${jwtConfig.fetchUrlSecret}product/generateCodeValidation`,
