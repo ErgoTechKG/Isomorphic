@@ -158,7 +158,7 @@ app.listen(port, () => {
 });
 
 app.get("/excel", async (req, res) => {
-  const excelFile = "./test/kentChina_test1.xlsx";
+  const excelFile = "./test/kent_photo.xlsx";
 
   try {
     await parseExcelFile(excelFile);
