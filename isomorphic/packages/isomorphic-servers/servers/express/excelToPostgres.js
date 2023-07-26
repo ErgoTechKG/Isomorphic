@@ -66,23 +66,6 @@ async function parseExcelFile(file) {
     ] = row; // Assuming 3 columns in the Excel file
     if (!(column1 || column11)) continue;
     try {
-      // console.log(
-      //   column1,
-      //   column2,
-      //   column3,
-      //   column4,
-      //   column5,
-      //   column6,
-      //   column7,
-      //   column8,
-      //   column9,
-      //   column10,
-      //   column11,
-      //   column12
-      // );
-      //console.log('code from China',column11);
-
-
       let columnArray = [
         column2,
         column3,
