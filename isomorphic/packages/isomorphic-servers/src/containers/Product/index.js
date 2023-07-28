@@ -104,8 +104,8 @@ const MyComponent = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Market Price" bordered={false}>
-            {record.price}
+          <Card title="Stock Price" bordered={false}>
+            ${record.priceAtStock.toFixed(2)}/Meter
           </Card>
         </Col>
         <Col span={8}>
