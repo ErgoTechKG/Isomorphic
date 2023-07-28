@@ -166,9 +166,6 @@ app.get("/excel", async (req, res) => {
   } catch (error) {
     console.error("Error parsing Excel file:", error);
     res.status(500).send("Error parsing Excel file.");
-  } finally {
-    // Remove the uploaded file
-    fs.unlinkSync(excelFile);
-  }
+  } 
 });
 
