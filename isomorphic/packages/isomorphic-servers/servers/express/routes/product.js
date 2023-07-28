@@ -67,13 +67,34 @@ router.get("/all", async (req, res) => {
             priceAtStock = marketPrice * 0.9
         }
       }
-      const { priceChinaKG, priceChinaMeter, ...rest } = i;
-      const updatedProduct = { ...rest, priceAtStock: 0 }; // Add the 'priceAtStock' field with a value of 0
 
+      const updatedProduct = {
+        id: i.id,
+        source: i.source,
+        codeKent: i.codeKent,
+        codeKent0: i.codeKent0,
+        codeChina: i.codeChina,
+        nameRussian: i.nameRussian,
+        nameChinese: i.nameChinese,
+        nameEnglish: i.nameEnglish,
+        subCat: i.subCat,
+        width: i.width,
+        gram: i.gram,
+        marketPrice: i.marketPrice,
+        imageURL: i.imageURL,
+        createdAt: i.createdAt,
+        updatedAt: i.updatedAt,
+        note: i.note,
+        currentPrice: i.currentPrice,
+        priceAtStock: priceAtStock // Add the 'priceAtStock' field with a value of 0
+      };
+      
+
+      
       //console.log(i.priceChinaKG, i.priceChinaMeter)
-      return i
+      return updatedProduct
     })
-    res.send(products);
+    res.send(result);
   } catch (error) {
     console.error('Error retrieving products:', error);
   } 
