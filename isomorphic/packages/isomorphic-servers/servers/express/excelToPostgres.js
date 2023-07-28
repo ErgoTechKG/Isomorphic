@@ -76,12 +76,15 @@ async function parseExcelFile(file) {
   
     await prisma.product.updateMany({
       where: {
-        codeChina: column11,
+        codeChina: column11.toString(),
       },
       data: {
         nameRussian: column12,
       },
     });
+
+
+    
   };
 }
 

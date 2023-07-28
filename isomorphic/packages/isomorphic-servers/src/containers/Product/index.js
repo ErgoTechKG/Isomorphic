@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
 import LayoutContent from "@iso/components/utility/layoutContent";
-import { Table, Modal, Button, Card, Col, Row, List, Image } from "antd";
+import { Table, Modal, Button, Card, Col, Row, List, Image, Spin} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 import ProductForm from "./Form";
 const MyComponent = () => {
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [record, setRecord] = useState(null);
@@ -33,14 +34,18 @@ const MyComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(
           `${jwtConfig.fetchUrlSecret}product/all`,
           axiosConfig
         ); // Replace with your actual API endpoint
-        console.log('response.data', response.data)
+        
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }
+      finally {
+        setLoading(false); // Set loading to false after data is fetched (including error cases)
       }
     };
  
@@ -140,7 +145,9 @@ const MyComponent = () => {
     setIsModalOpen(true);
   };
   return (
+    <Spin spinning={loading}>
     <LayoutContentWrapper>
+
       <LayoutContent>
         <Button type="primary" onClick={handleAdd}>
           Add New Product
@@ -167,6 +174,7 @@ const MyComponent = () => {
         />
       </LayoutContent>
     </LayoutContentWrapper>
+    </Spin>
   );
 };
 
