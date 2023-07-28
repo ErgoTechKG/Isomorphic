@@ -26,11 +26,57 @@ router.get("/", (req, res) => {
 router.get("/all", async (req, res) => {
   try {
     const products = await prisma.product.findMany();
+    const logisticRMB = await prisma.variables.findFirst({
+      where: {
+        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+        name: 'logisticRMB'
+      },
+      orderBy: {
+        createdAt: 'desc', // Sorting by createdAt field in descending order (newest to oldest)
+      },
+    });
+    const exRate = await prisma.variables.findFirst({
+      where: {
+        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+        name: 'exRate'
+      },
+      orderBy: {
+        createdAt: 'desc', // Sorting by createdAt field in descending order (newest to oldest)
+      },
+    });
+
+    console.log('logisticRMB', logisticRMB.value, exRate.value)
+
+    const result = products.map(i => {
+      let priceAtStock;
+      // console.log('i.codeChina', i.codeChina)
+      // console.log('i.width', i.width)
+      // console.log('i.gram', i.gram)
+      // console.log('how many meter per kg', (1000/i.width/i.gram)*100)
+      // console.log('cost in Bihskek per kg', ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value))
+      let costBkkM = ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value)/((1000/i.width/i.gram)*100)
+      if (i.currentPrice && i.currentPrice>costBkkM) {
+        priceAtStock = currentPrice
+      } else {
+        if (!i.marketPrice) {
+          priceAtStock = costBkkM * 1.3;
+        } else {
+          if(marketPrice*0.9<costBkkM*1.1)
+            priceAtStock = costBkkM * 1.1;
+          else
+            priceAtStock = marketPrice * 0.9
+        }
+      }
+      const { priceChinaKG, priceChinaMeter, ...rest } = i;
+      const updatedProduct = { ...rest, priceAtStock: 0 }; // Add the 'priceAtStock' field with a value of 0
+
+      //console.log(i.priceChinaKG, i.priceChinaMeter)
+      return i
+    })
     res.send(products);
   } catch (error) {
     console.error('Error retrieving products:', error);
   } 
-
   
 });
 
