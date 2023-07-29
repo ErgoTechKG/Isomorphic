@@ -15,6 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@babel/register": "^7.22.5",
     "@prisma/client": "^4.14.0",
     "argon2": "^0.30.3",
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -35,6 +37,7 @@
     "mongoose": "^7.1.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "2.1.2",
+    "react-spinners": "^0.13.8",
     "shortid": "^2.2.16",
     "uid": "^2.0.2",
     "winston": "^3.8.2"

@@ -9,9 +9,30 @@ import axiosConfig from "../../library/helpers/axios";
 const { Search } = Input;
 
 const MyComponent = (props) => {
+  console.log("props.recordID", props.recordID);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const Auth = useSelector((state) => state.Auth);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}product?id=${props.recordID}`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        console.log("response", response);
+        form.setFieldsValue(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // Set loading to false after data is fetched (including error cases)
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -28,19 +49,23 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
+    
+    if (props.recordID) {
+      console.log('values', values)
+    } else {
+      if (values.upload)
+        values.imageURL = values.upload.map((i) => i.response.fileId);
 
-    if (values.upload)
-      values.imageURL = values.upload.map((i) => i.response.fileId);
+      const { upload, ...rest } = values;
 
-    const { upload, ...rest } = values;
-
-    const response = await axios
-      .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
-      .catch(function (error) {
-        console.log(error);
-      });
-    if (response && response.data && response.status === 200) {
-      props.setIsModalOpen(false);
+      const response = await axios
+        .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     }
   };
 
@@ -95,6 +120,13 @@ const MyComponent = (props) => {
       }
       console.log("info", info);
     },
+    defaultFileList: [
+      {
+        uid: '1',
+        name: 'xxx.png',
+        url: 'http://www.baidu.com/xxx.png',
+      },
+    ]
   };
 
   const normFile = (e) => {

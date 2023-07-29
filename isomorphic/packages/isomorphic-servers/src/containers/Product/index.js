@@ -1,19 +1,131 @@
-import React, { useState, useEffect } from 'react';
-import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
-import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button, Card, Col, Row,  } from 'antd';
-import axios from 'axios';
-import jwtConfig from '@iso/config/jwt.config';
-import axiosConfig from '../../library/helpers/axios';
-import ProductForm from './Form';
+import React, { useState, useEffect, useRef } from "react";
+import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
+import LayoutContent from "@iso/components/utility/layoutContent";
+import { Table, Modal, Button, Card, Col, Row, List, Image, Spin, Input, Space} from "antd";
+import axios from "axios";
+import jwtConfig from "@iso/config/jwt.config";
+import axiosConfig from "../../library/helpers/axios";
+import ProductForm from "./Form";
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 const MyComponent = () => {
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+
+
+
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [record, setRecord] = useState(null);
-  const clickEdit = (recordId) => {
+  const [recordID, setRecordID] = useState(null);
+  const clickEdit = (value) => {
     setIsModalOpen(true);
-    let selectedRecord = data.find(i => {return i.id === recordId})
-    setRecord(selectedRecord);
+    setRecordID(value);
   };
 
   useEffect(() => {
@@ -25,97 +137,146 @@ const MyComponent = () => {
     //     console.error('Error fetching data:', error);
     //   }
     // };
-
     // fetchData();
   }, [isModalOpen]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}product/all`, axiosConfig); // Replace with your actual API endpoint
+        setLoading(true)
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}product/all`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        
         setData(response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
+      }
+      finally {
+        setLoading(false); // Set loading to false after data is fetched (including error cases)
       }
     };
-
+ 
     fetchData();
   }, []);
 
-
   const columns = [
     {
-      title: 'Kent Code',
-      dataIndex: 'codeKent',
-      key: 'codeKent',
+      title: "Kent Code",
+      dataIndex: "codeKent",
+      key: "codeKent",
+      ...getColumnSearchProps('codeKent'),
     },
     {
-      title: 'Kent Code(Old)',
-      dataIndex: 'codeKent0',
-      key: 'codeKent0',
+      title: "Kent Code(Old)",
+      dataIndex: "codeKent0",
+      key: "codeKent0",
+      ...getColumnSearchProps('codeKent0'),
     },
     {
-      title: 'China Code',
-      dataIndex: 'codeChina',
-      key: 'codeChina',
+      title: "China Code",
+      dataIndex: "codeChina",
+      key: "codeChina",
+      ...getColumnSearchProps('codeChina'),
     },
     {
-      title: 'Russian Name',
-      dataIndex: 'nameRussian',
-      key: 'nameRussian',
+      title: "Russian Name",
+      dataIndex: "nameRussian",
+      key: "nameRussian",
+      ...getColumnSearchProps('nameRussian'),
     },
     {
-      title: 'width',
-      dataIndex: 'width',
-      key: 'width',
+      title: "width",
+      dataIndex: "width",
+      key: "width",
+      ...getColumnSearchProps('width'),
     },
     {
-      title: 'gram',
-      dataIndex: 'gram',
-      key: 'gram',
+      title: "gram",
+      dataIndex: "gram",
+      key: "gram",
+      ...getColumnSearchProps('gram'),
     },
     {
-      title: 'Action',
-      dataIndex: '',
-      key: 'action',
-      render: (record) => <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>,
+      title: "Action",
+      dataIndex: "",
+      key: "action",
+      render: (record) => (
+        <Button id={record.id} onClick={() => clickEdit(record.id)}>
+          Edit
+        </Button>
+      ),
     },
   ];
 
   const expandedRowRender = (record) => (
-  <Row gutter={16}>
-    <Col span={8}>
-      <Card title="Price" bordered={false}>
-        {record.codeKent}
-      </Card>
-    </Col>
-    <Col span={8}>
-      <Card title="Market Price" bordered={false}>
-        {record.price}
-      </Card>
-    </Col>
-    <Col span={8}>
-      <Card title="Card title" bordered={false}>
-        Card content
-      </Card>
-    </Col>
-  </Row>
+    <>
+      <Row gutter={16}>
+        <Col span={8}>
+          <Card title="Price" bordered={false}>
+            {record.codeKent}
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="Stock Price" bordered={false}>
+            ${record.priceAtStock.toFixed(2)}/Meter
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="vipPrice with 100% DownPayment" bordered={false}>
+          ${record.vipPrice.toFixed(2)}/Meter
+          </Card>
+        </Col>
+      </Row>
+      <List
+        header={<div>Header</div>}
+        footer={<div>Footer</div>}
+        bordered
+        dataSource={record.imageURL}
+        renderItem={(item) =>{
+
+          // Construct the image URL using the fileId variable
+          const imageUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${item}`;
+        
+          return (
+          <List.Item>
+              <Image
+                width={200}
+                src={imageUrl}
+              />
+          </List.Item>
+        )}}
+      />
+    </>
   );
 
-  const rowExpandable = (record) => record.name !== 'Not Expandable';
+  const rowExpandable = (record) => record.name !== "Not Expandable";
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const handleAdd = () => {
-    setRecord(null)
+    setRecordID(null);
     setIsModalOpen(true);
   };
   return (
+    <Spin spinning={loading}>
     <LayoutContentWrapper>
+
       <LayoutContent>
-        <Button type="primary" onClick={handleAdd} >Add New Product</Button>
-        <Modal title="Create New Product" open={isModalOpen} onCancel={handleCancel} footer={null}>
-          <ProductForm setIsModalOpen={setIsModalOpen} record={record}></ProductForm>
+        <Button type="primary" onClick={handleAdd}>
+          Add New Product
+        </Button>
+        <Modal
+          title="Create New Product"
+          open={isModalOpen}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <ProductForm
+            setIsModalOpen={setIsModalOpen}
+            recordID={recordID}
+          ></ProductForm>
         </Modal>
         <Table
           columns={columns}
@@ -128,6 +289,7 @@ const MyComponent = () => {
         />
       </LayoutContent>
     </LayoutContentWrapper>
+    </Spin>
   );
 };
 

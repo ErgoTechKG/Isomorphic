@@ -158,7 +158,7 @@ app.listen(port, () => {
 });
 
 app.get("/excel", async (req, res) => {
-  const excelFile = "./test/kentChina_test1.xlsx";
+  const excelFile = "./test/kent_photo.xlsx";
 
   try {
     await parseExcelFile(excelFile);
@@ -166,9 +166,6 @@ app.get("/excel", async (req, res) => {
   } catch (error) {
     console.error("Error parsing Excel file:", error);
     res.status(500).send("Error parsing Excel file.");
-  } finally {
-    // Remove the uploaded file
-    fs.unlinkSync(excelFile);
-  }
+  } 
 });
 
