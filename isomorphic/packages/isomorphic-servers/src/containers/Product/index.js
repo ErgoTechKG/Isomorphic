@@ -93,8 +93,12 @@ const MyComponent = () => {
         }}
       />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) =>{
+      //console.log('dataIndex', dataIndex)
+      console.log(value, record, dataIndex)
+      console.log('record[dataIndex].toString()', record[dataIndex])
+      return record[dataIndex]?record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()):false
+    },
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
