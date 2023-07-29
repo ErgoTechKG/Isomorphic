@@ -19,8 +19,13 @@ async function generateUniqueID() {
 }
 
 // Define routes for /api/product here
-router.get("/", (req, res) => {
-  res.send("Product API");
+router.get("/", async (req, res) => {
+  const result = await prisma.product.findUnique({
+    where: {
+      id:parseInt(req.query.id),
+    },
+  })
+  res.send(result);
 });
 
 router.get("/all", async (req, res) => {
@@ -86,6 +91,7 @@ router.get("/all", async (req, res) => {
         updatedAt: i.updatedAt,
         note: i.note,
         currentPrice: i.currentPrice,
+        vipPrice:costBkkM*1.1,
         priceAtStock: priceAtStock // Add the 'priceAtStock' field with a value of 0
       };
       
