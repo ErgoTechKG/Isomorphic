@@ -9,11 +9,12 @@ import axiosConfig from "../../library/helpers/axios";
 const { Search } = Input;
 
 const MyComponent = (props) => {
-  console.log("props.recordID", props.recordID);
+  const [fileList, setFileList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const Auth = useSelector((state) => state.Auth);
-
+  console.log("props", props);
+  console.log("fileList", fileList);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,6 +23,14 @@ const MyComponent = (props) => {
           axiosConfig
         ); // Replace with your actual API endpoint
         console.log("response", response);
+        const fileListData = response.data.imageURL.map((file) => ({
+          uid: file, // Use a unique identifier for the file
+          name: file,
+          status: "done", // Assuming the file is already uploaded and stored on the server
+          url: `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${file}`, // URL of the uploaded file
+        }));
+
+        setFileList(fileListData);
         form.setFieldsValue(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,9 +38,12 @@ const MyComponent = (props) => {
         // Set loading to false after data is fetched (including error cases)
       }
     };
-
-    fetchData();
-  }, []);
+    console.log("props.recordID change");
+    if (!props.recordID) {
+      form.resetFields();
+      setFileList([]);
+    } else fetchData();
+  }, [props.recordID]);
 
   const tailLayout = {
     wrapperCol: {
@@ -49,14 +61,30 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
-    
     if (props.recordID) {
-      console.log('values', values)
-    } else {
+      console.log("values", values);
       if (values.upload)
-        values.imageURL = values.upload.map((i) => i.response.fileId);
+        values.imageURL = values.upload.fileList.map((i) =>
+          i.response ? i.response.fileId : i.uid
+        );
+      const { upload, ...rest } = values;
+
+      const response = await axios
+      .put(`${jwtConfig.fetchUrlSecret}product?id=${props.recordID}`, rest, axiosConfig)
+      .catch(function (error) {
+        console.log(error);
+      });
+    if (response && response.data && response.status === 200) {
+      props.setIsModalOpen(false);
+    }
+    } else {
+      //console.log('value no id', values)
+      if (values.upload)
+        values.imageURL = values.upload.fileList.map((i) => i.response.fileId);
 
       const { upload, ...rest } = values;
+
+      console.log("value no id rest", rest);
 
       const response = await axios
         .post(`${jwtConfig.fetchUrlSecret}product`, rest, axiosConfig)
@@ -67,6 +95,8 @@ const MyComponent = (props) => {
         props.setIsModalOpen(false);
       }
     }
+
+    form.resetFields();
   };
 
   const onReset = () => {
@@ -109,33 +139,41 @@ const MyComponent = (props) => {
   };
 
   const uploadProps = {
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      console.log("info", info);
+    onChange(info, i) {
+      // console.log("info", info, i);
+      // if (info.file.status !== "uploading") {
+      //   console.log(info.file, info.fileList);
+      // }
+      // if (info.file.status === "done") {
+      //   message.success(`${info.file.name} file uploaded successfully`);
+      // } else if (info.file.status === "error") {
+      //   message.error(`${info.file.name} file upload failed.`);
+      // }
+      let newFileList = [...info.fileList];
+      console.log("newFileList", newFileList);
+      // // 2. Read from response and show file link
+      // newFileList = newFileList.map((file) => {
+      //   if (file.response) {
+      //     // Component will show file.url as link
+      //     file.url = file.response.url;
+      //   }
+      //   return file;
+      // });
+      setFileList(newFileList);
     },
-    defaultFileList: [
-      {
-        uid: '1',
-        name: 'xxx.png',
-        url: 'http://www.baidu.com/xxx.png',
-      },
-    ]
   };
 
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
+  // const normFile = (e) => {
+  //   console.log("Upload event:", e);
+  //   if (Array.isArray(e)) {
+  //     return e;
+  //   }
+  //   return e?.fileList;
+  // };
+
+  const onRemove = async (value) => {
+    console.log('onRemove', value)
+  }
   return (
     <div>
       {contextHolder}
@@ -267,13 +305,16 @@ const MyComponent = (props) => {
           <Form.Item
             label="Upload"
             name="upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
+            // valuePropName="fileList"
+            // getValueFromEvent={normFile}
           >
             <Upload
               action={jwtConfig.uploadUrl}
               listType="picture-card"
               name="file"
+              multiple={true}
+              fileList={fileList}
+              onRemove={onRemove}
               {...uploadProps}
             >
               <div>

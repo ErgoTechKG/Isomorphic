@@ -230,7 +230,7 @@ async function parseExcelFile_images(file) {
 
       await prisma.product.updateMany({
         where: {
-          codeChina: column11,
+          codeChina: column11.toString(),
         },
         data: {
           imageURL: urlArray,
@@ -245,5 +245,5 @@ async function parseExcelFile_images(file) {
 
   console.log("Data imported successfully.");
 }
-export { parseExcelFile };
+export { parseExcelFile, parseExcelFile_images };
 
