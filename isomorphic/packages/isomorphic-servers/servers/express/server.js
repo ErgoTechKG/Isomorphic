@@ -10,7 +10,7 @@ import winston from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { PrismaClient } from "@prisma/client";
-import { parseExcelFile } from "./excelToPostgres";
+import { parseExcelFile, parseExcelFile_images } from "./excelToPostgres";
 
 
 const prisma = new PrismaClient();
@@ -161,7 +161,7 @@ app.get("/excel", async (req, res) => {
   const excelFile = "./test/kent_photo.xlsx";
 
   try {
-    await parseExcelFile(excelFile);
+    await parseExcelFile_images(excelFile);
     res.send("Data imported successfully.");
   } catch (error) {
     console.error("Error parsing Excel file:", error);

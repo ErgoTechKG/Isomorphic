@@ -1,16 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
 import LayoutContent from "@iso/components/utility/layoutContent";
-import { Table, Modal, Button, Card, Col, Row, List, Image, Spin, Input, Space} from "antd";
+import {
+  Table,
+  Modal,
+  Button,
+  Card,
+  Col,
+  Row,
+  List,
+  Image,
+  Spin,
+  Input,
+  Space,
+} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 import ProductForm from "./Form";
-import { SearchOutlined } from '@ant-design/icons';
-import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 const MyComponent = () => {
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -19,10 +31,16 @@ const MyComponent = () => {
   };
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText('');
+    setSearchText("");
   };
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
       <div
         style={{
           padding: 8,
@@ -33,11 +51,13 @@ const MyComponent = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
-            display: 'block',
+            display: "block",
           }}
         />
         <Space>
@@ -89,15 +109,17 @@ const MyComponent = () => {
     filterIcon: (filtered) => (
       <SearchOutlined
         style={{
-          color: filtered ? '#1677ff' : undefined,
+          color: filtered ? "#1677ff" : undefined,
         }}
       />
     ),
-    onFilter: (value, record) =>{
-      //console.log('dataIndex', dataIndex)
-      console.log(value, record, dataIndex)
-      console.log('record[dataIndex].toString()', record[dataIndex])
-      return record[dataIndex]?record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()):false
+    onFilter: (value, record) => {
+      return record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : false;
     },
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
@@ -108,20 +130,17 @@ const MyComponent = () => {
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{
-            backgroundColor: '#ffc069',
+            backgroundColor: "#ffc069",
             padding: 0,
           }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ''}
+          textToHighlight={text ? text.toString() : ""}
         />
       ) : (
         text
       ),
   });
-
-
-
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -130,6 +149,22 @@ const MyComponent = () => {
   const clickEdit = (value) => {
     setIsModalOpen(true);
     setRecordID(value);
+  };
+
+  const clickDelete = async (value) => {
+    console.log('delete ID', value)
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `${jwtConfig.fetchUrlSecret}product?id=${value}`,
+        axiosConfig
+      ); // Replace with your actual API endpoint
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Set loading to false after data is fetched (including error cases)
+    }
   };
 
   useEffect(() => {
@@ -147,69 +182,73 @@ const MyComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await axios.get(
           `${jwtConfig.fetchUrlSecret}product/all`,
           axiosConfig
         ); // Replace with your actual API endpoint
-        
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-      }
-      finally {
+      } finally {
         setLoading(false); // Set loading to false after data is fetched (including error cases)
       }
     };
- 
+
     fetchData();
-  }, []);
+  }, [isModalOpen]);
 
   const columns = [
     {
       title: "Kent Code",
       dataIndex: "codeKent",
       key: "codeKent",
-      ...getColumnSearchProps('codeKent'),
+      ...getColumnSearchProps("codeKent"),
     },
     {
       title: "Kent Code(Old)",
       dataIndex: "codeKent0",
       key: "codeKent0",
-      ...getColumnSearchProps('codeKent0'),
+      ...getColumnSearchProps("codeKent0"),
     },
     {
       title: "China Code",
       dataIndex: "codeChina",
       key: "codeChina",
-      ...getColumnSearchProps('codeChina'),
+      ...getColumnSearchProps("codeChina"),
     },
     {
       title: "Russian Name",
       dataIndex: "nameRussian",
       key: "nameRussian",
-      ...getColumnSearchProps('nameRussian'),
+      ...getColumnSearchProps("nameRussian"),
     },
     {
       title: "width",
       dataIndex: "width",
       key: "width",
-      ...getColumnSearchProps('width'),
+      ...getColumnSearchProps("width"),
     },
     {
       title: "gram",
       dataIndex: "gram",
       key: "gram",
-      ...getColumnSearchProps('gram'),
+      ...getColumnSearchProps("gram"),
     },
     {
       title: "Action",
       dataIndex: "",
       key: "action",
       render: (record) => (
-        <Button id={record.id} onClick={() => clickEdit(record.id)}>
-          Edit
-        </Button>
+        <>
+          <Button id={record.id} onClick={() => clickEdit(record.id)}>
+            Edit
+          </Button>
+
+          <Button id={record.id} onClick={() => clickDelete(record.id)}>
+            Delete
+          </Button>
+        </>
       ),
     },
   ];
@@ -224,12 +263,12 @@ const MyComponent = () => {
         </Col>
         <Col span={8}>
           <Card title="Stock Price" bordered={false}>
-            ${record.priceAtStock.toFixed(2)}/Meter
+            ${record.priceAtStock ? record.priceAtStock.toFixed(2) : null}/Meter
           </Card>
         </Col>
         <Col span={8}>
           <Card title="vipPrice with 100% DownPayment" bordered={false}>
-          ${record.vipPrice.toFixed(2)}/Meter
+            ${record.vipPrice ? record.vipPrice.toFixed(2) : null}/Meter
           </Card>
         </Col>
       </Row>
@@ -238,19 +277,16 @@ const MyComponent = () => {
         footer={<div>Footer</div>}
         bordered
         dataSource={record.imageURL}
-        renderItem={(item) =>{
-
+        renderItem={(item) => {
           // Construct the image URL using the fileId variable
           const imageUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${item}`;
-        
+
           return (
-          <List.Item>
-              <Image
-                width={200}
-                src={imageUrl}
-              />
-          </List.Item>
-        )}}
+            <List.Item>
+              <Image width={200} src={imageUrl} />
+            </List.Item>
+          );
+        }}
       />
     </>
   );
@@ -260,39 +296,40 @@ const MyComponent = () => {
     setIsModalOpen(false);
   };
   const handleAdd = () => {
+    console.log('handleAdd')
     setRecordID(null);
     setIsModalOpen(true);
   };
   return (
     <Spin spinning={loading}>
-    <LayoutContentWrapper>
-
-      <LayoutContent>
-        <Button type="primary" onClick={handleAdd}>
-          Add New Product
-        </Button>
-        <Modal
-          title="Create New Product"
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <ProductForm
-            setIsModalOpen={setIsModalOpen}
-            recordID={recordID}
-          ></ProductForm>
-        </Modal>
-        <Table
-          columns={columns}
-          rowKey={(record) => record.id}
-          expandable={{
-            expandedRowRender,
-            rowExpandable,
-          }}
-          dataSource={data}
-        />
-      </LayoutContent>
-    </LayoutContentWrapper>
+      <LayoutContentWrapper>
+        <LayoutContent>
+          <Button type="primary" onClick={handleAdd}>
+            Add New Product
+          </Button>
+          <Modal
+            title="Create New Product"
+            open={isModalOpen}
+            onCancel={handleCancel}
+            footer={null}
+          >
+            <ProductForm
+              setIsModalOpen={setIsModalOpen}
+              isModalOpen={isModalOpen}
+              recordID={recordID}
+            ></ProductForm>
+          </Modal>
+          <Table
+            columns={columns}
+            rowKey={(record) => record.id}
+            expandable={{
+              expandedRowRender,
+              rowExpandable,
+            }}
+            dataSource={data}
+          />
+        </LayoutContent>
+      </LayoutContentWrapper>
     </Spin>
   );
 };
