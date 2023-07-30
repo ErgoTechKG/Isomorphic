@@ -4,6 +4,7 @@ import { createBrowserHistory } from 'history';
 import { getToken, clearToken } from '@iso/lib/helpers/utility';
 import AuthHelper from '../../library/helpers/authHelper'
 import actions from './actions';
+import actionsLoading from '../loading/actions';
 import { message } from 'antd';
 
 const history = createBrowserHistory();
@@ -11,6 +12,7 @@ const history = createBrowserHistory();
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
     const { token } = payload;
+    yield put({type:actionsLoading.SET_LOADING, payload:true})
     if (token) {
       yield put({
         type: actions.LOGIN_SUCCESS,
@@ -30,6 +32,7 @@ export function* loginRequest() {
         yield put({ type: actions.LOGIN_ERROR });
       }
     }
+    yield put({type:actionsLoading.SET_LOADING, payload:false})
   });
 }
 

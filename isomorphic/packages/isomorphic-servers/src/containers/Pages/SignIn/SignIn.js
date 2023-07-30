@@ -21,7 +21,9 @@ const { clearMenu } = appAction;
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState("");
+  const loading = useSelector((state) => state.Loading.loading);
+  console.log('loading', loading);
+
   const [password, setPassword] = useState("");
   let history = useHistory();
   let location = useLocation();
@@ -35,14 +37,11 @@ export default function SignIn() {
     }
   }, [isLoggedIn]);
 
-  React.useEffect(() => {
-    console.log('loading',loading);
-  }, [loading]);
 
   function handleLogin(e, token = false) {
     e.preventDefault();
     
-      setLoading(true);
+      
       if (token) {
         dispatch(login(token));
       } else {
@@ -59,7 +58,9 @@ export default function SignIn() {
   if (redirectToReferrer) {
     return <Redirect to={from} />;
   }
-  return (<Spin spinning={loading}>
+  return (<Spin 
+  spinning={loading}
+  >
     <SignInStyleWrapper className="isoSignInPage">
        
       <div className="isoLoginContentWrapper">

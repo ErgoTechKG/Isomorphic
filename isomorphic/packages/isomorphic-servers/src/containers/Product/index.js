@@ -154,7 +154,7 @@ const MyComponent = () => {
   const clickDelete = async (value) => {
     console.log('delete ID', value)
     try {
-      setLoading(true);
+
       const response = await axios.delete(
         `${jwtConfig.fetchUrlSecret}product?id=${value}`,
         axiosConfig
