@@ -214,6 +214,18 @@ const MyComponent = (props) => {
           </Form.Item>
 
           <Form.Item
+            name="codeKent0"
+            label="Old Kent Code"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder="Old Kent Code" />
+          </Form.Item>
+
+          <Form.Item
             name="codeChina"
             label="Code China"
             rules={[
