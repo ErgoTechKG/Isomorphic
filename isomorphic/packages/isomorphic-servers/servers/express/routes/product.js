@@ -130,6 +130,17 @@ router.post("/", async (req, res) => {
   res.send("post product");
 });
 
+
+router.put("/", async (req, res) => {
+  const record = await prisma.product.update({
+    where: {
+      id: parseInt(req.query.id)  // Assuming id is an integer; adapt as needed
+    },
+    data: req.body
+  });
+  res.send(record);
+});
+
 router.get("/generateCode", async (req, res) => {
   const newProductID = await generateUniqueID();
 

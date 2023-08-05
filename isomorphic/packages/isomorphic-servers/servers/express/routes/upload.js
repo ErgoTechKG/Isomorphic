@@ -43,4 +43,27 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
+router.delete('/',  async (req, res) => {
+  const deleteFile = req;
+  console.log('delete, req', req.body, req.query)
+  try {
+
+    const response = await b2.deleteFileVersion(req.query);
+    console.log(response)
+    // const uploadUrl = await b2.getUploadUrl('07e749e3246869198e840e1a');
+
+    // const fileInfo =  await b2.uploadFile({
+    //   uploadUrl:uploadUrl.data.uploadUrl,
+    //   uploadAuthToken: uploadUrl.data.authorizationToken,
+    //   fileName: uploadedFile.originalname,
+    //   data: req.file.buffer,
+    // });
+
+    res.status(200).json("deleted");
+  } catch (error) {
+    console.error('Error uploading file to Backblaze B2:', error);
+    res.status(500).send('Error uploading file');
+  }
+});
+
 export default router;
