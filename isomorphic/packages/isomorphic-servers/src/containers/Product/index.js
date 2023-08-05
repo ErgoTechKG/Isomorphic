@@ -203,6 +203,8 @@ const MyComponent = () => {
       title: "Kent Code",
       dataIndex: "codeKent",
       key: "codeKent",
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => a.codeKent - b.codeKent,
       ...getColumnSearchProps("codeKent"),
     },
     {
@@ -215,6 +217,8 @@ const MyComponent = () => {
       title: "China Code",
       dataIndex: "codeChina",
       key: "codeChina",
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => a.codeChina - b.codeChina,
       ...getColumnSearchProps("codeChina"),
     },
     {
@@ -317,6 +321,7 @@ const MyComponent = () => {
               setIsModalOpen={setIsModalOpen}
               isModalOpen={isModalOpen}
               recordID={recordID}
+              setRecordID={setRecordID}
             ></ProductForm>
           </Modal>
           <Table

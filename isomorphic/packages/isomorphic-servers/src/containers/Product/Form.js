@@ -63,16 +63,21 @@ const MyComponent = (props) => {
   const onFinish = async (values) => {
     if (props.recordID) {
       console.log("values", values);
-      if (values.upload)
-        values.imageURL = values.upload.fileList.map((i) =>
-          i.response ? i.response.fileId : i.uid
-        );
+
+      values.imageURL = fileList.map((i) =>
+        i.response ? i.response.fileId : i.uid
+      );
+
       const { upload, ...rest } = values;
 
       const response = await axios
       .put(`${jwtConfig.fetchUrlSecret}product?id=${props.recordID}`, rest, axiosConfig)
       .catch(function (error) {
         console.log(error);
+        messageApi.open({
+          type: "error",
+          content: error,
+        });
       });
     if (response && response.data && response.status === 200) {
       props.setIsModalOpen(false);
@@ -95,7 +100,6 @@ const MyComponent = (props) => {
         props.setIsModalOpen(false);
       }
     }
-
     form.resetFields();
   };
 
@@ -173,6 +177,9 @@ const MyComponent = (props) => {
 
   const onRemove = async (value) => {
     console.log('onRemove', value)
+    // const response = await axios.delete(
+    //   `${jwtConfig.uploadUrl}?fileId=${value.response.fileId}`
+    // ); // Replace with your actual API endpoint
   }
   return (
     <div>
