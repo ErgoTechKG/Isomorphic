@@ -69,6 +69,7 @@ router.get("/all", async (req, res) => {
 
     const result = products.map(i => {
       let priceAtStock;
+      console.log('i', i)
       // console.log('i.codeChina', i.codeChina)
       // console.log('i.width', i.width)
       // console.log('i.gram', i.gram)
@@ -81,10 +82,10 @@ router.get("/all", async (req, res) => {
         if (!i.marketPrice) {
           priceAtStock = costBkkM * 1.3;
         } else {
-          if(marketPrice*0.9<costBkkM*1.1)
+          if(i.marketPrice*0.9<costBkkM*1.1)
             priceAtStock = costBkkM * 1.1;
           else
-            priceAtStock = marketPrice * 0.9
+            priceAtStock = i.marketPrice * 0.9
         }
       }
 

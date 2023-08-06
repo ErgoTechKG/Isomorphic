@@ -48,28 +48,27 @@ enum UserRole {
 }
 
 model Product {
-  id              Int     @id @default(autoincrement())
+  id              Int            @id @default(autoincrement())
   source          String?
   codeKent        String
-  codeKent0        String?
+  codeKent0       String?
   codeChina       String?
   nameRussian     String?
   nameChinese     String?
   nameEnglish     String?
   subCat          String?
-  priceChinaKG    Float?   @default(0)
-  priceChinaMeter Float?   @default(0)
-  width           Float?   @default(0)
-  gram            Float?   @default(0)
-  marketPrice Float?   @default(0)
-  priceHitory PriceHistory[]
-  imageURL  String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  note      String?
-  currentPrice Float?   @default(0)
+  priceChinaKG    Float?         @default(0)
+  priceChinaMeter Float?         @default(0)
+  width           Float?         @default(0)
+  gram            Float?         @default(0)
+  marketPrice     Float?         @default(0)
+  priceHitory     PriceHistory[]
+  imageURL        String[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  note            String?
+  currentPrice    Float?         @default(0)
 }
-
 
 model PriceHistory {
   id        Int      @id @default(autoincrement())
@@ -87,5 +86,3 @@ model Variables {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
