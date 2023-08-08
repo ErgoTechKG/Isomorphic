@@ -587,5 +587,6 @@
   "sidebar.productList": "Product List",
   "sidebar.financialTransaction": "Financial Transaction",
   "sidebar.inkOrder": "Ink Order", 
-  "sidebar.temporary": "Temporary"
+  "sidebar.temporary": "Temporary",
+  "sidebar.cargo": "Cargo"
 }

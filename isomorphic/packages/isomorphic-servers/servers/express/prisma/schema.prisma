@@ -68,6 +68,7 @@ model Product {
   updatedAt       DateTime       @updatedAt
   note            String?
   currentPrice    Float?         @default(0)
+   Roll            Roll[]
 }
 
 model PriceHistory {
@@ -85,4 +86,25 @@ model Variables {
   value     Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Roll {
+  id          Int     @id @default(autoincrement())
+  product     Product @relation(fields: [productId], references: [id])
+  color       Int?    @default(0)
+  description String?
+  rbg         String?
+  amount      Float?  @default(0)
+  productId   Int
+  cargo       Cargo?  @relation(fields: [cargoId], references: [id])
+  cargoId     Int?
+}
+
+model Cargo {
+  id          Int       @id @default(autoincrement())
+  dataArrived DateTime? @default(now())
+  dateSent    DateTime? @default(now())
+  costTotal   Float?    @default(0)
+  logisticFee Float?    @default(0)
+  roll        Roll[]
 }

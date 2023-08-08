@@ -69,13 +69,19 @@ router.get("/all", async (req, res) => {
 
     const result = products.map(i => {
       let priceAtStock;
-      console.log('i', i)
+    
       // console.log('i.codeChina', i.codeChina)
       // console.log('i.width', i.width)
       // console.log('i.gram', i.gram)
-      // console.log('how many meter per kg', (1000/i.width/i.gram)*100)
+      // if(i.codeChina=="98653") {
+      //   console.log('i.priceChinaKG', i.priceChinaKG)
+      //   console.log('how many meter per kg', (1000/i.width/i.gram)*100)
+      //   console.log('cost in kg bkk rmb', (parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value)))
+      //   console.log('cost in kg bkk', ( (parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value))/exRate.value))
+      // }
+      // 
       // console.log('cost in Bihskek per kg', ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value))
-      let costBkkM = ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value)/((1000/i.width/i.gram)*100)
+      let costBkkM = ((parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value))/exRate.value)/((1000/i.width/i.gram)*100)
       if (i.currentPrice && i.currentPrice>costBkkM) {
         priceAtStock = currentPrice
       } else {
@@ -88,6 +94,9 @@ router.get("/all", async (req, res) => {
             priceAtStock = i.marketPrice * 0.9
         }
       }
+      // if(i.codeChina=="98653") {
+      //   console.log('costBkkM', costBkkM)
+      // }
 
       const updatedProduct = {
         id: i.id,
