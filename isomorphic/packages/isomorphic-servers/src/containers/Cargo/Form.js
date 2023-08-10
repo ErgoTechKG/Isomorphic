@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Select, Space, DatePicker } from "antd";
+import { Button, Form, Input, Select, Space, DatePicker, InputNumber } from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-const { Option } = Select;
-const sights = {
-  Beijing: ["Tiananmen", "Great Wall"],
-  Shanghai: ["Oriental Pearl", "The Bund"],
-};
+
 const App = () => {
   const [form] = Form.useForm();
   const onFinish = (values) => {
     console.log("Received values of form:", values);
   };
   const [prodcutsData, setProductsData] = useState([]);
+  const [prodcutData, setProductData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,6 +31,11 @@ const App = () => {
 
     fetchData();
   }, []);
+  
+  const handleChange = (value) => {
+    console.log(value); // { value: "lucy", key: "lucy", label: "Lucy (101)" }
+  };
+
   console.log('prodcutsData', prodcutsData)
   return (
     <Form
@@ -74,6 +76,7 @@ const App = () => {
           filterOption={(input, option) =>
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
+          onChange={handleChange}
           options={prodcutsData}
         />
       </Form.Item>
@@ -85,53 +88,39 @@ const App = () => {
                 <Form.Item
                   noStyle
                   shouldUpdate={(prevValues, curValues) =>
-                    prevValues.area !== curValues.area ||
+                    prevValues.amount !== curValues.amount ||
                     prevValues.sights !== curValues.sights
                   }
                 >
                   {() => (
                     <Form.Item
                       {...field}
-                      label="Sight"
-                      name={[field.name, "sight"]}
+                      label="Amount"
+                      name={[field.name, "amount"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing sight",
+                          message: "Missing Amount",
                         },
                       ]}
                     >
-                      <Select
-                        disabled={!(form.getFieldValue("date") && form.getFieldValue("product"))}
-                        style={{
-                          width: 130,
-                        }}
-                      >
-                        {(sights[form.getFieldValue("area")] || []).map(
-                          (item) => (
-                            <Option key={item} value={item}>
-                              {item}
-                            </Option>
-                          )
-                        )}
-                      </Select>
+                       <InputNumber />
                     </Form.Item>
                   )}
                 </Form.Item>
                 <Form.Item
                   {...field}
-                  label="Price"
-                  name={[field.name, "price"]}
+                  label="Color#"
+                  name={[field.name, "color"]}
                   rules={[
                     {
                       required: true,
-                      message: "Missing price",
+                      message: "Missing color",
                     },
                   ]}
                 >
-                  <Input />
+                  <InputNumber />
                 </Form.Item>
-
                 <MinusCircleOutlined onClick={() => remove(field.name)} />
               </Space>
             ))}

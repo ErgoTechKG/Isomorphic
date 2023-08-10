@@ -228,16 +228,16 @@ const MyComponent = () => {
       ...getColumnSearchProps("nameRussian"),
     },
     {
-      title: "width",
-      dataIndex: "width",
-      key: "width",
-      ...getColumnSearchProps("width"),
+      title: "createdAt",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
     },
     {
-      title: "gram",
-      dataIndex: "gram",
-      key: "gram",
-      ...getColumnSearchProps("gram"),
+      title: "updatedAt",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      sorter: (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt),
     },
     {
       title: "Action",
@@ -273,6 +273,23 @@ const MyComponent = () => {
         <Col span={8}>
           <Card title="vipPrice with 100% DownPayment" bordered={false}>
             ${record.vipPrice ? record.vipPrice.toFixed(2) : null}/Meter
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <Card title="Width" bordered={false}>
+            {record.width} cm
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="Gram" bordered={false}>
+           {record.gram} g
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="Source" bordered={false}>
+            {record.source}
           </Card>
         </Col>
       </Row>
