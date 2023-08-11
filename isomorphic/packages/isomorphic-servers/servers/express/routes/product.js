@@ -86,17 +86,20 @@ router.get("/all", async (req, res) => {
         priceAtStock = currentPrice
       } else {
         if (!i.marketPrice) {
-          priceAtStock = costBkkM * 1.3;
+          priceAtStock = costBkkM * 1.15;
         } else {
-          if(i.marketPrice*0.9<costBkkM*1.1)
-            priceAtStock = costBkkM * 1.1;
+          if(i.marketPrice*0.95<costBkkM*1.1)
+            priceAtStock = costBkkM * 1.08;
           else
-            priceAtStock = i.marketPrice * 0.9
+            priceAtStock = i.marketPrice * 0.95
         }
       }
-      // if(i.codeChina=="98653") {
-      //   console.log('costBkkM', costBkkM)
-      // }
+      if(i.codeChina=="98tc6535+") {
+        console.log('costBkkM', costBkkM)
+        console.log('costBkkM 1.1', costBkkM*1.1)
+        console.log('i.marketPrice', i.marketPrice)
+        console.log('i.marketPrice*0.9', i.marketPrice*0.9)
+      }
 
       const updatedProduct = {
         id: i.id,
@@ -116,7 +119,7 @@ router.get("/all", async (req, res) => {
         updatedAt: i.updatedAt,
         note: i.note,
         currentPrice: i.currentPrice,
-        vipPrice:costBkkM*1.1,
+        vipPrice:costBkkM*1.05,
         priceAtStock: priceAtStock // Add the 'priceAtStock' field with a value of 0
       };
       
