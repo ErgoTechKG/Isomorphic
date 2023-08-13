@@ -86,15 +86,15 @@ router.get("/all", async (req, res) => {
         priceAtStock = currentPrice
       } else {
         if (!i.marketPrice) {
-          priceAtStock = costBkkM * 1.15;
+          priceAtStock = costBkkM * 1.10;
         } else {
-          if(i.marketPrice*0.95<costBkkM*1.1)
-            priceAtStock = costBkkM * 1.08;
+          if(i.marketPrice*0.8<costBkkM*1.1)
+            priceAtStock = costBkkM * 1.10;
           else
-            priceAtStock = i.marketPrice * 0.95
+            priceAtStock = costBkkM * 1.10;
         }
       }
-      if(i.codeChina=="98tc6535+") {
+      if(i.codeChina=="98650") {
         console.log('costBkkM', costBkkM)
         console.log('costBkkM 1.1', costBkkM*1.1)
         console.log('i.marketPrice', i.marketPrice)
@@ -120,7 +120,7 @@ router.get("/all", async (req, res) => {
         note: i.note,
         currentPrice: i.currentPrice,
         vipPrice:costBkkM*1.05,
-        priceAtStock: priceAtStock // Add the 'priceAtStock' field with a value of 0
+        priceAtStock: costBkkM*1.15,// Add the 'priceAtStock' field with a value of 0
       };
       
 
