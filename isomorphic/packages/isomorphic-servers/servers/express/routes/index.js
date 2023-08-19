@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import Config from "../config";
 import jwtDecode from "jwt-decode";
 import productRouter from './product.js';
+import cargoRouter from './cargo.js';
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -208,5 +209,6 @@ router.post("/temporary-upload", async (req, res) => {
 
 
 router.use('/product', productRouter);
+router.use('/cargo', cargoRouter);
 
 export default router;

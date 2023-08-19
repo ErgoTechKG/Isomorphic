@@ -68,7 +68,9 @@ model Product {
   updatedAt       DateTime       @updatedAt
   note            String?
   currentPrice    Float?         @default(0)
-   Roll            Roll[]
+  Roll            Roll[]
+  isPluff         Boolean?       @default(false)
+  isResToChina    Boolean?       @default(false)
 }
 
 model PriceHistory {
@@ -102,7 +104,7 @@ model Roll {
 
 model Cargo {
   id          Int       @id @default(autoincrement())
-  dataArrived DateTime? @default(now())
+  dateArrived DateTime? @unique @default(now())
   dateSent    DateTime? @default(now())
   costTotal   Float?    @default(0)
   logisticFee Float?    @default(0)

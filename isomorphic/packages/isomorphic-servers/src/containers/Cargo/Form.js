@@ -7,8 +7,15 @@ import axiosConfig from "../../library/helpers/axios";
 
 const App = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Received values of form:", values);
+
+    const response = await axios.post(`${jwtConfig.fetchUrlSecret}cargo`,values, axiosConfig).catch(function (error) {
+      console.log(error)
+    });
+    if(response && response.data && response.status === 200) {
+      console.log('response', response)
+    }
   };
   const [prodcutsData, setProductsData] = useState([]);
   const [prodcutData, setProductData] = useState(null);
@@ -19,7 +26,7 @@ const App = () => {
           `${jwtConfig.fetchUrlSecret}product/all`,
           axiosConfig
         ); // Replace with your actual API endpoint
-        console.log('response.data', response.data)
+       
         setProductsData(response.data.map(i => ({value:i.id, 
         label:`${i.codeChina}-${i.codeKent}-${i.codeKent0}`})));
       } catch (error) {
@@ -32,11 +39,23 @@ const App = () => {
     fetchData();
   }, []);
   
-  const handleChange = (value) => {
+  const handleChange = async (value) => {
     console.log(value); // { value: "lucy", key: "lucy", label: "Lucy (101)" }
+
+    try {
+      const response = await axios.get(
+        `${jwtConfig.fetchUrlSecret}product?id=${value}`,
+        axiosConfig
+      ); // Replace with your actual API endpoint
+     console.log('product data', response.data)
+     setProductData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      //setLoading(false); // Set loading to false after data is fetched (including error cases)
+    }
   };
 
-  console.log('prodcutsData', prodcutsData)
   return (
     <Form
       form={form}

@@ -22,15 +22,15 @@ async function generateUniqueID() {
 router.get("/", async (req, res) => {
   const result = await prisma.product.findUnique({
     where: {
-      id:parseInt(req.query.id),
+      id: parseInt(req.query.id),
     },
-  })
+  });
   res.send(result);
 });
 
 // Define routes for /api/product here
 router.delete("/", async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   const deletedProduct = await prisma.product.delete({
     where: {
       id: parseInt(req.query.id),
@@ -46,59 +46,86 @@ router.delete("/", async (req, res) => {
 router.get("/all", async (req, res) => {
   try {
     const products = await prisma.product.findMany();
-    const logisticRMB = await prisma.variables.findFirst({
+    const logisticReUSD = await prisma.variables.findFirst({
       where: {
         // Your condition here, for example, filtering products with priceChinaMeter greater than 0
-        name: 'logisticRMB'
+        name: "logisticReUSD",
       },
       orderBy: {
-        createdAt: 'desc', // Sorting by createdAt field in descending order (newest to oldest)
+        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
       },
     });
     const exRate = await prisma.variables.findFirst({
       where: {
         // Your condition here, for example, filtering products with priceChinaMeter greater than 0
-        name: 'exRate'
+        name: "exRate",
       },
       orderBy: {
-        createdAt: 'desc', // Sorting by createdAt field in descending order (newest to oldest)
+        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
       },
     });
 
-    console.log('logisticRMB', logisticRMB.value, exRate.value)
+    const logisticPluffUSD = await prisma.variables.findFirst({
+      where: {
+        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+        name: "logisticPluffUSD",
+      },
+      orderBy: {
+        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
+      },
+    });
 
-    const result = products.map(i => {
+    console.log(
+      "logisticReUSD",
+      logisticReUSD.value,
+      exRate.value,
+      logisticPluffUSD.value
+    );
+
+    const result = products.map((i) => {
+      let logisticUSD = i.isPluff
+        ? parseFloat(logisticPluffUSD.value)
+        : parseFloat(logisticReUSD.value);
+        
       let priceAtStock;
-    
-      // console.log('i.codeChina', i.codeChina)
-      // console.log('i.width', i.width)
-      // console.log('i.gram', i.gram)
-      // if(i.codeChina=="98653") {
-      //   console.log('i.priceChinaKG', i.priceChinaKG)
-      //   console.log('how many meter per kg', (1000/i.width/i.gram)*100)
-      //   console.log('cost in kg bkk rmb', (parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value)))
-      //   console.log('cost in kg bkk', ( (parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value))/exRate.value))
-      // }
-      // 
+      let mPerKG = (1000 / i.width / i.gram) * 100;
+      let costKGBKKUSD =
+        parseFloat(
+          i.priceChinaKG ? i.priceChinaKG : mPerKG * i.priceChinaMeter
+        ) /
+          parseFloat(exRate.value) +
+        logisticUSD;
+
+      if (i.codeKent == "k1e526b") {
+        console.log("logisticUSD", logisticUSD);
+        console.log("i.codeChina", i.codeChina);
+        console.log("i.width", i.width);
+        console.log("i.gram", i.gram);
+        console.log("i.priceChinaKG", i.priceChinaKG);
+        console.log("i.priceChinaMeter", i.priceChinaMeter);
+        console.log("how many meter per kg", mPerKG);
+        console.log("cost in kg bkk usd", costKGBKKUSD);
+        //console.log('cost in kg bkk', ( (parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ logisticRMBFinal)/exRate.value))
+      }
+
       // console.log('cost in Bihskek per kg', ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value))
-      let costBkkM = ((parseFloat(i.priceChinaKG?i.priceChinaKG:((1000/i.width/i.gram)*100*i.priceChinaMeter ))+ parseFloat(logisticRMB.value))/exRate.value)/((1000/i.width/i.gram)*100)
-      if (i.currentPrice && i.currentPrice>costBkkM) {
-        priceAtStock = currentPrice
+      let costBkkM = costKGBKKUSD / mPerKG;
+      if (i.currentPrice && i.currentPrice > costBkkM) {
+        priceAtStock = currentPrice;
       } else {
         if (!i.marketPrice) {
-          priceAtStock = costBkkM * 1.10;
+          priceAtStock = costBkkM * 1.1;
         } else {
-          if(i.marketPrice*0.8<costBkkM*1.1)
-            priceAtStock = costBkkM * 1.10;
-          else
-            priceAtStock = costBkkM * 1.10;
+          if (i.marketPrice * 0.8 < costBkkM * 1.1)
+            priceAtStock = costBkkM * 1.1;
+          else priceAtStock = costBkkM * 1.1;
         }
       }
-      if(i.codeChina=="98650") {
-        console.log('costBkkM', costBkkM)
-        console.log('costBkkM 1.1', costBkkM*1.1)
-        console.log('i.marketPrice', i.marketPrice)
-        console.log('i.marketPrice*0.9', i.marketPrice*0.9)
+      if (i.codeKent == "k1e526b") {
+        console.log("costBkkM", costBkkM);
+        console.log("costBkkM 1.1", costBkkM * 1.1);
+        console.log("i.marketPrice", i.marketPrice);
+        console.log("i.marketPrice*0.9", i.marketPrice * 0.9);
       }
 
       const updatedProduct = {
@@ -119,37 +146,32 @@ router.get("/all", async (req, res) => {
         updatedAt: i.updatedAt,
         note: i.note,
         currentPrice: i.currentPrice,
-        vipPrice:costBkkM*1.05,
-        priceAtStock: costBkkM*1.15,// Add the 'priceAtStock' field with a value of 0
+        vipPrice: costBkkM * 1.05,
+        priceAtStock: costBkkM * 1.15, // Add the 'priceAtStock' field with a value of 0
       };
-      
 
-      
       //console.log(i.priceChinaKG, i.priceChinaMeter)
-      return updatedProduct
-    })
+      return updatedProduct;
+    });
     res.send(result);
   } catch (error) {
-    console.error('Error retrieving products:', error);
-  } 
-  
+    console.error("Error retrieving products:", error);
+  }
 });
 
 router.post("/", async (req, res) => {
-
   const record = await prisma.product.create({
     data: req.body,
   });
   res.send("post product");
 });
 
-
 router.put("/", async (req, res) => {
   const record = await prisma.product.update({
     where: {
-      id: parseInt(req.query.id)  // Assuming id is an integer; adapt as needed
+      id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
     },
-    data: req.body
+    data: req.body,
   });
   res.send(record);
 });
