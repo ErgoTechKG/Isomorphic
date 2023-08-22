@@ -71,6 +71,7 @@ model Product {
   Roll            Roll[]
   isPluff         Boolean?       @default(false)
   isResToChina    Boolean?       @default(false)
+  isKentSample    Boolean?       @default(false)
 }
 
 model PriceHistory {

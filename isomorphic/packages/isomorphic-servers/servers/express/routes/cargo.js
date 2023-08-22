@@ -54,7 +54,14 @@ router.put("/", async (req, res) => {
     },
     data: req.body
   });
-  res.send(record);
+
+  const roll = prisma.roll.create({
+    data: {
+      
+    }
+  });
+
+  res.send(record.id);
 });
 
 

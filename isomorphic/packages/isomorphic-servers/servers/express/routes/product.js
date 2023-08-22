@@ -96,7 +96,7 @@ router.get("/all", async (req, res) => {
           parseFloat(exRate.value) +
         logisticUSD;
 
-      if (i.codeKent == "k1e526b") {
+      if (i.codeChina == "98642") {
         console.log("logisticUSD", logisticUSD);
         console.log("i.codeChina", i.codeChina);
         console.log("i.width", i.width);
@@ -121,7 +121,7 @@ router.get("/all", async (req, res) => {
           else priceAtStock = costBkkM * 1.1;
         }
       }
-      if (i.codeKent == "k1e526b") {
+      if (i.codeChina == "98642") {
         console.log("costBkkM", costBkkM);
         console.log("costBkkM 1.1", costBkkM * 1.1);
         console.log("i.marketPrice", i.marketPrice);
@@ -148,6 +148,9 @@ router.get("/all", async (req, res) => {
         currentPrice: i.currentPrice,
         vipPrice: costBkkM * 1.05,
         priceAtStock: costBkkM * 1.15, // Add the 'priceAtStock' field with a value of 0
+        isPluff:i.isPluff,
+        isResToChina:i.isResToChina, 
+        isKentSample:i.isKentSample,
       };
 
       //console.log(i.priceChinaKG, i.priceChinaMeter)
@@ -167,6 +170,7 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
+  console.log('req.body', req.body)
   const record = await prisma.product.update({
     where: {
       id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed

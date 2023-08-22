@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Input, Button, Upload, Space, InputNumber, Form, message } from "antd";
+import {
+  Input,
+  Button,
+  Upload,
+  Space,
+  InputNumber,
+  Form,
+  message,
+  Checkbox,
+  Switch
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
@@ -32,6 +42,9 @@ const MyComponent = (props) => {
 
         setFileList(fileListData);
         form.setFieldsValue(response.data);
+      //   form.setFieldsValue({
+      //     isPluff: true,
+      // });
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -71,17 +84,21 @@ const MyComponent = (props) => {
       const { upload, ...rest } = values;
 
       const response = await axios
-      .put(`${jwtConfig.fetchUrlSecret}product?id=${props.recordID}`, rest, axiosConfig)
-      .catch(function (error) {
-        console.log(error);
-        messageApi.open({
-          type: "error",
-          content: error,
+        .put(
+          `${jwtConfig.fetchUrlSecret}product?id=${props.recordID}`,
+          rest,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+          messageApi.open({
+            type: "error",
+            content: error,
+          });
         });
-      });
-    if (response && response.data && response.status === 200) {
-      props.setIsModalOpen(false);
-    }
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     } else {
       //console.log('value no id', values)
       if (values.upload)
@@ -142,6 +159,11 @@ const MyComponent = (props) => {
     }
   };
 
+
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
+
   const uploadProps = {
     onChange(info, i) {
       // console.log("info", info, i);
@@ -176,16 +198,19 @@ const MyComponent = (props) => {
   // };
 
   const onRemove = async (value) => {
-    console.log('onRemove', value)
+    console.log("onRemove", value);
     // const response = await axios.delete(
     //   `${jwtConfig.uploadUrl}?fileId=${value.response.fileId}`
     // ); // Replace with your actual API endpoint
-  }
+  };
   return (
     <div>
       {contextHolder}
       <Space style={{ width: "100%" }} direction="vertical">
         <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
+
+
+
           <Form.Item
             name="source"
             label="Source"
@@ -319,6 +344,46 @@ const MyComponent = (props) => {
             ]}
           >
             <InputNumber addonAfter="$/M" placeholder="Market Price" />
+          </Form.Item>
+
+          <Form.Item
+            name="isPluff"
+            label="Is Pluff"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+            valuePropName="checked"
+          >
+            <Switch >isPluff</Switch>
+          </Form.Item>
+
+          <Form.Item
+            name="isResToChina"
+            label="Is Res To China"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+            valuePropName="checked"
+          >
+            <Switch >isResToChina</Switch>
+          </Form.Item>
+
+
+          <Form.Item
+            name="isKentSample"
+            label="is Kent Sample"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+            valuePropName="checked"
+          >
+            <Switch >IsKentSample</Switch>
           </Form.Item>
 
           <Form.Item

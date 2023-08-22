@@ -7,7 +7,7 @@ import {
   Space,
   Upload,
   Form,
-  Avatar,
+  Switch,
   List,
 } from "antd";
 import axios from "axios";
@@ -35,37 +35,40 @@ const MyComponent = (props) => {
     },
   };
 
-  useEffect(() => {
-    if (props.record) {
-      form.setFieldsValue({
-        description: props.record.description,
-        userFrom: props.record.userFromId,
-        userTo: props.record.userToId,
-        amount: props.record.amount,
-        status: props.record.status,
-      });
-    } else {
-      form.resetFields();
-    }
-  }, [props.record]);
+  // useEffect(() => {
+  //   if (props.record) {
+  //     form.setFieldsValue({
+  //       description: props.record.description,
+  //       userFrom: props.record.userFromId,
+  //       userTo: props.record.userToId,
+  //       amount: props.record.amount,
+  //       status: props.record.status,
+  //     });
+  //   } else {
+  //     form.resetFields();
+  //   }
+  // }, [props.record]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `${jwtConfig.fetchUrlSecret}users`,
-          axiosConfig
-        ); // Replace with your actual API endpoint
-        const userDropdownlist = response.data.map((a) => ({
-          value: a.id,
-          label: a.name,
-        }));
-        setUserDropdownlistValue(userDropdownlist);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchUserData();
+    // const fetchUserData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       `${jwtConfig.fetchUrlSecret}users`,
+    //       axiosConfig
+    //     ); // Replace with your actual API endpoint
+    //     const userDropdownlist = response.data.map((a) => ({
+    //       value: a.id,
+    //       label: a.name,
+    //     }));
+    //     setUserDropdownlistValue(userDropdownlist);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+    // fetchUserData();
+    form.setFieldsValue({
+      switchField: false,
+  });
   }, []);
 
   const onFinish = async (values) => {
@@ -117,49 +120,9 @@ const MyComponent = (props) => {
     <div>
       <Space style={{ width: "100%" }} direction="vertical">
         <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
-          <Form.Item
-            label="Upload"
-            name="upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              action={jwtConfig.uploadUrl}
-              listType="picture-card"
-              name="file"
-              {...uploadProps}
-            >
-              <div>
-                <PlusOutlined />
-                <div
-                  style={{
-                    marginTop: 8,
-                  }}
-                >
-                  Upload
-                </div>
-              </div>
-            </Upload>
-          </Form.Item>
-          <List
-            itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item, index) => {
-              console.log('item', item)
-              return item.response?(
-              <List.Item>
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${item.response.fileId}`}
-                    />
-                  }
-                  title={<a href="https://ant.design"></a>}
-                  description={item.response.fileId}
-                />
-              </List.Item>):null}
-            }
-          />
+            <Form.Item name="isPluff" label="Enable feature" valuePropName="checked">
+                <Switch />
+            </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Submit
