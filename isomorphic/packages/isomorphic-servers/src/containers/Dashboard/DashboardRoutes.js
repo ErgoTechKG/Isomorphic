@@ -34,6 +34,10 @@ const routes = [
     component: lazy(() => import('../Cargo')),
   },
   {
+    path: 'calculator',
+    component: lazy(() => import('../Calculator')),
+  },
+  {
     path: 'inkOrder',
     component: lazy(() => import('../InkOrder')),
   },

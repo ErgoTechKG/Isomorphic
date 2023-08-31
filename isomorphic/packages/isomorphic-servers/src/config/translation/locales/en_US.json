@@ -588,5 +588,6 @@
   "sidebar.financialTransaction": "Financial Transaction",
   "sidebar.inkOrder": "Ink Order", 
   "sidebar.temporary": "Temporary",
-  "sidebar.cargo": "Cargo"
+  "sidebar.cargo": "Cargo",
+  "sidebar.calculator": "Calculator"
 }

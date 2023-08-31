@@ -37,6 +37,11 @@ const options = [
     label: 'sidebar.cargo',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'calculator',
+    label: 'sidebar.calculator',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
   // {
   //   key: 'inkOrder',
   //   label: 'sidebar.inkOrder',

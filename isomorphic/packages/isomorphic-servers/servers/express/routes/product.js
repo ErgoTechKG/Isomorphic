@@ -20,6 +20,7 @@ async function generateUniqueID() {
 
 // Define routes for /api/product here
 router.get("/", async (req, res) => {
+  console.log('prisma.product', prisma.product)
   const result = await prisma.product.findUnique({
     where: {
       id: parseInt(req.query.id),
