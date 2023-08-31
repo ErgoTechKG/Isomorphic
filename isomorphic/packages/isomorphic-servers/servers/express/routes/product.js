@@ -25,6 +25,7 @@ router.get("/", async (req, res) => {
       id: parseInt(req.query.id),
     },
   });
+  console.log('productid', result)
   res.send(result);
 });
 
@@ -96,7 +97,7 @@ router.get("/all", async (req, res) => {
           parseFloat(exRate.value) +
         logisticUSD;
 
-      if (i.codeChina == "98642") {
+      if (i.codeKent == "k1e22b2") {
         console.log("logisticUSD", logisticUSD);
         console.log("i.codeChina", i.codeChina);
         console.log("i.width", i.width);
@@ -121,7 +122,7 @@ router.get("/all", async (req, res) => {
           else priceAtStock = costBkkM * 1.1;
         }
       }
-      if (i.codeChina == "98642") {
+      if (i.codeKent == "k1e22b2") {
         console.log("costBkkM", costBkkM);
         console.log("costBkkM 1.1", costBkkM * 1.1);
         console.log("i.marketPrice", i.marketPrice);

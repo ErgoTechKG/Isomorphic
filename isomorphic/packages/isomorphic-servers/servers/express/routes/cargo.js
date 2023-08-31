@@ -41,6 +41,12 @@ router.post("/", async (req, res) => {
     create: { dateArrived: req.body.date  }
   });
 
+  const rolls = await prisma.cargo.create({
+    data: {
+      name: 'Alice',
+      email: 'alice@example.com',
+    },
+  })
   console.log(cargo.id);
   res.send("post product");
 
