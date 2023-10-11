@@ -20,6 +20,7 @@ import axiosConfig from "../../library/helpers/axios";
 import ProductForm from "./Form";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import CollapsePanel from "antd/lib/collapse/CollapsePanel";
 const MyComponent = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -187,6 +188,7 @@ const MyComponent = () => {
           `${jwtConfig.fetchUrlSecret}product/all`,
           axiosConfig
         ); // Replace with your actual API endpoint
+        console.log('response.data', response.data)
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -222,10 +224,36 @@ const MyComponent = () => {
       ...getColumnSearchProps("codeChina"),
     },
     {
+      title: "Source",
+      dataIndex: "source",
+      key: "source",
+      ...getColumnSearchProps("source"),
+    },
+    {
       title: "Russian Name",
       dataIndex: "nameRussian",
       key: "nameRussian",
       ...getColumnSearchProps("nameRussian"),
+    },
+    {
+      title: "Chinese Name",
+      dataIndex: "nameChinese",
+      key: "nameChinese",
+      ...getColumnSearchProps("nameChinese"),
+    },
+    {
+      title: "English Name",
+      dataIndex: "nameEnglish",
+      key: "nameChinese",
+      ...getColumnSearchProps("nameChinese"),
+    },
+    {
+      title: "Price",
+      dataIndex: "priceAtStock",
+      sorter: (a, b) => (a.priceAtStock).toFixed(2) - b.priceAtStock.toFixed(2),
+      render: (record) => {
+        return record?record.toFixed(2):0
+      },
     },
     {
       title: "createdAt",
@@ -233,12 +261,7 @@ const MyComponent = () => {
       key: "createdAt",
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
     },
-    {
-      title: "updatedAt",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      sorter: (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt),
-    },
+
     {
       title: "Action",
       dataIndex: "",
