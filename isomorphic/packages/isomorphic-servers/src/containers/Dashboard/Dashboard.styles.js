@@ -5,6 +5,12 @@ export const DashboardGlobalStyles = createGlobalStyle`
 body {
   -webkit-overflow-scrolling: touch;
 }
+@media only screen and (max-width: 600px) {
+  .ant-table {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
 
 html h1,
 html h2,
