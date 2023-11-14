@@ -72,6 +72,11 @@ model Product {
   isPluff         Boolean?       @default(false)
   isResToChina    Boolean?       @default(false)
   isKentSample    Boolean?       @default(false)
+  staff     String?
+  client     String?
+  description     String? @db.VarChar(1000) 
+  isPopular    Boolean?       @default(false)
+  priceUpdated Float?         @default(0)
 }
 
 model PriceHistory {

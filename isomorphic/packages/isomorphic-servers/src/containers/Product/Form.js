@@ -15,7 +15,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-
+const { TextArea } = Input;
 const { Search } = Input;
 
 const MyComponent = (props) => {
@@ -220,7 +220,43 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="Description" />
+            <Input placeholder="source" />
+          </Form.Item>
+
+          <Form.Item
+            name="client"
+            label="Client"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder="client" />
+          </Form.Item>
+
+          <Form.Item
+            name="staff"
+            label="Staff"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder="staff" />
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <TextArea rows={4} placeholder="description" />
           </Form.Item>
 
           <Form.Item
@@ -272,6 +308,18 @@ const MyComponent = (props) => {
             ]}
           >
             <Input placeholder="Russian Name" />
+          </Form.Item>
+
+          <Form.Item
+            name="nameEnglish"
+            label="English Name"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder="English Name" />
           </Form.Item>
 
           <Form.Item
@@ -335,6 +383,18 @@ const MyComponent = (props) => {
           </Form.Item>
 
           <Form.Item
+            name="priceUpdated"
+            label="Our Price"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <InputNumber addonAfter="$/M" placeholder="Our Price" />
+          </Form.Item>
+
+          <Form.Item
             name="marketPrice"
             label="Market Price"
             rules={[
@@ -344,6 +404,19 @@ const MyComponent = (props) => {
             ]}
           >
             <InputNumber addonAfter="$/M" placeholder="Market Price" />
+          </Form.Item>
+
+          <Form.Item
+            name="isPopular"
+            label="Is Popular"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+            valuePropName="checked"
+          >
+            <Switch >isPopular</Switch>
           </Form.Item>
 
           <Form.Item
