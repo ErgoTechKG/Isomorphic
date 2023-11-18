@@ -165,9 +165,11 @@ router.get("/all", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  console.log("post product req.body", req.body)
   const record = await prisma.product.create({
     data: req.body,
   });
+  console.log("post product record", record)
   res.send("post product");
 });
 
