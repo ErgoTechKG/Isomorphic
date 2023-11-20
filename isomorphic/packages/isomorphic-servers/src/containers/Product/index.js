@@ -365,6 +365,7 @@ const MyComponent = () => {
             ></ProductForm>
           </Modal>
           <Table
+          scroll={{ x: "max-content" }}
             columns={columns}
             rowKey={(record) => record.id}
             expandable={{
