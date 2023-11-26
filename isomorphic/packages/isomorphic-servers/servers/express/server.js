@@ -141,7 +141,7 @@ app.post("/signup", async (req, res) => {
 
 // Set up routes
 app.use("/api", [authenticate, authError, routes]);
-
+//app.use("/api", [authError, routes]);
 // Route for handling file uploads
 app.use("/upload", uploadRoute);
 

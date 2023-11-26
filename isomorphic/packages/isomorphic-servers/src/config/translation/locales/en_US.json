@@ -589,5 +589,6 @@
   "sidebar.inkOrder": "Ink Order", 
   "sidebar.temporary": "Temporary",
   "sidebar.cargo": "Cargo",
-  "sidebar.calculator": "Calculator"
+  "sidebar.calculator": "Calculator",
+  "sidebar.roll": "Roll"
 }

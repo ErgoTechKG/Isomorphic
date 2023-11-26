@@ -45,6 +45,10 @@ const routes = [
     path: 'temporary',
     component: lazy(() => import('../Temporary')),
   },
+  {
+    path: 'roll',
+    component: lazy(() => import('../Roll')),
+  },
 ];
 
 export default function AppRouter() {

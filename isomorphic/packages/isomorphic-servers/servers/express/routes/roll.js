@@ -1,31 +1,26 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getCargoFromSheet } from "../scripts/googleSheets";
+import { getRollFromSheet } from "../scripts/googleSheetsRolls";
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // Define routes for /api/product here
-router.get("/", async (req, res) => {
-  const result = await prisma.product.findUnique({
-    where: {
-      id:parseInt(req.query.id),
-    },
-  })
-  res.send(result);
+router.get("/all", async (req, res) => {
+  const rolls = await prisma.roll.findMany();
+  res.send(rolls);
 });
 
 
 // // Define routes for /api/product here
 // router.get("/bulk", async (req, res) => {
-//   let googleSheetResult = await getCargoFromSheet();
-//   googleSheetResult.shift();
-//   console.log('googleSheetResult', googleSheetResult)
-//   const cargos = await prisma.cargo.createMany({
-//     data: googleSheetResult,
+//   let sheetResult = await getRollFromSheet();
+//   console.log('sheetResult', sheetResult)
+//   const cargos = await prisma.roll.createMany({
+//     data: sheetResult,
 //     //skipDuplicates: true // Optional: skips the insert if a record with unique constraint already exists
 //   });
-//   res.send(cargos);
+//   res.send([]);
 // });
 
 // Define routes for /api/product here
@@ -44,9 +39,7 @@ router.delete("/", async (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
-  const allCargos = await prisma.cargo.findMany();
-
-  res.send(allCargos);
+  
 });
 
 router.post("/", async (req, res) => {
@@ -71,14 +64,15 @@ router.post("/", async (req, res) => {
 
 
 router.put("/", async (req, res) => {
-  const record = await prisma.cargo.update({
+  console.log('req.body', req.body)
+  const record = await prisma.roll.update({
     where: {
       id: req.body.id  // Assuming id is an integer; adapt as needed
     },
     data: req.body
   });
 
-  const rolls = await prisma.cargo.findMany();
+  const rolls = await prisma.roll.findMany();
   res.send(rolls);
 });
 

@@ -38,6 +38,11 @@ const options = [
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
+    key: 'roll',
+    label: 'sidebar.roll',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
+  {
     key: 'calculator',
     label: 'sidebar.calculator',
     leftIcon: <SidebarBlankIcon size={19} />,
