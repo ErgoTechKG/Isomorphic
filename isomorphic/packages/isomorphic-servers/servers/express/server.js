@@ -12,12 +12,15 @@ import argon2 from "argon2";
 import { PrismaClient } from "@prisma/client";
 import { parseExcelFile, parseExcelFile_images } from "./excelToPostgres";
 
+import path from 'path';
+
+
+const app = express();
 
 const prisma = new PrismaClient();
 dotenv.config();
 
 const { port, secretKey, expiredAfter } = Config;
-const app = express();
 
 // Create a Winston logger instance
 const logger = winston.createLogger({
@@ -152,6 +155,15 @@ app.post("/api/secret/test", (req, res) => {
     message: "succcesful",
   });
 });
+
+
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 app.listen(port, () => {
   logger.info("Isomorphic JWT login " + port);
