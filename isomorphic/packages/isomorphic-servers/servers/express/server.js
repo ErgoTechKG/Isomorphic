@@ -11,6 +11,8 @@ import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { PrismaClient } from "@prisma/client";
 import { parseExcelFile, parseExcelFile_images } from "./excelToPostgres";
+import path from 'path';
+
 
 
 const prisma = new PrismaClient();
@@ -18,6 +20,9 @@ dotenv.config();
 
 const { port, secretKey, expiredAfter } = Config;
 const app = express();
+
+const buildPath = path.join(__dirname, '..', '..', '..', 'build');
+app.use(express.static(buildPath));
 
 // Create a Winston logger instance
 const logger = winston.createLogger({
@@ -151,6 +156,11 @@ app.post("/api/secret/test", (req, res) => {
     status: 200,
     message: "succcesful",
   });
+});
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 app.listen(port, () => {
