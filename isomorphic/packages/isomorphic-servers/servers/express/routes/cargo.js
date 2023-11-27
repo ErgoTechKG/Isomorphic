@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getCargoFromSheet } from "../scripts/googleSheets";
+//import { getCargoFromSheet } from "../scripts/googleSheets";
 
 const prisma = new PrismaClient();
 const router = express.Router();

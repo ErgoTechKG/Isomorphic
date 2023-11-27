@@ -1,3 +1,6 @@
-require('babel-register');
-require('babel-polyfill');
-require('./server.js');
+//require('babel-register');
+import "core-js/stable/index.js";
+import "regenerator-runtime/runtime.js";
+
+//require('babel-polyfill');
+import './server.js';

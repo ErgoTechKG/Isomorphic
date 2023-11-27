@@ -1,20 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import Config from "./config";
-import { authenticate, authError } from "./middleware";
+import Config from "./config.js";
+import { authenticate, authError } from "./middleware.js";
 import dotenv from "dotenv";
-import routes from "./routes";
+import routes from "./routes/index.js";
 import uploadRoute from "./routes/upload.js";
 import winston from "winston";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { PrismaClient } from "@prisma/client";
-import { parseExcelFile, parseExcelFile_images } from "./excelToPostgres";
+import { parseExcelFile, parseExcelFile_images } from "./excelToPostgres.js";
 
 import path from 'path';
-
-
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 const prisma = new PrismaClient();
@@ -157,11 +157,11 @@ app.post("/api/secret/test", (req, res) => {
 });
 
 
-
-app.use(express.static(path.join(__dirname, 'build')));
+const buildPath = path.join(__dirname, '..', '..', 'build');
+app.use(express.static(buildPath));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 

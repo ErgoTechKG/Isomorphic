@@ -1,5 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
-import Config from './config';
+import Config from './config.js';
 
 const { secretKey } = Config;
 

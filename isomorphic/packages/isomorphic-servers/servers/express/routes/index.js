@@ -1,7 +1,7 @@
 import express from "express";
 
 import { PrismaClient } from "@prisma/client";
-import Config from "../config";
+import Config from "../config.js";
 import jwtDecode from "jwt-decode";
 import productRouter from './product.js';
 import cargoRouter from './cargo.js';
