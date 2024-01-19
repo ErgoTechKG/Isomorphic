@@ -148,8 +148,9 @@ router.get("/all", async (req, res) => {
         updatedAt: i.updatedAt,
         note: i.note,
         currentPrice: i.currentPrice,
+        priceUpdated: i.priceUpdated,
         vipPrice: costBkkM * 1.10,
-        priceAtStock: costBkkM * 1.18, // Add the 'priceAtStock' field with a value of 0
+        priceAtStock: i.priceUpdated?i.priceUpdated:costBkkM * 1.18, // Add the 'priceAtStock' field with a value of 0
         isPluff:i.isPluff,
         isResToChina:i.isResToChina, 
         isKentSample:i.isKentSample,

@@ -284,8 +284,8 @@ const MyComponent = () => {
     <>
       <Row gutter={16}>
         <Col span={8}>
-          <Card title="Price" bordered={false}>
-            {record.codeKent}
+          <Card title="Market Price" bordered={false}>
+            {record.marketPrice}
           </Card>
         </Col>
         <Col span={8}>

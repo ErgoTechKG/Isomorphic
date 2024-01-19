@@ -10,7 +10,7 @@
 //eric.dev.liu@gmail.com
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL_PROD")
+  url      = env("DATABASE_URL_DEV")
 }
 
 generator client {
@@ -71,11 +71,11 @@ model Product {
   isPluff         Boolean?       @default(false)
   isResToChina    Boolean?       @default(false)
   isKentSample    Boolean?       @default(false)
-  staff     String?
-  client     String?
-  description     String? @db.VarChar(1000) 
-  isPopular    Boolean?       @default(false)
-  priceUpdated Float?         @default(0)
+  staff           String?
+  client          String?
+  description     String?        @db.VarChar(1000)
+  isPopular       Boolean?       @default(false)
+  priceUpdated    Float?         @default(0)
 }
 
 model PriceHistory {
@@ -98,24 +98,75 @@ model Variables {
 model Roll {
   id          Int     @id @default(autoincrement())
   color       Int?    @default(0)
-  description String? @db.VarChar(1000) 
+  description String? @db.VarChar(1000)
   rbg         String?
   amount      Float?  @default(0)
   unit        String?
   kentCode    String?
   cargo       Cargo?  @relation(fields: [cargoId], references: [id])
   cargoId     Int?
-  isSold      Boolean?  @default(false)
+
+  sale   Sale? @relation(fields: [saleId], references: [id])
+  saleId Int?
 }
 
 model Cargo {
-  id          Int       @id @default(autoincrement())
-  description String? @db.VarChar(1000) 
-  dateArrived DateTime?
-  dateSent    DateTime? @default(now())
-  feePackage  Float?    @default(0)
-  valueCargo   Float?    @default(0)
-  logisticFee Float?    @default(0)
+  id              Int       @id @default(autoincrement())
+  description     String?   @db.VarChar(1000)
+  dateArrived     DateTime?
+  dateSent        DateTime? @default(now())
+  feePackage      Float?    @default(0)
+  valueCargo      Float?    @default(0)
+  logisticFee     Float?    @default(0)
   isFullyRecieved Boolean?  @default(false)
-  roll        Roll[]
+  roll            Roll[]
+}
+
+model Finance {
+  id         Int              @id @default(autoincrement())
+  date       DateTime
+  incomeUSD  Float?
+  incomeSom  Float?
+  expenseUSD Float?
+  expenseSom Float?
+  note       String?
+  cat        FinanceCatagory?
+  Client     Client?          @relation(fields: [clientId], references: [id])
+  clientId   Int?
+}
+
+enum FinanceCatagory {
+  INIT
+  CARGO
+  OPERATION
+  INVESTMENT
+  LOADER
+  TRANSFER
+  TAX
+  PORTER
+  SALES
+  SALARY
+  RENT
+  OTHER
+}
+
+model Client {
+  id    Int    @id @default(autoincrement())
+  Sales Sale[]
+
+  payment Finance[]
+}
+
+model Sale {
+  id       Int       @id @default(autoincrement())
+  date     DateTime?
+  client   Client?   @relation(fields: [clientId], references: [id])
+  clientId Int?
+
+  Roll          Roll[]
+  note          String?
+  amount        Float?
+  unit          String?
+  priceUSD      Float?
+  paymentMethod String
 }
