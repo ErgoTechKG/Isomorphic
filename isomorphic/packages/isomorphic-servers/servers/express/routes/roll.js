@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { getRollFromSheet } from "../scripts/googleSheetsRolls";
+//import { getRollFromSheet } from "../scripts/googleSheetsRolls";
 
 const prisma = new PrismaClient();
 const router = express.Router();

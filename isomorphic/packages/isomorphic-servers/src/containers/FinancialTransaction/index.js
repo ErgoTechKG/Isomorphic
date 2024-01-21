@@ -6,6 +6,7 @@ import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
 import FinancialTransactionForm from './FinancialTransactionForm';
+import moment from 'moment';
 const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,7 @@ const MyComponent = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); // Replace with your actual API endpoint
+        console.log('data', response.data)
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,30 +38,35 @@ const MyComponent = () => {
       key: 'id',
     },
     {
-      title: 'From',
-      dataIndex: 'userFrom',
-      key: 'userFrom',
+      title: "date",
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
       render: (record) => {
-        return record.name
+        return moment(record.date).format('MM/DD/YYYY')
       }
     },
     {
-      title: 'To',
-      dataIndex: 'userTo',
-      key: 'userTo',
+      title: 'incomeUSD',
       render: (record) => {
-        return record.name
+        return record.incomeUSD
       }
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'incomeSom',
+      render: (record) => {
+        return record.incomeSom
+      }
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: 'expenseUSD',
+      render: (record) => {
+        return record.incomeUSD
+      }
+    },
+    {
+      title: 'expenseSom',
+      render: (record) => {
+        return record.incomeSom
+      }
     },
     {
       title: 'Action',
@@ -82,7 +89,7 @@ const MyComponent = () => {
     setIsModalOpen(true);
   };
   return (
-    <LayoutContentWrapper style={{ height: '100vh' }}>
+    <LayoutContentWrapper>
       <LayoutContent>
         <Button type="primary" onClick={handleAdd} >Add new</Button>
         <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>

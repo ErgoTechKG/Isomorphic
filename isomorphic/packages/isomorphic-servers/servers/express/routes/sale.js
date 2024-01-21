@@ -16,19 +16,6 @@ router.get("/", async (req, res) => {
 });
 
 
-// // Define routes for /api/product here
-// router.get("/bulk", async (req, res) => {
-//   let googleSheetResult = await getCargoFromSheet();
-//   googleSheetResult.shift();
-//   console.log('googleSheetResult', googleSheetResult)
-//   const cargos = await prisma.cargo.createMany({
-//     data: googleSheetResult,
-//     //skipDuplicates: true // Optional: skips the insert if a record with unique constraint already exists
-//   });
-//   res.send(cargos);
-// });
-
-// Define routes for /api/product here
 router.delete("/", async (req, res) => {
   console.log(req.query)
   const deletedProduct = await prisma.product.delete({
@@ -44,9 +31,9 @@ router.delete("/", async (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
-  const allCargos = await prisma.cargo.findMany();
+  const all = await prisma.sale.findMany();
 
-  res.send(allCargos);
+  res.send(all);
 });
 
 router.post("/", async (req, res) => {

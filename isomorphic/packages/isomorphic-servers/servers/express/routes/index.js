@@ -6,6 +6,7 @@ import jwtDecode from "jwt-decode";
 import productRouter from './product.js';
 import cargoRouter from './cargo.js';
 import rollRouter from './roll.js';
+import saleRouter from './sale.js';
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -66,22 +67,7 @@ router.get("/users", async (req, res) => {
 
 router.get("/financialTransactions", async (req, res) => {
   try {
-    const records = await prisma.financialTransaction.findMany({
-      include: {
-        userFrom: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        userTo: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
+    const records = await prisma.finance.findMany();
     res.json(records);
   } catch (error) {
     console.error(error);
@@ -212,5 +198,6 @@ router.post("/temporary-upload", async (req, res) => {
 router.use('/product', productRouter);
 router.use('/cargo', cargoRouter);
 router.use('/roll', rollRouter);
+router.use('/sale', saleRouter);
 
 export default router;

@@ -47,6 +47,11 @@ const options = [
     label: 'sidebar.calculator',
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'sale',
+    label: 'sidebar.sale',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
   // {
   //   key: 'inkOrder',
   //   label: 'sidebar.inkOrder',

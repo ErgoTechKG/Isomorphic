@@ -10,7 +10,7 @@ async function getSheetData() {
   });
 
   const spreadsheetId = "1Hsd3v6gotrgv70W1o_D3jaj6dpTVFVVsX49JpdyoauU";
-  const range = "summary!A1:A";
+  const range = "summary!A1:F";
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,

@@ -1,0 +1,62 @@
+var PrismaClient = require("@prisma/client").PrismaClient;
+var prisma = new PrismaClient();
+const { google } = require("googleapis");
+
+const sheets = google.sheets("v4");
+
+
+async function getSheetData() {
+  const auth = await google.auth.getClient({
+    keyFile: "./scripts/theta-eon-391814-087f4a9c7334.json",
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+
+  const spreadsheetId = "1Rb_IIGTLAlDpuRu8Eg8gcpFlJyxDbjDcC0JN7vHo4KI";
+  const range = "104!A1:F";
+
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+    auth,
+  });
+
+  const data = response.data.values;
+
+  data.shift();
+
+  return data;
+}
+
+
+
+
+async function getCargoFromSheet() {
+  let sewings = await getSheetData()
+    .then(async (data) => {
+      console.log('data', data)
+
+
+      const transformedData = data.map(item => ({
+        kentCode: item[0],
+        amount: parseFloat(item[1]), // Assuming amount is a float
+        rbg: item[2], // Assuming rbg is a typo for rgb
+        unit: item[3],
+        cargoId: parseInt(item[4]), // Assuming cargoId is an integer
+        cost: item[5]?parseInt(item[5]):null,
+      }));
+      
+  
+      console.log('transformedData', transformedData)
+    const rolls = await prisma.roll.createMany({
+        data: transformedData,
+      });
+
+      return transformedData
+    })
+    .catch(err => {
+      console.error("Error reading data from Google Sheet:", err);
+    });
+  return sewings;
+}
+
+getCargoFromSheet();
