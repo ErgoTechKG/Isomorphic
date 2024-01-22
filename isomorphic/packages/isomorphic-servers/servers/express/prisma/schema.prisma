@@ -97,17 +97,17 @@ model Variables {
 
 model Roll {
   id          Int     @id @default(autoincrement())
-  color       Int?    @default(0)
-  description String? @db.VarChar(1000)
-  rbg         String?
+  kentCode    String?
   amount      Float?  @default(0)
   unit        String?
-  kentCode    String?
+  rbg         String?
   cargo       Cargo?  @relation(fields: [cargoId], references: [id])
   cargoId     Int?
   cost        Float?  @default(0)
   sale   Sale? @relation(fields: [saleId], references: [id])
   saleId Int?
+  location String?
+  note String?
 }
 
 model Cargo {
