@@ -7,6 +7,15 @@ import Highlighter from "react-highlight-words";
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
+const originData = [];
+for (let i = 0; i < 100; i++) {
+  originData.push({
+    key: i.toString(),
+    name: `Edward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
 const EditableCell = ({
   editing,
   dataIndex,
@@ -52,24 +61,24 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   
   const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record) => record.key === editingKey;
+  const isEditing = (record) => record.id === editingKey;
   const edit = (record) => {
     form.setFieldsValue({
-      name: "",
-      age: "",
-      address: "",
+      id: "",
+      kentcode: "",
+      amount: "",
       ...record,
     });
-    setEditingKey(record.key);
+    setEditingKey(record.id);
   };
   const cancel = () => {
     setEditingKey("");
   };
-  const save = async (key) => {
+  const save = async (id) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+      const index = newData.findIndex((item) => id === item.id);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
@@ -160,7 +169,7 @@ const App = () => {
         setLoading(true);
         const response = await axios.get(`${jwtConfig.fetchUrlSecret}roll/all`, axiosConfig); // Replace with your actual API endpoint
         console.log('response', response)
-        //setData(response.data);
+        setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
