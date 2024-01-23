@@ -12,7 +12,7 @@ async function getSheetData() {
   });
 
   const spreadsheetId = "1Rb_IIGTLAlDpuRu8Eg8gcpFlJyxDbjDcC0JN7vHo4KI";
-  const range = "104!A1:F";
+  const range = "80!A1:F";
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
