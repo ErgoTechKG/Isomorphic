@@ -1,5 +1,5 @@
-import React from 'react';
-import { SidebarBlankIcon } from '@iso/config/icon.config';
+import React from "react";
+import { SidebarBlankIcon } from "@iso/config/icon.config";
 
 const options = [
   // {
@@ -18,38 +18,43 @@ const options = [
   //   leftIcon: <SidebarBlankIcon size={19} />,
   // },
   {
-    key: 'productList',
-    label: 'sidebar.productList',
+    key: "productList",
+    label: "sidebar.productList",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'temporary',
-    label: 'sidebar.temporary',
+    key: "temporary",
+    label: "sidebar.temporary",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'financialTransaction',
-    label: 'sidebar.financialTransaction',
+    key: "financialTransaction",
+    label: "sidebar.financialTransaction",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'cargo',
-    label: 'sidebar.cargo',
+    key: "cargo",
+    label: "sidebar.cargo",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'roll',
-    label: 'sidebar.roll',
+    key: "roll",
+    label: "sidebar.roll",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'calculator',
-    label: 'sidebar.calculator',
+    key: "calculator",
+    label: "sidebar.calculator",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   {
-    key: 'sale',
-    label: 'sidebar.sale',
+    key: "sale",
+    label: "sidebar.sale",
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
+  {
+    key: "client",
+    label: "sidebar.client",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
   // {

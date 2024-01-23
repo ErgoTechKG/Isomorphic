@@ -10,7 +10,7 @@
 //eric.dev.liu@gmail.com
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL_PREPROD")
+  url      = env("DATABASE_URL_DEV")
 }
 
 generator client {
