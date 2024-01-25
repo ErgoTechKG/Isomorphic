@@ -6,6 +6,7 @@ import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 const MyComponent = (props) => {
   const [form] = Form.useForm();
+  const [data, setData] = useState();
   //const [record, setRecord] = useState(props.record);
   const Auth = useSelector((state) => state.Auth);
   const [userDropdownlistValue, setUserDropdownlistValue] = useState([]);
@@ -27,11 +28,9 @@ const MyComponent = (props) => {
   useEffect(() => {
     if (props.record) {
       form.setFieldsValue({
-        description: props.record.description,
-        userFrom: props.record.userFromId,
-        userTo: props.record.userToId,
-        amount: props.record.amount,
-        status: props.record.status,
+        name: props.record.name,
+        staff: props.record.staff,
+        payment: props.record.payment,
       });
     } else {
       form.resetFields();
@@ -45,11 +44,7 @@ const MyComponent = (props) => {
           `${jwtConfig.fetchUrlSecret}client`,
           axiosConfig
         ); // Replace with your actual API endpoint
-        const userDropdownlist = response.data.map((a) => ({
-          value: a.id,
-          label: a.name,
-        }));
-        setUserDropdownlistValue(userDropdownlist);
+        setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -109,7 +104,7 @@ const MyComponent = (props) => {
           </Form.Item>
           <Form.Item
             name="payment"
-            label="Payment method"
+            label="Payment"
             rules={[
               {
                 required: true,
@@ -125,8 +120,8 @@ const MyComponent = (props) => {
                   value: "CASH",
                 },
                 {
-                  label: "NON_CASH",
-                  value: "NON_CASH",
+                  label: "NON-CASH",
+                  value: "NON-CASH",
                 },
               ]}
             />

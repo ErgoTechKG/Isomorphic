@@ -18,11 +18,23 @@ const MyComponent = () => {
     setRecord(selectedRecord);
   };
 
+  const handleDeleteClient = async (recordId) => {
+    try {
+      const response = await axios.delete(
+        `${jwtConfig.fetchUrlSecret}client?id=${recordId}`,
+        axiosConfig
+      ); // Replace with your actual API endpoint
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${jwtConfig.fetchUrlSecret}client`,
+          `${jwtConfig.fetchUrlSecret}client/all`,
           axiosConfig
         ); // Replace with your actual API endpoint
         setData(response.data);
@@ -39,25 +51,38 @@ const MyComponent = () => {
       title: "Id",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => a.id - b.id,
     },
     {
-      title: "name",
+      title: "Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "staff",
+      title: "Staff",
       dataIndex: "staff",
       key: "staff",
+      sorter: (a, b) => a.staff.localeCompare(b.staff),
+    },
+    {
+      title: "Payment",
+      dataIndex: "payment",
+      key: "payment",
     },
     {
       title: "Action",
       dataIndex: "",
       key: "action",
       render: (record) => (
-        <Button id={record.id} onClick={() => clickEdit(record.id)}>
-          Edit
-        </Button>
+        <div>
+          <Button id={record.id} onClick={() => clickEdit(record.id)}>
+            Edit
+          </Button>
+          <Button id={record.id} onClick={() => handleDeleteClient(record.id)}>
+            Delete
+          </Button>
+        </div>
       ),
     },
   ];
@@ -75,7 +100,7 @@ const MyComponent = () => {
     setIsModalOpen(true);
   };
   return (
-    <LayoutContentWrapper style={{ height: "100vh" }}>
+    <LayoutContentWrapper>
       <LayoutContent>
         <Button type="primary" onClick={handleAdd}>
           Add new

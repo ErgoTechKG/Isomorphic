@@ -6,18 +6,17 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // Define routes for /api/product here
-router.get("/", async (req, res) => {
-  const result = await prisma.client.findUnique({
-    where: {
-      id: parseInt(req.query.id),
-    },
-  });
-  res.send(result);
+router.get("/all", async (req, res) => {
+  console.log("client get all");
+  const all = await prisma.client.findMany();
+
+  res.send(all);
 });
 
 router.delete("/", async (req, res) => {
+  console.log("reached");
   console.log(req.query);
-  const deletedProduct = await prisma.client.delete({
+  const deletedClient = await prisma.client.delete({
     where: {
       id: parseInt(req.query.id),
     },
@@ -29,28 +28,19 @@ router.delete("/", async (req, res) => {
   res.send(allClients);
 });
 
-router.get("/all", async (req, res) => {
-  const all = await prisma.client.findMany();
-
-  res.send(all);
-});
-
 router.post("/", async (req, res) => {
   console.log("received from frontend", req.body, req.query);
-  const cargo = await prisma.cargo.upsert({
-    where: { dateArrived: req.body.date },
-    update: {}, // No update operation since we just want to fetch the ID if it exists
-    create: { dateArrived: req.body.date },
-  });
 
-  const rolls = await prisma.cargo.create({
+  const client = await prisma.client.create({
     data: {
-      name: "Alice",
-      email: "alice@example.com",
+      id: req.body.id,
+      name: req.body.name,
+      staff: req.body.staff,
+      payment: req.body.payment,
     },
   });
-  console.log(cargo.id);
-  res.send("post product");
+
+  res.send(client);
 });
 
 router.put("/", async (req, res) => {
@@ -61,8 +51,8 @@ router.put("/", async (req, res) => {
     data: req.body,
   });
 
-  const rolls = await prisma.client.findMany();
-  res.send(rolls);
+  const clients = await prisma.client.findMany();
+  res.send(clients);
 });
 
 // Export the router
