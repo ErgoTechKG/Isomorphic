@@ -1,0 +1,62 @@
+var PrismaClient = require("@prisma/client").PrismaClient;
+var prisma = new PrismaClient();
+const { google } = require("googleapis");
+
+const sheets = google.sheets("v4");
+
+
+async function getSheetData() {
+  const auth = await google.auth.getClient({
+    keyFile: "./scripts/theta-eon-391814-087f4a9c7334.json",
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+
+  const spreadsheetId = "1Rb_IIGTLAlDpuRu8Eg8gcpFlJyxDbjDcC0JN7vHo4KI";
+  const range = "accSys!A1:G";
+
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+    auth,
+  });
+
+  const data = response.data.values;
+
+  data.shift();
+
+  return data;
+}
+
+
+
+
+async function getCargoFromSheet() {
+  let sewings = await getSheetData()
+    .then(async (data) => {
+      //console.log('data', data)
+
+      const transformedData = data.map(item => ({
+        date: new Date(item[0]),
+        incomeUSD: item[1]?parseFloat(item[1]):null, // Assuming amount is a float
+        incomeSom: item[2]?parseFloat(item[2]):null, // Assuming rbg is a typo for rgb
+        expenseUSD: item[3]?parseFloat(item[3]):null,
+        expenseSom: item[4]?parseFloat(item[4]):null, // Assuming cargoId is an integer
+        note: item[5],
+        cat: item[6]
+      }));
+      
+  
+      console.log('transformedData', transformedData)
+      const sales = await prisma.finance.createMany({
+          data: transformedData,
+        });
+
+        return transformedData
+      })
+      .catch(err => {
+        console.error("Error reading data from Google Sheet:", err);
+      });
+  return sewings;
+}
+
+getCargoFromSheet();
