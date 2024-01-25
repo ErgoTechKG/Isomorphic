@@ -53,7 +53,10 @@ const MyComponent = (props) => {
   };
 
   const onFinish = async (values) => {
-    const newClient = { ...values, ...Auth };
+    const newClient = { ...values };
+
+    console.log('values', values)
+    console.log('props', props)
     if (props.record) {
       // Editing an existing record (PUT request)
       const response = await axios.put(
@@ -76,31 +79,6 @@ const MyComponent = (props) => {
       }
     }
   };
-
-
-
-  // const onFinish = async (values) => {
-  //   const newClient = { ...values, ...Auth };
-  //   console.log("id value", props.record.id);
-  //   // const response = await axios
-  //   //   .put(
-  //   //     `${jwtConfig.fetchUrlSecret}client?id=${props.record.id}`,
-  //   //     newClient,
-  //   //     axiosConfig
-  //   //   )
-  //   const response = await axios
-  //     .post(
-  //       `${jwtConfig.fetchUrlSecret}client`,
-  //       newClient,
-  //       axiosConfig
-  //     )
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //   if (response && response.data && response.status === 200) {
-  //     props.setIsModalOpen(false);
-  //   }
-  // };
 
   const onReset = () => {
     form.resetFields();
