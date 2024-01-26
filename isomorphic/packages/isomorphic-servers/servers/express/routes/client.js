@@ -1,6 +1,5 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import jwtDecode from "jwt-decode";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -34,15 +33,6 @@ router.get("/all", async (req, res) => {
   const allClients = await prisma.client.findMany();
   res.send(allClients);
 });
-
-// router.post("/", async (req, res) => {
-//   console.log("post product req.body", req.body)
-//   const record = await prisma.client.create({
-//     data: req.body,
-//   });
-//   console.log("post product record", record)
-//   res.send("post product");
-// });
 
 router.post("/", async (req, res) => {
   try {

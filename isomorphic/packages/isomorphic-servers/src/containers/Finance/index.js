@@ -1,39 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button } from 'antd';
+import {Table, Modal, Button} from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
 import moment from 'moment';
-import FinanceForm from "./FinanceForm";
+import FinanceForm from "./FinanceForm2";
+
 const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [record, setRecord] = useState(null);
+  const [loading, setLoading] = useState(false);
   const clickEdit = (recordId) => {
     setIsModalOpen(true);
-    let selectedRecord = data.find(i => {return i.id === recordId})
+    let selectedRecord = data.find(i => {
+      return i.id === recordId
+    })
     setRecord(selectedRecord);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const FetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}finance/all`, axiosConfig); // Replace with your actual API endpoint
-        console.log('data', response.data)
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}finance/all`,
+          axiosConfig);
         setData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      } catch (err) {
+        console.log("Fetching data error: ", err);
       }
-    };
-
-    fetchData();
+    }
+    FetchData();
   }, [isModalOpen]);
+
+  const clickDelete = async (value) => {
+    console.log('delete ID', value)
+    try {
+
+      const response = await axios.delete(
+        `${jwtConfig.fetchUrlSecret}finance?id=${value}`,
+        axiosConfig
+      ); // Replace with your actual API endpoint
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Set loading to false after data is fetched (including error cases)
+    }
+  };
 
   const columns = [
     {
-      title: 'Id',
+      title: 'id',
       dataIndex: 'id',
       key: 'id',
     },
@@ -77,7 +96,11 @@ const MyComponent = () => {
       title: 'Action',
       dataIndex: '',
       key: 'action',
-      render: (record) => <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>,
+      render: (record) =>
+        <>
+          <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>
+          <Button id={record.id} onClick={() => clickDelete(record.id)}>Delete</Button>
+        </>
     },
   ];
 
@@ -90,7 +113,7 @@ const MyComponent = () => {
     setIsModalOpen(false);
   };
   const handleAdd = () => {
-    setRecord(null)
+    setRecord(null);
     setIsModalOpen(true);
   };
   return (

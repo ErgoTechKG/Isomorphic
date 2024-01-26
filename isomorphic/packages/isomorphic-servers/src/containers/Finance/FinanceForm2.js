@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
-import {Input, Button, Select, Space, InputNumber, Form, DatePicker} from "antd";
+import { useSelector } from "react-redux";
+import {Input, Button, Select, Space, Form, DatePicker} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 const MyComponent = (props) => {
-
   const [form] = Form.useForm();
   const [record, setRecord] = useState(props.record);
-  const Auth = useSelector((state) => state.Auth);
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -25,73 +23,54 @@ const MyComponent = (props) => {
   };
 
   useEffect(() => {
-    const incomeUSD2 = parseFloat( props.record.incomeUSD);
-    const incomeSOM2 = parseFloat(props.record.incomeSOM);
-    const expensesUSD2 = parseFloat(props.record.expenseUSD);
-    const expensesSOM2 = parseFloat(props.record.expenseSOM);
-    if(props.record){
-      form.setFieldsValue({
-        date: props.record.date,
-        incomeUSD:incomeUSD2,
-        incomeSOM: incomeSOM2,
-        expenseUSD: expensesUSD2,
-        expenseSOM: expensesSOM2,
-        note: props.record.note,
-        action: props.record.action
-      })
-    }
-    else{
-      form.resetFields()
-    }
-  }, [props.record]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}finance`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
-
-
-  const handleChange = (e) => {
-    console.log(e);
+  const handleChange = () => {
+    //TODO: Handle SELECT events
   };
 
-  // const onFinish = async (values) => {
-  //   // Convert incomeUSD and expenseUSD to Float or set them to null if they're not valid numbers
-  //   const incomeUSD = parseFloat(values.incomeUSD);
-  //   const incomeSOM = parseFloat(values.incomeSOM);
-  //   const expensesUSD = parseFloat(values.expensesUSD);
-  //   const expensesSOM = parseFloat(values.expensesSOM);
-  //   const newFinance = { ...values, incomeUSD,incomeSOM, expensesUSD, expensesSOM, ...Auth };
-  //
-  //   const response = await axios.post(`${jwtConfig.fetchUrlSecret}finance`, newFinance, axiosConfig).catch(function (error) {
-  //     console.log(error);
-  //   });
-  //
-  //   if (response && response.data && response.status === 200) {
-  //     props.setIsModalOpen(false);
-  //   }
-  // };
+  const onFinish = async (data) => {
+    const newFinance = {
+      ...data,
+      incomeUSD: parseFloat(data.incomeUSD),
+      incomeSOM: parseFloat(data.incomeSOM),
+      expensesUSD: parseFloat(data.expensesUSD),
+      expensesSOM: parseFloat(data.expensesSOM),
+    };
 
-
-  const onFinish = async(data) => {
-    const newFinance = {...data};
-    //put request to change data by id
-    if(props.record) {
-      const response = await axios.put(`${jwtConfig.fetchUrlSecret}finance/id?=${props.record.id}`,
-      newFinance,
+    if (props.record) {
+      // Editing an existing record (PUT request)
+      const response = await axios.put(
+        `${jwtConfig.fetchUrlSecret}finance?id=${props.record.id}`,
+        newFinance,
         axiosConfig
-    );
-      if(response && response.data && response.status === 200) {
-        console.log("Successfully editing data process!");
+      );
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
     } else {
-      //post request to send data to table
-     const response = await axios.post(`${jwtConfig.fetchUrlSecret}finance`,
-       newFinance,
-       axiosConfig
-     );
-     if(response && response.data && response.status === 200) {
-       console.log("Successfully sending data process!");
-     }
+      // Creating a new record (POST request)
+      const response = await axios.post(
+        `${jwtConfig.fetchUrlSecret}finance`,
+        newFinance,
+        axiosConfig
+      );
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     }
-  }
-
+  };
   const onReset = () => {
     form.resetFields();
   };
@@ -114,7 +93,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-           <DatePicker />
+            <DatePicker />
           </Form.Item>
           <Form.Item
             name="incomeUSD"
@@ -232,7 +211,7 @@ const MyComponent = (props) => {
                   label: "PORTER",
                   value: "PORTER",
                 },
-                ]}
+              ]}
             />
           </Form.Item>
           <Form.Item {...tailLayout}>

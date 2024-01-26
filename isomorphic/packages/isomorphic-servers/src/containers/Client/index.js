@@ -105,7 +105,7 @@ const MyComponent = () => {
       <LayoutContentWrapper>
         <LayoutContent>
           <Button type="primary" onClick={handleAdd}>Add new</Button>
-          <Modal title="Finance Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
+          <Modal title="Client Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
             <Form setIsModalOpen={setIsModalOpen} record={record}></Form>
           </Modal>
           <Table
