@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import { PrismaClient } from "@prisma/client";
 //import { getCargoFromSheet } from "../scripts/googleSheets";
 
@@ -7,10 +7,19 @@ const router = express.Router();
 
 // Define routes for /api/product here
 router.get("/all", async (req, res) => {
-  console.log("client get all");
   const all = await prisma.client.findMany();
 
   res.send(all);
+});
+
+router.get("/", async (req, res) => {
+  const client = await prisma.client.findUnique({
+    where: {
+      id: req.body.id,
+    },
+  });
+
+  res.send(client);
 });
 
 router.delete("/", async (req, res) => {
@@ -36,7 +45,6 @@ router.post("/", async (req, res) => {
       id: req.body.id,
       name: req.body.name,
       staff: req.body.staff,
-      payment: req.body.payment,
     },
   });
 
@@ -44,11 +52,16 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
+  const client = {
+    name: req.body.name,
+    staff: req.body.staff,
+  };
+
   const record = await prisma.client.update({
     where: {
-      id: req.body.id, // Assuming id is an integer; adapt as needed
+      id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
     },
-    data: req.body,
+    data: client,
   });
 
   const clients = await prisma.client.findMany();

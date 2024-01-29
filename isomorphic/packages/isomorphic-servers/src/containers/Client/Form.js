@@ -28,9 +28,9 @@ const MyComponent = (props) => {
   useEffect(() => {
     if (props.record) {
       form.setFieldsValue({
+        id: props.record.id,
         name: props.record.name,
         staff: props.record.staff,
-        payment: props.record.payment,
       });
     } else {
       form.resetFields();
@@ -58,17 +58,33 @@ const MyComponent = (props) => {
 
   const onFinish = async (values) => {
     const newFinancialTransaction = { ...values, ...Auth };
-    const response = await axios
-      .post(
-        `${jwtConfig.fetchUrlSecret}client`,
-        newFinancialTransaction,
-        axiosConfig
-      )
-      .catch(function (error) {
-        console.log(error);
-      });
-    if (response && response.data && response.status === 200) {
-      props.setIsModalOpen(false);
+
+    if (props.record && props.record.id) {
+      const response = await axios
+        .put(
+          `${jwtConfig.fetchUrlSecret}client?id=${props.record.id}`,
+          newFinancialTransaction,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
+    } else {
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}client`,
+          newFinancialTransaction,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     }
   };
 
@@ -101,30 +117,6 @@ const MyComponent = (props) => {
             ]}
           >
             <Input placeholder="Staff" />
-          </Form.Item>
-          <Form.Item
-            name="payment"
-            label="Payment"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Method"
-              onChange={handleChange}
-              options={[
-                {
-                  label: "CASH",
-                  value: "CASH",
-                },
-                {
-                  label: "NON-CASH",
-                  value: "NON-CASH",
-                },
-              ]}
-            />
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">

@@ -66,11 +66,6 @@ const MyComponent = () => {
       sorter: (a, b) => a.staff.localeCompare(b.staff),
     },
     {
-      title: "Payment",
-      dataIndex: "payment",
-      key: "payment",
-    },
-    {
       title: "Action",
       dataIndex: "",
       key: "action",
