@@ -59,13 +59,13 @@ const MyComponent = () => {
     {
       title: 'expenseUSD',
       render: (record) => {
-        return record.incomeUSD
+        return record.expenseUSD
       }
     },
     {
       title: 'expenseSom',
       render: (record) => {
-        return record.incomeSom
+        return record.expenseSom
       }
     },
     {
@@ -77,7 +77,7 @@ const MyComponent = () => {
   ];
 
   const expandedRowRender = (record) => (
-    <p style={{ margin: 0 }}>{record.description}</p>
+    <p style={{ margin: 0 }}>{record.note}</p>
   );
 
   const rowExpandable = (record) => record.name !== 'Not Expandable';

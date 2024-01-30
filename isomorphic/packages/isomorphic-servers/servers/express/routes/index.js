@@ -8,6 +8,7 @@ import cargoRouter from "./cargo.js";
 import rollRouter from "./roll.js";
 import saleRouter from "./sale.js";
 import clientRouter from "./client.js";
+import dashboardRouter from "./dashboard.js";
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
@@ -181,5 +182,6 @@ router.use("/cargo", cargoRouter);
 router.use("/roll", rollRouter);
 router.use("/sale", saleRouter);
 router.use("/client", clientRouter);
+router.use("/dashboard", dashboardRouter);
 
 export default router;
