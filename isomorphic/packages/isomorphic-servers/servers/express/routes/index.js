@@ -7,6 +7,7 @@ import productRouter from './product.js';
 import cargoRouter from './cargo.js';
 import rollRouter from './roll.js';
 import saleRouter from './sale.js';
+import dashboardRouter from './dashboard.js'
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -199,5 +200,5 @@ router.use('/product', productRouter);
 router.use('/cargo', cargoRouter);
 router.use('/roll', rollRouter);
 router.use('/sale', saleRouter);
-
+router.use('/dashboard', dashboardRouter);
 export default router;
