@@ -298,10 +298,10 @@ async function analyzeNonSoldRolls() {
 
 // Example usage
 //analyzeNonSoldRolls().then((data) => console.log(data));
-// module.exports = {
-//   getFinances,
-//   calculateProfit,
-//   calculateProfitProcessing,
-//   getNamesAndCalculateSoldOutRatios,
-//   analyzeNonSoldRolls,
-// };
+module.exports = {
+  getFinances,
+  calculateProfit,
+  calculateProfitProcessing,
+  getNamesAndCalculateSoldOutRatios,
+  analyzeNonSoldRolls,
+};
