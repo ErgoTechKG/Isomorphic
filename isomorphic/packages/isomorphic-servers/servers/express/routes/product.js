@@ -20,13 +20,13 @@ async function generateUniqueID() {
 
 // Define routes for /api/product here
 router.get("/", async (req, res) => {
-  console.log('prisma.product', prisma.product)
+  console.log("prisma.product", prisma.product);
   const result = await prisma.product.findUnique({
     where: {
       id: parseInt(req.query.id),
     },
   });
-  console.log('productid', result)
+  console.log("productid", result);
   res.send(result);
 });
 
@@ -88,7 +88,7 @@ router.get("/all", async (req, res) => {
       let logisticUSD = i.isPluff
         ? parseFloat(logisticPluffUSD.value)
         : parseFloat(logisticReUSD.value);
-        
+
       let priceAtStock;
       let mPerKG = (1000 / i.width / i.gram) * 100;
       let costKGBKKUSD =
@@ -113,7 +113,7 @@ router.get("/all", async (req, res) => {
       // console.log('cost in Bihskek per kg', ((i.priceChinaKG?i.priceChinaKG:(1000/i.width/i.gram)*100*i.priceChinaMeter + logisticRMB.value)/exRate.value))
       let costBkkM = costKGBKKUSD / mPerKG;
       if (i.currentPrice && i.currentPrice > costBkkM) {
-        priceAtStock = currentPrice;
+        priceAtStock = i.currentPrice;
       } else {
         if (!i.marketPrice) {
           priceAtStock = costBkkM * 1.1;
@@ -149,11 +149,11 @@ router.get("/all", async (req, res) => {
         note: i.note,
         currentPrice: i.currentPrice,
         priceUpdated: i.priceUpdated,
-        vipPrice: costBkkM * 1.10,
-        priceAtStock: i.priceUpdated?i.priceUpdated:costBkkM * 1.18, // Add the 'priceAtStock' field with a value of 0
-        isPluff:i.isPluff,
-        isResToChina:i.isResToChina, 
-        isKentSample:i.isKentSample,
+        vipPrice: costBkkM * 1.1,
+        priceAtStock: i.priceUpdated ? i.priceUpdated : costBkkM * 1.18, // Add the 'priceAtStock' field with a value of 0
+        isPluff: i.isPluff,
+        isResToChina: i.isResToChina,
+        isKentSample: i.isKentSample,
       };
 
       //console.log(i.priceChinaKG, i.priceChinaMeter)
@@ -166,16 +166,16 @@ router.get("/all", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log("post product req.body", req.body)
+  console.log("post product req.body", req.body);
   const record = await prisma.product.create({
     data: req.body,
   });
-  console.log("post product record", record)
+  console.log("post product record", record);
   res.send("post product");
 });
 
 router.put("/", async (req, res) => {
-  console.log('req.body', req.body)
+  console.log("req.body", req.body);
   const record = await prisma.product.update({
     where: {
       id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
