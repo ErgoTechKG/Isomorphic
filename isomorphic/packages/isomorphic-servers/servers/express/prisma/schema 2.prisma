@@ -1,16 +1,16 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-//https://prismaliser.app/
+// https://prismaliser.app/
 
-//https://cloud.prisma.io/projects
-//https://www.tpu-ptfe.com/post/6329.html
-//npx prisma db push  
-//email:eric.liu@gmail.com
-//psw:Baza7183!
-//eric.dev.liu@gmail.com
+// https://cloud.prisma.io/projects
+// https://www.tpu-ptfe.com/post/6329.html
+// npx prisma db push
+// email:eric.liu@gmail.com
+// psw:Baza7183!
+// eric.dev.liu@gmail.com
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL_DEV")
 }
 
 generator client {

@@ -8,6 +8,7 @@ import cargoRouter from './cargo.js';
 import rollRouter from './roll.js';
 import saleRouter from './sale.js';
 import dashboardRouter from './dashboard.js'
+import clientRouter from './client';
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -201,4 +202,5 @@ router.use('/cargo', cargoRouter);
 router.use('/roll', rollRouter);
 router.use('/sale', saleRouter);
 router.use('/dashboard', dashboardRouter);
+router.use('/client', clientRouter);
 export default router;
