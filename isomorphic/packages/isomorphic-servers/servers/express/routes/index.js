@@ -3,12 +3,12 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import Config from "../config";
 import jwtDecode from "jwt-decode";
-import productRouter from './product.js';
-import cargoRouter from './cargo.js';
-import rollRouter from './roll.js';
-import saleRouter from './sale.js';
-import dashboardRouter from './dashboard.js'
-
+import productRouter from "./product.js";
+import cargoRouter from "./cargo.js";
+import rollRouter from "./roll.js";
+import saleRouter from "./sale.js";
+import clientRouter from "./client.js";
+import dashboardRouter from "./dashboard.js";
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 
 const router = express.Router();
 
-router
+router;
 
 router.get("/", (req, res) => {
   res.json({ status: "OK1" });
@@ -72,11 +72,9 @@ router.get("/financialTransactions", async (req, res) => {
     res.json(records);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
   }
 });
 
@@ -102,11 +100,9 @@ router.post("/financialTransaction", async (req, res) => {
     res.json(record);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
   }
 });
 
@@ -141,64 +137,51 @@ router.post("/financialTransaction", async (req, res) => {
 
 router.get("/usages", async (req, res) => {
   try {
-    const records = await prisma.Garments.findMany({
-    });
+    const records = await prisma.Garments.findMany({});
     res.json(records);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
   }
 });
 
 router.get("/catagories", async (req, res) => {
   try {
-    const records = await prisma.Category.findMany({
-    });
+    const records = await prisma.Category.findMany({});
     res.json(records);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
   }
 });
 
 router.get("/materials", async (req, res) => {
   try {
-    const records = await prisma.Material.findMany({
-    });
+    const records = await prisma.Material.findMany({});
     res.json(records);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
   }
 });
 
-
-
-
 router.post("/temporary-upload", async (req, res) => {
-
-  const {  imageUrl } = req.body;
-
+  const { imageUrl } = req.body;
 
   res.json(record);
 });
 
+router.use("/product", productRouter);
+router.use("/cargo", cargoRouter);
+router.use("/roll", rollRouter);
+router.use("/sale", saleRouter);
+router.use("/client", clientRouter);
+router.use("/dashboard", dashboardRouter);
 
-router.use('/product', productRouter);
-router.use('/cargo', cargoRouter);
-router.use('/roll', rollRouter);
-router.use('/sale', saleRouter);
-router.use('/dashboard', dashboardRouter);
 export default router;

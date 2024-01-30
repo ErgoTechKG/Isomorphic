@@ -6,6 +6,7 @@ Cart
 Checkout
 Cards
 Maps
+Client
 Google Map
 Leaflet Map
 Calendar
