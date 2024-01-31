@@ -55,12 +55,15 @@ async function getClientFinancialSummary() {
   const clientFinancialSummary = Object.keys(salesTotalByClient).map(clientId => {
 
     const finance = financeData.find(f => f.clientId === parseInt(clientId)) || {};
+
+    const client = clients.find(client => client.id === parseInt(clientId));
+     const clientName = client ? client.name : undefined;
     return {
       clientId: parseInt(clientId),
       salesTotal: salesTotalByClient[clientId].toFixed(2),
       paymentTotal: (finance.netIncomeUSD?finance.netIncomeUSD:0).toFixed(2),
       oweTotal:(parseFloat(salesTotalByClient[clientId])-parseFloat(finance.netIncomeUSD?finance.netIncomeUSD:0)).toFixed(2),
-      clientName: clients.find(client => client.id === parseInt(clientId))?.name
+      clientName: clientName
     };
   });
 
