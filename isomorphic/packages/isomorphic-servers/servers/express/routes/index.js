@@ -9,6 +9,7 @@ import rollRouter from './roll.js';
 import saleRouter from './sale.js';
 import dashboardRouter from './dashboard.js'
 import clientRouter from './client';
+import financialTransactionRouter from './financialTransaction';
 
 
 const { port, secretKey, expiredAfter } = Config;
@@ -18,15 +19,6 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router
-
-router.get("/", (req, res) => {
-  res.json({ status: "OK1" });
-});
-
-// router.post("/login", (req, res) => {
-//   console.log("req.body", req.body);
-//   res.json({ status: "OK2" });
-// });
 
 router.put("/user", async (req, res) => {
   const { body } = req;
@@ -47,14 +39,21 @@ router.put("/user", async (req, res) => {
   res.json(updateUser);
 });
 
+router.get("/", (req, res) => {
+  res.json({ status: "OK1" });
+});
+
+// router.post("/login", (req, res) => {
+//   console.log("req.body", req.body);
+//   res.json({ status: "OK2" });
+// });
+
 router.get("/users", async (req, res) => {
   try {
     const users = await prisma.user.findMany({
       select: {
         id: true,
-        name: true,
         email: true,
-        address: true,
         role: true,
         createdAt: true,
         profile: true,
@@ -67,10 +66,26 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/financialTransactions", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const records = await prisma.finance.findMany();
-    res.json(records);
+    console.log("req.body", req.body);
+
+    const { userFrom, userTo, description, amount, status} = req.body;
+    // const profile = jwtDecode(idToken);
+    // console.log("profile", profile);
+
+    const record = await prisma.financialTransaction.create({
+      data: {
+        userFromId: userFrom,
+        userToId: userTo,
+        description,
+        amount,
+        status,
+        // inputerId: profile.id,
+      },
+    });
+
+    res.json(record);
   } catch (error) {
     console.error(error);
     res
@@ -81,26 +96,12 @@ router.get("/financialTransactions", async (req, res) => {
   }
 });
 
-router.post("/financialTransaction", async (req, res) => {
+
+
+router.get("/financialTransactions", async (req, res) => {
   try {
-    console.log("req.body", req.body);
-
-    const { userFrom, userTo, description, amount, status, idToken } = req.body;
-    const profile = jwtDecode(idToken);
-    console.log("profile", profile);
-
-    const record = await prisma.financialTransaction.create({
-      data: {
-        userFromId: userFrom,
-        userToId: userTo,
-        description,
-        amount,
-        status,
-        inputerId: profile.id,
-      },
-    });
-
-    res.json(record);
+    const records = await prisma.finance.findMany();
+    res.json(records);
   } catch (error) {
     console.error(error);
     res
@@ -203,4 +204,5 @@ router.use('/roll', rollRouter);
 router.use('/sale', saleRouter);
 router.use('/dashboard', dashboardRouter);
 router.use('/client', clientRouter);
+router.use('/financialTransactions', financialTransactionRouter);
 export default router;

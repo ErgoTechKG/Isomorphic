@@ -35,15 +35,6 @@ router.get("/all", async (req, res) => {
   res.send(allClients);
 });
 
-// router.post("/", async (req, res) => {
-//   console.log("post product req.body", req.body)
-//   const record = await prisma.client.create({
-//     data: req.body,
-//   });
-//   console.log("post product record", record)
-//   res.send("post product");
-// });
-
 router.post("/", async (req, res) => {
   try {
     console.log("req.body", req.body);

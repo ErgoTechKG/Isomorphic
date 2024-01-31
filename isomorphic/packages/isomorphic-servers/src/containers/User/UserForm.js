@@ -46,7 +46,7 @@ const MyComponent = (props) => {
   const updateName = (value) => {
     //value is new email
     //date props.user.email to new email
-    setUser(prevUser => ({ ...prevUser, email: value }));
+    setUser(prevUser => ({ ...prevUser, name: value }));
   }
   const updateAddress = (value) => {
     setUser(prevUser => ({ ...prevUser, address: value }));
