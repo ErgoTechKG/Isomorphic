@@ -98,19 +98,19 @@ router.post("/", async (req, res) => {
 
 
 
-router.get("/financialTransactions", async (req, res) => {
-  try {
-    const records = await prisma.finance.findMany();
-    res.json(records);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An error occurred while fetching financialTransactions.",
-      });
-  }
-});
+// router.get("/financialTransactions", async (req, res) => {
+//   try {
+//     const records = await prisma.finance.findMany();
+//     res.json(records);
+//   } catch (error) {
+//     console.error(error);
+//     res
+//       .status(500)
+//       .json({
+//         error: "An error occurred while fetching financialTransactions.",
+//       });
+//   }
+// });
 
 // router.post("/product", async (req, res) => {
 //   console.log("req.body", req.body);

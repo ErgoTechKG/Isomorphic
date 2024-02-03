@@ -5,77 +5,96 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 async function generateUniqueID() {
-  let existingProd;
-  let newID;
-  do {
-    newID = "k1" + uid(5); // Generate a new ID with a length of 5 characters.
-    existingProd = await prisma.product.findFirst({
-      where: { codeKent: newID },
-    });
-  } while (existingProd);
+ try {
+   let existingProd;
+   let newID;
+   do {
+     newID = "k1" + uid(5); // Generate a new ID with a length of 5 characters.
+     existingProd = await prisma.product.findFirst({
+       where: { codeKent: newID },
+     });
+   } while (existingProd);
 
-  // At this point, the generated ID is unique and can be used.
-  return newID;
+   // At this point, the generated ID is unique and can be used.
+   return newID;
+ } catch(err) {
+   console.log('error', err);
+ }
 }
 
 // Define routes for /api/product here
 router.get("/", async (req, res) => {
-  console.log('prisma.product', prisma.product)
-  const result = await prisma.product.findUnique({
-    where: {
-      id: parseInt(req.query.id),
-    },
-  });
-  console.log('productid', result)
-  res.send(result);
+  try {
+    console.log('prisma.product', prisma.product)
+    const result = await prisma.product.findUnique({
+      where: {
+        id: parseInt(req.query.id),
+      },
+    });
+    console.log('productid', result)
+    res.send(result);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Define routes for /api/product here
 router.delete("/", async (req, res) => {
-  console.log(req.query);
-  const deletedProduct = await prisma.product.delete({
-    where: {
-      id: parseInt(req.query.id),
-    },
-  });
+  try {
+    console.log(req.query);
+    const deletedProduct = await prisma.product.delete({
+      where: {
+        id: parseInt(req.query.id),
+      },
+    });
 
-  // Step 2: Fetch all products after deletion
-  const allProducts = await prisma.product.findMany();
+    // Step 2: Fetch all products after deletion
+    const allProducts = await prisma.product.findMany();
 
-  res.send(allProducts);
+    res.send(allProducts);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/all", async (req, res) => {
   try {
     const products = await prisma.product.findMany();
-    const logisticReUSD = await prisma.variables.findFirst({
-      where: {
-        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
-        name: "logisticReUSD",
-      },
-      orderBy: {
-        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
-      },
-    });
-    const exRate = await prisma.variables.findFirst({
-      where: {
-        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
-        name: "exRate",
-      },
-      orderBy: {
-        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
-      },
-    });
-
-    const logisticPluffUSD = await prisma.variables.findFirst({
-      where: {
-        // Your condition here, for example, filtering products with priceChinaMeter greater than 0
-        name: "logisticPluffUSD",
-      },
-      orderBy: {
-        createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
-      },
-    });
+    // const logisticReUSD = await prisma.variables.findFirst({
+    //   where: {
+    //     // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+    //     name: "logisticReUSD",
+    //   },
+    //   orderBy: {
+    //     createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
+    //   },
+    // });
+    // const exRate = await prisma.variables.findFirst({
+    //   where: {
+    //     // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+    //     name: "exRate",
+    //   },
+    //   orderBy: {
+    //     createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
+    //   },
+    // });
+    //
+    // const logisticPluffUSD = await prisma.variables.findFirst({
+    //   where: {
+    //     // Your condition here, for example, filtering products with priceChinaMeter greater than 0
+    //     name: "logisticPluffUSD",
+    //   },
+    //   orderBy: {
+    //     createdAt: "desc", // Sorting by createdAt field in descending order (newest to oldest)
+    //   },
+    // });
+    const [logisticReUSD, exRate, logisticPluffUSD] = await Promise.all([
+      prisma.variables.findFirst({ where: { name: "logisticReUSD" } }),
+      prisma.variables.findFirst({ where: { name: "exRate" } }),
+      prisma.variables.findFirst({ where: { name: "logisticPluffUSD" } }),
+    ]);
 
     console.log(
       "logisticReUSD",
@@ -166,41 +185,60 @@ router.get("/all", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log("post product req.body", req.body)
-  const record = await prisma.product.create({
-    data: req.body,
-  });
-  console.log("post product record", record)
-  res.send("post product");
+  try {
+    console.log("post product req.body", req.body)
+    const record = await prisma.product.create({
+      data: req.body,
+    });
+    console.log("post product record", record)
+    res.send("post product");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.put("/", async (req, res) => {
-  console.log('req.body', req.body)
-  const record = await prisma.product.update({
-    where: {
-      id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
-    },
-    data: req.body,
-  });
-  res.send(record);
+  try {
+    console.log('req.body', req.body)
+    const record = await prisma.product.update({
+      where: {
+        id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
+      },
+      data: req.body,
+    });
+    res.send(record);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/generateCode", async (req, res) => {
-  const newProductID = await generateUniqueID();
+  try {
+    const newProductID = await generateUniqueID();
 
-  res.send(newProductID);
+    res.send(newProductID);
+  } catch(err) {
+    console.log("error", err);
+  }
 });
 
 router.post("/generateCodeValidation", async (req, res) => {
-  const existingID = await prisma.product.findFirst({
-    where: { codeKent: req.body.value },
-  });
+  try {
+    const existingID = await prisma.product.findFirst({
+      where: { codeKent: req.body.value },
+    });
 
-  if (existingID) {
-    return res.status(409).json({ error: "Kent code already exists" });
+    if (existingID) {
+      return res.status(409).json({ error: "Kent code already exists" });
+    }
+    res.send("ok");
+  } catch(err) {
+    console.log("error", err);
   }
-  res.send("ok");
 });
 
 // Export the router
 export default router;
+

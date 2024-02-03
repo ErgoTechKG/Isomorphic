@@ -37,10 +37,7 @@ async function calculateProfit() {
   try {
     const salesWithProfit = await prisma.sale.findMany({
       where: {
-        // Filter sales by status
-        status: {
-          in: ["Finished", "Delivered"],
-        },
+        status: { in: ["Finished", "Delivered"] },
       },
       select: {
         id: true,
@@ -102,10 +99,7 @@ async function calculateProfitProcessing() {
   try {
     const salesWithProfit = await prisma.sale.findMany({
       where: {
-        // Filter sales by status
-        status: {
-          in: ["Processing"],
-        },
+        status: { in: ["Processing"] },
       },
       select: {
         id: true,
@@ -181,8 +175,10 @@ async function fetchProductsMap() {
 
 async function getNamesAndCalculateSoldOutRatios() {
   try {
-    const productsMap = await fetchProductsMap();
-    const rolls = await prisma.roll.findMany();
+    const [productsMap, rolls] = await Promise.all([
+      fetchProductsMap(),
+      prisma.roll.findMany(),
+    ]);
 
     let rollData = rolls.reduce((acc, roll) => {
       const product = productsMap.get(roll.kentCode) || {};
