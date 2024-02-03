@@ -26,11 +26,11 @@ async function getFinances() {
 
 // // Example usage
 getFinances().then(data => {
-    console.log(data)
+  console.log(data)
 }).catch(e => {
-    throw e;
+  throw e;
 }).finally(async () => {
-    await prisma.$disconnect();
+  await prisma.$disconnect();
 });
 
 async function calculateProfit() {
@@ -65,7 +65,7 @@ async function calculateProfit() {
           (roll.unit == "kg"
             ? parseFloat(roll.cost) / 7.1 + 0.7
             : parseFloat(roll.cost) / 7.1) *
-            parseFloat(roll.amount),
+          parseFloat(roll.amount),
         0
       );
 
@@ -130,7 +130,7 @@ async function calculateProfitProcessing() {
           (roll.unit == "kg"
             ? parseFloat(roll.cost) / 7.1 + 0.7
             : parseFloat(roll.cost) / 7.1) *
-            parseFloat(roll.amount),
+          parseFloat(roll.amount),
         0
       );
 
