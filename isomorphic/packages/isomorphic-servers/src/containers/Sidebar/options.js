@@ -57,6 +57,11 @@ const options = [
     label: "sidebar.client",
     leftIcon: <SidebarBlankIcon size={19} />,
   },
+  {
+    key: 'client',
+    label: 'Client',
+    leftIcon: <SidebarBlankIcon size={19} />,
+  },
   // {
   //   key: 'inkOrder',
   //   label: 'sidebar.inkOrder',

@@ -1,13 +1,13 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-//https://prismaliser.app/
+// https://prismaliser.app/
 
-//https://cloud.prisma.io/projects
-//https://www.tpu-ptfe.com/post/6329.html
-//npx prisma db push  
-//email:eric.liu@gmail.com
-//psw:Baza7183!
-//eric.dev.liu@gmail.com
+// https://cloud.prisma.io/projects
+// https://www.tpu-ptfe.com/post/6329.html
+// npx prisma db push
+// email:eric.liu@gmail.com
+// psw:Baza7183!
+// eric.dev.liu@gmail.com
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_PREPROD")
@@ -86,7 +86,7 @@ model PriceHistory {
   product   Product  @relation(fields: [productId], references: [id])
 }
 
-//exchange, logistic, profit%
+// exchange, logistic, profit%
 model Variables {
   id        Int      @id @default(autoincrement())
   name      String
@@ -96,18 +96,18 @@ model Variables {
 }
 
 model Roll {
-  id          Int     @id @default(autoincrement())
-  kentCode    String?
-  amount      Float?  @default(0)
-  unit        String?
-  rbg         String?
-  cargo       Cargo?  @relation(fields: [cargoId], references: [id])
-  cargoId     Int?
-  cost        Float?  @default(0)
-  sale   Sale? @relation(fields: [saleId], references: [id])
-  saleId Int?
+  id       Int     @id @default(autoincrement())
+  kentCode String?
+  amount   Float?  @default(0)
+  unit     String?
+  rbg      String?
+  cargo    Cargo?  @relation(fields: [cargoId], references: [id])
+  cargoId  Int?
+  cost     Float?  @default(0)
+  sale     Sale?   @relation(fields: [saleId], references: [id])
+  saleId   Int?
   location String?
-  note String?
+  note     String?
 }
 
 model Cargo {
@@ -151,10 +151,10 @@ enum FinanceCatagory {
 }
 
 model Client {
-  id    Int    @id @default(autoincrement())
-  Sales Sale[]
-  name  String?
-  staff  String?
+  id      Int       @id @default(autoincrement())
+  Sales   Sale[]
+  name    String?
+  staff   String?
   payment Finance[]
 }
 
@@ -170,5 +170,5 @@ model Sale {
   unit          String?
   priceUSD      Float?
   paymentMethod String?
-  status String?
+  status        String?
 }

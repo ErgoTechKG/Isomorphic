@@ -48,19 +48,22 @@ async function getClientFinancialSummary() {
   // Convert 'incomeSom' and 'expenseSom' to USD and calculate net income
   financeData.forEach(finance => {
     finance.netIncomeUSD = (finance._sum.incomeUSD || 0) - (finance._sum.expenseUSD || 0) +
-                           ((finance._sum.incomeSom || 0) - (finance._sum.expenseSom || 0)) / 89.5;
+      ((finance._sum.incomeSom || 0) - (finance._sum.expenseSom || 0)) / 89.5;
   });
 
   // Combining Sales and Finance Data
   const clientFinancialSummary = Object.keys(salesTotalByClient).map(clientId => {
 
     const finance = financeData.find(f => f.clientId === parseInt(clientId)) || {};
+
+    const client = clients.find(client => client.id === parseInt(clientId));
+    const clientName = client ? client.name : undefined;
     return {
       clientId: parseInt(clientId),
       salesTotal: salesTotalByClient[clientId].toFixed(2),
       paymentTotal: (finance.netIncomeUSD?finance.netIncomeUSD:0).toFixed(2),
       oweTotal:(parseFloat(salesTotalByClient[clientId])-parseFloat(finance.netIncomeUSD?finance.netIncomeUSD:0)).toFixed(2),
-      clientName: clients.find(client => client.id === parseInt(clientId))?.name
+      clientName: clientName
     };
   });
 

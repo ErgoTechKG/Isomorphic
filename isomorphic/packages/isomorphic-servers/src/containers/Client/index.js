@@ -5,7 +5,7 @@ import { Table, Modal, Button } from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-import FinancialTransactionForm from "./Form";
+import ClientForm from "./ClientForm";
 const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,10 +106,10 @@ const MyComponent = () => {
           onCancel={handleCancel}
           footer={null}
         >
-          <FinancialTransactionForm
+          <ClientForm
             setIsModalOpen={setIsModalOpen}
             record={record}
-          ></FinancialTransactionForm>
+          ></ClientForm>
         </Modal>
         <Table
           columns={columns}
