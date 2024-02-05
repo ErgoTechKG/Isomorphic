@@ -25,16 +25,16 @@ async function getFinances() {
 }
 
 // // Example usage
-getFinances()
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// getFinances()
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((e) => {
+//     throw e;
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
 
 async function calculateProfit() {
   try {
@@ -289,9 +289,11 @@ async function fetchProductNames(rollGroups) {
   }
 }
 async function analyzeNonSoldRolls() {
-  const nonSoldRolls = await fetchNonSoldRolls();
-  const groupedRolls = await groupRollsByKentCode(nonSoldRolls);
-  const productDetails = await fetchProductNames(groupedRolls);
+  const [nonSoldRolls, groupedRolls, productDetails] = await Promise.all([
+    fetchNonSoldRolls(),
+    groupRollsByKentCode(nonSoldRolls),
+    fetchProductNames(groupedRolls),
+  ]);
   return productDetails;
 }
 
