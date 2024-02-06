@@ -7,8 +7,9 @@ import productRouter from "./product.js";
 import cargoRouter from "./cargo.js";
 import rollRouter from "./roll.js";
 import saleRouter from "./sale.js";
-import clientRouter from "./client.js";
 import dashboardRouter from "./dashboard.js";
+import clientRouter from "./client";
+import financialTransactionRouter from "./financialTransaction";
 
 const { port, secretKey, expiredAfter } = Config;
 // Create an instance of the Prisma client
@@ -17,15 +18,6 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router;
-
-router.get("/", (req, res) => {
-  res.json({ status: "OK1" });
-});
-
-// router.post("/login", (req, res) => {
-//   console.log("req.body", req.body);
-//   res.json({ status: "OK2" });
-// });
 
 router.put("/user", async (req, res) => {
   const { body } = req;
@@ -46,14 +38,21 @@ router.put("/user", async (req, res) => {
   res.json(updateUser);
 });
 
+router.get("/", (req, res) => {
+  res.json({ status: "OK1" });
+});
+
+// router.post("/login", (req, res) => {
+//   console.log("req.body", req.body);
+//   res.json({ status: "OK2" });
+// });
+
 router.get("/users", async (req, res) => {
   try {
     const users = await prisma.user.findMany({
       select: {
         id: true,
-        name: true,
         email: true,
-        address: true,
         role: true,
         createdAt: true,
         profile: true,
@@ -66,25 +65,13 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/financialTransactions", async (req, res) => {
-  try {
-    const records = await prisma.finance.findMany();
-    res.json(records);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      error: "An error occurred while fetching financialTransactions.",
-    });
-  }
-});
-
-router.post("/financialTransaction", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     console.log("req.body", req.body);
 
-    const { userFrom, userTo, description, amount, status, idToken } = req.body;
-    const profile = jwtDecode(idToken);
-    console.log("profile", profile);
+    const { userFrom, userTo, description, amount, status } = req.body;
+    // const profile = jwtDecode(idToken);
+    // console.log("profile", profile);
 
     const record = await prisma.financialTransaction.create({
       data: {
@@ -93,11 +80,23 @@ router.post("/financialTransaction", async (req, res) => {
         description,
         amount,
         status,
-        inputerId: profile.id,
+        // inputerId: profile.id,
       },
     });
 
     res.json(record);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "An error occurred while fetching financialTransactions.",
+    });
+  }
+});
+
+router.get("/financialTransactions", async (req, res) => {
+  try {
+    const records = await prisma.finance.findMany();
+    res.json(records);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -184,4 +183,11 @@ router.use("/sale", saleRouter);
 router.use("/client", clientRouter);
 router.use("/dashboard", dashboardRouter);
 
+router.use("/product", productRouter);
+router.use("/cargo", cargoRouter);
+router.use("/roll", rollRouter);
+router.use("/sale", saleRouter);
+router.use("/dashboard", dashboardRouter);
+router.use("/client", clientRouter);
+router.use("/financialTransactions", financialTransactionRouter);
 export default router;

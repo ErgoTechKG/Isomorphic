@@ -7,7 +7,7 @@ import {
   calculateProfitProcessing,
   getNamesAndCalculateSoldOutRatios,
   analyzeNonSoldRolls,
-} from "../scripts/dashboard.js"
+} from "../scripts/dashboard.js";
 //import { getCargoFromSheet } from "../scripts/googleSheets";
 
 const prisma = new PrismaClient();
@@ -15,22 +15,25 @@ const router = express.Router();
 
 // Define routes for /api/product here
 router.get("/", async (req, res) => {
-
-  // Example usage
-  const finances = await getFinances();
-
-  const profits = await calculateProfit();
-
-  //const profitProcessing = await calculateProfitProcessing()
-  const namesAndCalculateSoldOutRatios = await getNamesAndCalculateSoldOutRatios();
-  const nonsoldout = await analyzeNonSoldRolls();
-  res.send({finances:finances, profits: profits, namesAndCalculateSoldOutRatios, nonsoldout:nonsoldout
-    //profitProcessing:profitProcessing
-  });
+  try {
+    const [finances, profits, namesAndCalculateSoldOutRatios, nonsoldout] =
+      await Promise.all([
+        getFinances(),
+        calculateProfit(),
+        getNamesAndCalculateSoldOutRatios(),
+        analyzeNonSoldRolls(),
+      ]);
+    res.send({
+      finances,
+      profits,
+      namesAndCalculateSoldOutRatios,
+      nonsoldout,
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
-
-
-
 
 // Export the router
 export default router;
