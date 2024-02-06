@@ -58,6 +58,7 @@ async function getClientFinancialSummary() {
 
     const client = clients.find(client => client.id === parseInt(clientId));
     const clientName = client ? client.name : undefined;
+    
     return {
       clientId: parseInt(clientId),
       salesTotal: salesTotalByClient[clientId].toFixed(2),
