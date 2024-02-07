@@ -8,6 +8,7 @@
 // email:eric.liu@gmail.com
 // psw:Baza7183!
 // eric.dev.liu@gmail.com
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_DEV")

@@ -8,8 +8,7 @@ import axiosConfig from "../../library/helpers/axios";
 const MyComponent = (props) => {
 
   const [form] = Form.useForm();
-  //const [record, setRecord] = useState(props.record);
-  const Auth = useSelector((state) => state.Auth);
+  const [record, setRecord] = useState(props.record);
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -37,25 +36,29 @@ const MyComponent = (props) => {
     const expenseUSD = parseFloat(values.expenseUSD);
     const expenseSom = parseFloat(values.expenseSom);
     const newFinance = {...values, incomeUSD, incomeSom, expenseUSD, expenseSom}
-    if(props.record && props.record.id) {
-      const response = await axios.put(
-        `${jwtConfig.fetchUrlSecret}financialTransactions?id=${props.record.id}`,
-        newFinance,
-        axiosConfig
-      )
+    if (props.record && props.record.id) {
+      const response = await axios
+        .put(
+          `${jwtConfig.fetchUrlSecret}financialTransactions?id=${props.record.id}`,
+          newFinance,
+          axiosConfig
+        )
         .catch(function (error) {
           console.log(error);
-        })
-    if (response && response.data && response.status === 200) {
-      props.setIsModalOpen(false);
-    }
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     } else {
-      const response = await axios.post(`${jwtConfig.fetchUrlSecret}financialTransactions`,
-        newFinance,
-        axiosConfig,
-      ).catch(function (error) {
-        console.log(error);
-      });
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}financialTransactions`,
+          newFinance,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
       if (response && response.data && response.status === 200) {
         props.setIsModalOpen(false);
       }

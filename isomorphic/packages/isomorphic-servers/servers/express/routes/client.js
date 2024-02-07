@@ -1,4 +1,3 @@
-//import { getCargoFromSheet } from "../scripts/googleSheets";
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import jwtDecode from "jwt-decode";
@@ -27,7 +26,6 @@ router.delete("/", async (req, res) => {
 
   // Step 2: Fetch all products after deletion
   const allClients = await prisma.client.findMany();
-
   res.send(allClients);
 });
 
@@ -40,7 +38,7 @@ router.post("/", async (req, res) => {
   try {
     console.log("req.body", req.body);
 
-    const { name, staff } = req.body;
+    const { name, staff} = req.body;
     const record = await prisma.client.create({
       data: {
         name: name,
@@ -57,8 +55,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 router.put("/", async (req, res) => {
-  console.log("req.body", req.body);
+  console.log('req.body', req.body)
   const record = await prisma.client.update({
     where: {
       id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
@@ -67,6 +66,7 @@ router.put("/", async (req, res) => {
   });
   res.send(record);
 });
+
 
 // Export the router
 export default router;

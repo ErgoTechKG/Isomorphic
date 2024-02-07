@@ -21,8 +21,12 @@ router.get("/all", async(req, res) => {
 
 router.post("/", async(req, res) => {
   try {
-    // console.log("req.body", req.body);
-    const {date, incomeUSD, incomeSom, expenseUSD, expenseSom, note, cat} = req.body;
+    console.log("req.body", req.body);
+
+    const { date, incomeUSD, incomeSom, expenseUSD, expenseSom, note, cat } = req.body;
+
+    // Add some validation here if needed
+
     const record = await prisma.finance.create({
       data: {
         date,
@@ -31,17 +35,15 @@ router.post("/", async(req, res) => {
         expenseUSD,
         expenseSom,
         note,
-        cat
+        cat,
       }
-    })
-    res.json(record);
-  } catch(err) {
-    console.log(err)
-    res.status(500).json({
-      error: "An error occurred while fetching finance records.",
     });
+    console.log('Record created successfully:', record);
+    res.json(record);
+  } catch (error) {
+    console.error('Error creating record:', error);
   }
-})
+});
 
 
 router.delete("/", async(req, res) => {
@@ -50,7 +52,7 @@ router.delete("/", async(req, res) => {
       id: parseInt(req.query.id)
     }
   })
-  
+
   //second step
   const allFinance = await prisma.finance.findMany();
   res.send(allFinance);
@@ -68,4 +70,3 @@ router.put("/", async(req, res) => {
 })
 
 export default router;
-

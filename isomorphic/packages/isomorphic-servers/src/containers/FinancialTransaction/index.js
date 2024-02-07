@@ -33,7 +33,8 @@ const MyComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions/all`, axiosConfig); // Replace with your actual API endpoint
+        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions/all`,
+          axiosConfig); // Replace with your actual API endpoint
         console.log('data', response.data)
         setData(response.data);
       } catch (error) {
