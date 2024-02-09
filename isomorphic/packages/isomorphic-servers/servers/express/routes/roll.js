@@ -1,9 +1,28 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import {uid} from "uid";
 //import { getRollFromSheet } from "../scripts/googleSheetsRolls";
 
 const prisma = new PrismaClient();
 const router = express.Router();
+
+async function generateUniqueID() {
+  try {
+    let existingProd;
+    let newID;
+    do {
+      newID = "k1" + uid(5); // Generate a new ID with a length of 5 characters.
+      existingProd = await prisma.roll.findFirst({
+        where: { kentCode: newID },
+      });
+    } while (existingProd);
+
+    // At this point, the generated ID is unique and can be used.
+    return newID;
+  } catch (err) {
+    console.log("error", err);
+  }
+}
 
 // Define routes for /api/product here
 router.get("/all", async (req, res) => {
@@ -38,42 +57,83 @@ router.delete("/", async (req, res) => {
   res.send(allProducts);
 });
 
-router.get("/all", async (req, res) => {
-  
-});
 
-router.post("/", async (req, res) => {
+// router.post("/", async (req, res) => {
+//
+//   console.log('received from frontend', req.body,req.query)
+//   const cargo = await prisma.cargo.upsert({
+//     where: { dateArrived: req.body.date },
+//     update: {}, // No update operation since we just want to fetch the ID if it exists
+//     create: { dateArrived: req.body.date  }
+//   });
+//
+//   const rolls = await prisma.cargo.create({
+//     data: {
+//       name: 'Alice',
+//       email: 'alice@example.com',
+//     },
+//   })
+//   console.log(cargo.id);
+//   res.send("post product");
+//
+// });
 
-  console.log('received from frontend', req.body,req.query)
-  const cargo = await prisma.cargo.upsert({
-    where: { dateArrived: req.body.date },
-    update: {}, // No update operation since we just want to fetch the ID if it exists
-    create: { dateArrived: req.body.date  }
-  });
+router.post("/", async(req, res) => {
+    try {
+      console.log(req.body)
+      const {rbg, amount, unit, cost, kentCode} = req.body;
+      const record = await prisma.roll.create({
+        data: {
+          rbg,
+          amount,
+          unit,
+          cost,
+          kentCode,
+        }
+      })
+      console.log("Record created successfully!", record);
+      res.json(record);
 
-  const rolls = await prisma.cargo.create({
-    data: {
-      name: 'Alice',
-      email: 'alice@example.com',
-    },
-  })
-  console.log(cargo.id);
-  res.send("post product");
+      }  catch(err)  {
+        console.log("Error at creating data for roll table", err);
+    }
 
-});
+})
 
 
-router.put("/", async (req, res) => {
-  console.log('req.body', req.body)
+router.put("/", async(req, res) => {
   const record = await prisma.roll.update({
     where: {
-      id: req.body.id  // Assuming id is an integer; adapt as needed
+      id: parseInt(req.query.id)
     },
     data: req.body
-  });
+  })
+  res.send(record);
+})
 
-  const rolls = await prisma.roll.findMany();
-  res.send(rolls);
+router.get("/generateCode", async (req, res) => {
+  try {
+    const newProductID = await generateUniqueID();
+
+    res.send(newProductID);
+  } catch (err) {
+    console.log("error", err);
+  }
+});
+
+router.post("/generateCodeValidation", async (req, res) => {
+  try {
+    const existingID = await prisma.roll.findFirst({
+      where: { kentCode: req.body.value },
+    });
+
+    if (existingID) {
+      return res.status(409).json({ error: "Kent code already exists" });
+    }
+    res.send("ok");
+  } catch (err) {
+    console.log("error", err);
+  }
 });
 
 

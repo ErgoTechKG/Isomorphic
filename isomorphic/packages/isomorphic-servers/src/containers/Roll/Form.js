@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import {
-  message,
-  Button,
-  Select,
-  Space,
-  Upload,
-  Form,
-  Switch,
-  List,
-} from "antd";
+import React, {useState} from "react";
+import {Input, Button,  Space,  Form,  message} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 const MyComponent = (props) => {
   const [form] = Form.useForm();
-  //const [record, setRecord] = useState(props.record);
-  const Auth = useSelector((state) => state.Auth);
-  const [userDropdownlistValue, setUserDropdownlistValue] = useState([]);
-  const [data, setData] = useState([]);
+  const [record, setRecord] = useState(props.record);
+  const [messageApi] = message.useMessage();
+  const { Search } = Input;
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -35,94 +24,151 @@ const MyComponent = (props) => {
     },
   };
 
-  // useEffect(() => {
-  //   if (props.record) {
-  //     form.setFieldsValue({
-  //       description: props.record.description,
-  //       userFrom: props.record.userFromId,
-  //       userTo: props.record.userToId,
-  //       amount: props.record.amount,
-  //       status: props.record.status,
-  //     });
-  //   } else {
-  //     form.resetFields();
-  //   }
-  // }, [props.record]);
 
-  useEffect(() => {
-    // const fetchUserData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `${jwtConfig.fetchUrlSecret}users`,
-    //       axiosConfig
-    //     ); // Replace with your actual API endpoint
-    //     const userDropdownlist = response.data.map((a) => ({
-    //       value: a.id,
-    //       label: a.name,
-    //     }));
-    //     setUserDropdownlistValue(userDropdownlist);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchUserData();
-    form.setFieldsValue({
-      switchField: false,
-  });
-  }, []);
+  const handleChange = (e) => {
+    console.log(e);
+  };
 
   const onFinish = async (values) => {
-    console.log('values', values)
-    if (values.upload)
-      values.imageUrl = values.upload.map((i) => i.response.fileId);
-
-    const { upload, ...rest } = values;
-
-    // const response = await axios
-    //   .post(`${jwtConfig.fetchUrlSecret}temporary-upload`, rest, axiosConfig)
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // if (response && response.data && response.status === 200) {
-    //   props.setIsModalOpen(false);
-    // }
-    //TODO: what to do after clicking save button
-  };
-
-  const uploadProps = {
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+    console.log(props.recordId);
+    const amount = parseFloat(values.amount);
+    const cost = parseFloat(values.cost);
+    const newRoll = {...values, amount, cost}
+    if (props.record && props.record.id) {
+      const response = await axios
+        .put(
+          `${jwtConfig.fetchUrlSecret}roll?id=${props.record.id}`,
+          newRoll,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
+    } else {
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}roll`,
+          newRoll,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
-      console.log("info", info);
-      setData(info.fileList)
-    },
-  };
-
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
     }
-    return e?.fileList;
+  }
+
+  const onGenerateCode = async (value) => {
+    if (value) {
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}roll/generateCodeValidation`,
+          { value: value },
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        messageApi.open({
+          type: "success",
+          content: "Your Kent code is available",
+        });
+
+        //props.setIsModalOpen(false);
+      }
+    } else {
+      const response = await axios
+        .get(`${jwtConfig.fetchUrlSecret}roll/generateCode`, axiosConfig)
+        .catch(function (error) {
+          console.log(error);
+        });
+      console.log("response", response);
+      if (response && response.data && response.status === 200) {
+        console.log(response.data);
+        form.setFieldsValue({ kentCode: response.data });
+        //fill the generate value to the form
+        //props.setIsModalOpen(false);
+      }
+    }
   };
 
   const onReset = () => {
     form.resetFields();
   };
 
-  return (
-    <div>
-      <Space style={{ width: "100%" }} direction="vertical">
-        <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
-            <Form.Item name="isPluff" label="Enable feature" valuePropName="checked">
-                <Switch />
-            </Form.Item>
+  return(
+    <>
+      <Space style={{width: "100%"}} direction="vertical">
+        <Form
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          {...layout}
+        >
+          <Form.Item
+            name="rbg"
+            label="rbg"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Rbg"/>
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Amount"/>
+          </Form.Item>
+          <Form.Item
+            name="unit"
+            label="Unit"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Unit"/>
+          </Form.Item>
+          <Form.Item
+            name="kentCode"
+            label="KentCode"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Search
+              placeholder="auto generate a kent code"
+              onSearch={onGenerateCode}
+            />
+          </Form.Item>
+          <Form.Item
+            name="cost"
+            label="Cost"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Cost"/>
+          </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Submit
@@ -133,8 +179,8 @@ const MyComponent = (props) => {
           </Form.Item>
         </Form>
       </Space>
-    </div>
-  );
-};
+    </>
+  )
+}
 
 export default MyComponent;
