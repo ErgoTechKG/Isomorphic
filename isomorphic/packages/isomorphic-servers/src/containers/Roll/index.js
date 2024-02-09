@@ -14,13 +14,24 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [record, setRecord] = useState(null);
 
-  const handleDelete = () => {
-
+  const handleDelete = async(recordId) => {
+     try {
+       const result = await axios.delete(`
+       ${jwtConfig.fetchUrlSecret}roll?id=${recordId}`,
+         axiosConfig)
+       setData(result.data);
+     } catch(err) {
+       console.log("Error: " , err);
+     }
   }
 
-  const clickEdit = () => {
-
-  }
+  const clickEdit = (recordId) => {
+    setIsModalOpen(true);
+    let selectedRecord = data.find(i => {
+      return i.id === recordId
+    })
+    setRecord(selectedRecord);
+  };
 
   const columns = [
     {

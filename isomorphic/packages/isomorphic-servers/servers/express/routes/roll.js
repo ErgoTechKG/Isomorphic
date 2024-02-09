@@ -43,19 +43,16 @@ router.get("/all", async (req, res) => {
 // });
 
 // Define routes for /api/product here
-router.delete("/", async (req, res) => {
-  console.log(req.query)
-  const deletedProduct = await prisma.product.delete({
+router.delete("/", async(req, res) => {
+  const deletedRoll = await prisma.roll.delete({
     where: {
-      id: parseInt(req.query.id),
-    },
-  });
+      id: parseInt(req.query.id)
+    }
+  })
 
-  // Step 2: Fetch all products after deletion
-  const allProducts = await prisma.product.findMany();
-
-  res.send(allProducts);
-});
+  const allRecords = await prisma.roll.findMany();
+  res.send(allRecords);
+})
 
 
 // router.post("/", async (req, res) => {

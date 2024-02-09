@@ -45,7 +45,8 @@ router.post("/", async(req, res) => {
   }
 });
 
-
+//deleting functionality
+//ygoiph;ititfgh[oj'i;lguyvk
 router.delete("/", async(req, res) => {
   const deletedFinance = await prisma.finance.delete({
     where: {

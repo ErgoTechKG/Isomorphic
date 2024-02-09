@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import {useSelector} from 'react-redux';
 import {Input, Button, Select, Space, InputNumber, Form, DatePicker} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
