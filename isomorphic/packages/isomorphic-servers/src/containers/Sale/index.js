@@ -31,6 +31,16 @@ const MyComponent = () => {
     let selectedRecord = data.find(i => {return i.id === recordId})
     setRecord(selectedRecord);
   };
+
+  const handleDelete = async (recordId) => {
+    try {
+      const result = await axios.delete(`${jwtConfig.fetchUrlSecret}sale?id=${recordId}`,
+        axiosConfig)
+      setData(result.data);
+    } catch (err) {
+      console.log("Fetching data error: ", err);
+    }
+  }
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -211,7 +221,11 @@ const MyComponent = () => {
       title: 'Action',
       dataIndex: '',
       key: 'action',
-      render: (record) => <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>,
+      render: (record) =>
+        <>
+          <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>
+          <Button id={record.id} onClick={() => handleDelete(record.id)}>Delete</Button>
+        </>
     },
   ];
 
@@ -230,7 +244,7 @@ const MyComponent = () => {
   return (
     <LayoutContentWrapper >
       <LayoutContent>
-        <Button type="primary" onClick={handleAdd} >Add new image</Button>
+        <Button type="primary" onClick={handleAdd} >Add new Sale</Button>
         <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
           <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
         </Modal>

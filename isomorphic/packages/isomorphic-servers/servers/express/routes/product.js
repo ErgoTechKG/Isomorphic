@@ -51,7 +51,6 @@ router.delete("/", async (req, res) => {
 
     // Step 2: Fetch all products after deletion
     const allProducts = await prisma.product.findMany();
-
     res.send(allProducts);
   } catch (error) {
     console.error("Error:", error);

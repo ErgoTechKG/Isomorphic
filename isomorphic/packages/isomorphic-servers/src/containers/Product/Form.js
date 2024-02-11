@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, {useState, useEffect} from "react";
+import {useSelector} from "react-redux";
 import {
   Input,
   Button,
@@ -11,18 +11,18 @@ import {
   Checkbox,
   Switch
 } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {PlusOutlined} from "@ant-design/icons";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-const { TextArea } = Input;
-const { Search } = Input;
+
+const {TextArea} = Input;
+const {Search} = Input;
 
 const MyComponent = (props) => {
   const [fileList, setFileList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const Auth = useSelector((state) => state.Auth);
   console.log("props", props);
   console.log("fileList", fileList);
   useEffect(() => {
@@ -42,9 +42,9 @@ const MyComponent = (props) => {
 
         setFileList(fileListData);
         form.setFieldsValue(response.data);
-      //   form.setFieldsValue({
-      //     isPluff: true,
-      // });
+        //   form.setFieldsValue({
+        //     isPluff: true,
+        // });
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -81,7 +81,7 @@ const MyComponent = (props) => {
         i.response ? i.response.fileId : i.uid
       );
 
-      const { upload, ...rest } = values;
+      const {upload, ...rest} = values;
 
       const response = await axios
         .put(
@@ -100,11 +100,10 @@ const MyComponent = (props) => {
         props.setIsModalOpen(false);
       }
     } else {
-      //console.log('value no id', values)
       if (values.upload)
         values.imageURL = values.upload.fileList.map((i) => i.response.fileId);
 
-      const { upload, ...rest } = values;
+      const {upload, ...rest} = values;
 
       console.log("value no id rest", rest);
 
@@ -129,7 +128,7 @@ const MyComponent = (props) => {
       const response = await axios
         .post(
           `${jwtConfig.fetchUrlSecret}product/generateCodeValidation`,
-          { value: value },
+          {value: value},
           axiosConfig
         )
         .catch(function (error) {
@@ -140,8 +139,6 @@ const MyComponent = (props) => {
           type: "success",
           content: "Your Kent code is available",
         });
-
-        //props.setIsModalOpen(false);
       }
     } else {
       const response = await axios
@@ -152,9 +149,7 @@ const MyComponent = (props) => {
       console.log("response", response);
       if (response && response.data && response.status === 200) {
         console.log(response.data);
-        form.setFieldsValue({ codeKent: response.data });
-        //fill the generate value to the form
-        //props.setIsModalOpen(false);
+        form.setFieldsValue({codeKent: response.data});
       }
     }
   };
@@ -166,49 +161,20 @@ const MyComponent = (props) => {
 
   const uploadProps = {
     onChange(info, i) {
-      // console.log("info", info, i);
-      // if (info.file.status !== "uploading") {
-      //   console.log(info.file, info.fileList);
-      // }
-      // if (info.file.status === "done") {
-      //   message.success(`${info.file.name} file uploaded successfully`);
-      // } else if (info.file.status === "error") {
-      //   message.error(`${info.file.name} file upload failed.`);
-      // }
       let newFileList = [...info.fileList];
       console.log("newFileList", newFileList);
-      // // 2. Read from response and show file link
-      // newFileList = newFileList.map((file) => {
-      //   if (file.response) {
-      //     // Component will show file.url as link
-      //     file.url = file.response.url;
-      //   }
-      //   return file;
-      // });
       setFileList(newFileList);
     },
   };
 
-  // const normFile = (e) => {
-  //   console.log("Upload event:", e);
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-  //   return e?.fileList;
-  // };
-
   const onRemove = async (value) => {
     console.log("onRemove", value);
-    // const response = await axios.delete(
-    //   `${jwtConfig.uploadUrl}?fileId=${value.response.fileId}`
-    // ); // Replace with your actual API endpoint
   };
   return (
     <div>
       {contextHolder}
-      <Space style={{ width: "100%" }} direction="vertical">
+      <Space style={{width: "100%"}} direction="vertical">
         <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
-
 
 
           <Form.Item
@@ -220,7 +186,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="source" />
+            <Input placeholder="source"/>
           </Form.Item>
 
           <Form.Item
@@ -232,7 +198,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="client" />
+            <Input placeholder="client"/>
           </Form.Item>
 
           <Form.Item
@@ -244,7 +210,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="staff" />
+            <Input placeholder="staff"/>
           </Form.Item>
 
           <Form.Item
@@ -256,7 +222,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <TextArea rows={4} placeholder="description" />
+            <TextArea rows={4} placeholder="description"/>
           </Form.Item>
 
           <Form.Item
@@ -283,7 +249,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="Old Kent Code" />
+            <Input placeholder="Old Kent Code"/>
           </Form.Item>
 
           <Form.Item
@@ -295,7 +261,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="Code China" />
+            <Input placeholder="Code China"/>
           </Form.Item>
 
           <Form.Item
@@ -307,7 +273,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="Russian Name" />
+            <Input placeholder="Russian Name"/>
           </Form.Item>
 
           <Form.Item
@@ -319,7 +285,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="English Name" />
+            <Input placeholder="English Name"/>
           </Form.Item>
 
           <Form.Item
@@ -331,7 +297,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <Input placeholder="Chinese Name" />
+            <Input placeholder="Chinese Name"/>
           </Form.Item>
 
           <Form.Item
@@ -343,7 +309,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonBefore="¥" placeholder="Price China in KG" />
+            <InputNumber addonBefore="¥" placeholder="Price China in KG"/>
           </Form.Item>
 
           <Form.Item
@@ -355,7 +321,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonBefore="¥" placeholder="Price China in KG" />
+            <InputNumber addonBefore="¥" placeholder="Price China in KG"/>
           </Form.Item>
 
           <Form.Item
@@ -367,7 +333,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonAfter="cm" placeholder="width" />
+            <InputNumber addonAfter="cm" placeholder="width"/>
           </Form.Item>
 
           <Form.Item
@@ -379,7 +345,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonAfter="g" placeholder="Gram" />
+            <InputNumber addonAfter="g" placeholder="Gram"/>
           </Form.Item>
 
           <Form.Item
@@ -391,7 +357,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonAfter="$/M" placeholder="Our Price" />
+            <InputNumber addonAfter="$/M" placeholder="Our Price"/>
           </Form.Item>
 
           <Form.Item
@@ -403,7 +369,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <InputNumber addonAfter="$/M" placeholder="Market Price" />
+            <InputNumber addonAfter="$/M" placeholder="Market Price"/>
           </Form.Item>
 
           <Form.Item
@@ -416,7 +382,7 @@ const MyComponent = (props) => {
             ]}
             valuePropName="checked"
           >
-            <Switch >isPopular</Switch>
+            <Switch>isPopular</Switch>
           </Form.Item>
 
           <Form.Item
@@ -429,7 +395,7 @@ const MyComponent = (props) => {
             ]}
             valuePropName="checked"
           >
-            <Switch >isPluff</Switch>
+            <Switch>isPluff</Switch>
           </Form.Item>
 
           <Form.Item
@@ -442,7 +408,7 @@ const MyComponent = (props) => {
             ]}
             valuePropName="checked"
           >
-            <Switch >isResToChina</Switch>
+            <Switch>isResToChina</Switch>
           </Form.Item>
 
 
@@ -456,14 +422,12 @@ const MyComponent = (props) => {
             ]}
             valuePropName="checked"
           >
-            <Switch >IsKentSample</Switch>
+            <Switch>IsKentSample</Switch>
           </Form.Item>
 
           <Form.Item
             label="Upload"
             name="upload"
-            // valuePropName="fileList"
-            // getValueFromEvent={normFile}
           >
             <Upload
               action={jwtConfig.uploadUrl}
@@ -475,7 +439,7 @@ const MyComponent = (props) => {
               {...uploadProps}
             >
               <div>
-                <PlusOutlined />
+                <PlusOutlined/>
                 <div
                   style={{
                     marginTop: 8,

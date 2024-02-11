@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
 import LayoutContent from "@iso/components/utility/layoutContent";
 import {
@@ -18,9 +18,9 @@ import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 import ProductForm from "./Form";
-import { SearchOutlined } from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import CollapsePanel from "antd/lib/collapse/CollapsePanel";
+
 const MyComponent = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -36,12 +36,12 @@ const MyComponent = () => {
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters,
+                       close,
+                     }) => (
       <div
         style={{
           padding: 8,
@@ -65,7 +65,7 @@ const MyComponent = () => {
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
             style={{
               width: 90,
@@ -117,9 +117,9 @@ const MyComponent = () => {
     onFilter: (value, record) => {
       return record[dataIndex]
         ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
         : false;
     },
     onFilterDropdownOpenChange: (visible) => {
@@ -169,18 +169,6 @@ const MyComponent = () => {
   };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions`, axiosConfig); // Replace with your actual API endpoint
-    //     setData(response.data);
-    //   } catch (error) {
-    //     console.error('Error fetching data:', error);
-    //   }
-    // };
-    // fetchData();
-  }, [isModalOpen]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -201,6 +189,14 @@ const MyComponent = () => {
   }, [isModalOpen]);
 
   const columns = [
+    {
+      title: "id",
+      dataIndex: "id",
+      key: "id",
+      // defaultSortOrder: 'ascend',
+      // sorter: (a, b) => a.id- b.id,
+      // ...getColumnSearchProps("id"),
+    },
     {
       title: "Kent Code",
       dataIndex: "codeKent",
@@ -252,7 +248,7 @@ const MyComponent = () => {
       dataIndex: "priceAtStock",
       sorter: (a, b) => (a.priceAtStock).toFixed(2) - b.priceAtStock.toFixed(2),
       render: (record) => {
-        return record?record.toFixed(2):0
+        return record ? record.toFixed(2) : 0
       },
     },
     {
@@ -307,7 +303,7 @@ const MyComponent = () => {
         </Col>
         <Col span={8}>
           <Card title="Gram" bordered={false}>
-           {record.gram} g
+            {record.gram} g
           </Card>
         </Col>
         <Col span={8}>
@@ -327,7 +323,7 @@ const MyComponent = () => {
 
           return (
             <List.Item>
-              <Image width={200} src={imageUrl} />
+              <Image width={200} src={imageUrl}/>
             </List.Item>
           );
         }}
@@ -365,7 +361,7 @@ const MyComponent = () => {
             ></ProductForm>
           </Modal>
           <Table
-            scroll={{ x: "max-content" }}
+            scroll={{x: "max-content"}}
             columns={columns}
             rowKey={(record) => record.id}
             expandable={{
@@ -381,3 +377,6 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
+
+
+

@@ -1,25 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import {
-  message,
-  Button,
-  Select,
-  Space,
-  Upload,
-  Form,
-  Switch,
-  List,
-} from "antd";
+import React from "react";
+import {Input, Button, Select, Space, InputNumber, Form, DatePicker} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 const MyComponent = (props) => {
+
   const [form] = Form.useForm();
-  //const [record, setRecord] = useState(props.record);
-  const Auth = useSelector((state) => state.Auth);
-  const [userDropdownlistValue, setUserDropdownlistValue] = useState([]);
-  const [data, setData] = useState([]);
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -35,82 +22,44 @@ const MyComponent = (props) => {
     },
   };
 
-  // useEffect(() => {
-  //   if (props.record) {
-  //     form.setFieldsValue({
-  //       description: props.record.description,
-  //       userFrom: props.record.userFromId,
-  //       userTo: props.record.userToId,
-  //       amount: props.record.amount,
-  //       status: props.record.status,
-  //     });
-  //   } else {
-  //     form.resetFields();
-  //   }
-  // }, [props.record]);
 
-  useEffect(() => {
-    // const fetchUserData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `${jwtConfig.fetchUrlSecret}users`,
-    //       axiosConfig
-    //     ); // Replace with your actual API endpoint
-    //     const userDropdownlist = response.data.map((a) => ({
-    //       value: a.id,
-    //       label: a.name,
-    //     }));
-    //     setUserDropdownlistValue(userDropdownlist);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchUserData();
-    form.setFieldsValue({
-      switchField: false,
-  });
-  }, []);
+  const handleChange = (e) => {
+    console.log(e);
+  };
 
   const onFinish = async (values) => {
-    console.log('values', values)
-    if (values.upload)
-      values.imageUrl = values.upload.map((i) => i.response.fileId);
-
-    const { upload, ...rest } = values;
-
-    // const response = await axios
-    //   .post(`${jwtConfig.fetchUrlSecret}temporary-upload`, rest, axiosConfig)
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // if (response && response.data && response.status === 200) {
-    //   props.setIsModalOpen(false);
-    // }
-    //TODO: what to do after clicking save button
-  };
-
-  const uploadProps = {
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+    // Convert incomeUSD and expenseUSD to Float or set them to null if they're not valid numbers
+    const priceUSD = parseFloat(values.priceUSD);
+    const amount = parseFloat(values.amount);
+    const newSale = {...values, priceUSD, amount}
+    if (props.record && props.record.id) {
+      const response = await axios
+        .put(
+          `${jwtConfig.fetchUrlSecret}sale?id=${props.record.id}`,
+          newSale,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
+    } else {
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}sale`,
+          newSale,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
-      console.log("info", info);
-      setData(info.fileList)
-    },
-  };
-
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
     }
-    return e?.fileList;
-  };
+  }
 
   const onReset = () => {
     form.resetFields();
@@ -118,11 +67,90 @@ const MyComponent = (props) => {
 
   return (
     <div>
-      <Space style={{ width: "100%" }} direction="vertical">
-        <Form form={form} name="control-hooks" onFinish={onFinish} {...layout}>
-            <Form.Item name="isPluff" label="Enable feature" valuePropName="checked">
-                <Switch />
-            </Form.Item>
+      <Space style={{width: "100%"}} direction="vertical">
+        <Form
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          {...layout}
+        >
+          <Form.Item
+            name="date"
+            label="Date"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker/>
+          </Form.Item>
+          <Form.Item
+            name="note"
+            label="Note"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Note"/>
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Amount"/>
+          </Form.Item>
+          <Form.Item
+            name="unit"
+            label="Unit"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Unit"/>
+          </Form.Item>
+          <Form.Item
+            name="priceUSD"
+            label="Price (USD)"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Price (USD)"/>
+          </Form.Item>
+          <Form.Item
+            name="paymentMethod"
+            label="Payment Method"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Payment Method"/>
+          </Form.Item>
+          <Form.Item
+            name="status"
+            label="Status"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Status"/>
+          </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Submit

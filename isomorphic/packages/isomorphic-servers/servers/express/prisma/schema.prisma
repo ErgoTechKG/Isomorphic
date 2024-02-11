@@ -160,11 +160,10 @@ model Client {
 }
 
 model Sale {
-  id       Int       @id @default(autoincrement())
-  date     DateTime?
-  client   Client?   @relation(fields: [clientId], references: [id])
-  clientId Int?
-
+  id            Int       @id @default(autoincrement())
+  date          DateTime?
+  client        Client?   @relation(fields: [clientId], references: [id])
+  clientId      Int?
   Roll          Roll[]
   note          String?
   amount        Float?
