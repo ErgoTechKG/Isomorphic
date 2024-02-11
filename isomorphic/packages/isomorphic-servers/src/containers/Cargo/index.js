@@ -1,21 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button, Checkbox, Spin} from 'antd';
+import {Table, Modal, Button, Checkbox, Spin} from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
 import CargoForm from './Form';
 import moment from 'moment';
+
 const MyComponent = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [record, setRecord] = useState(null);
-  const clickEdit = (recordId) => {
+  const handleEdit = (recordId) => {
     setIsModalOpen(true);
-    let selectedRecord = data.find(i => {return i.id === recordId})
+    let selectedRecord = data.find(i => {
+      return i.id === recordId
+    })
     setRecord(selectedRecord);
   };
+
+  const handleDelete = async (recordId) => {
+    try {
+      const result = await axios.delete(`${jwtConfig.fetchUrlSecret}cargo?id=${recordId}`,
+        axiosConfig)
+      setData(result.data);
+    } catch (error) {
+      console.log("Error while deleting cargo", error);
+    }
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +56,7 @@ const MyComponent = () => {
       dataIndex: 'dateSent',
       key: 'dateSent',
       render: (record) => {
-        return moment(record).format('L'); 
+        return moment(record).format('L');
       },
     },
     {
@@ -68,13 +82,18 @@ const MyComponent = () => {
     {
       title: 'isFullyRecieved',
       sorter: (a, b) => a.isFullyRecieved - b.isFullyRecieved,
-      render: (record) => <Checkbox defaultChecked={record.isFullyRecieved} onChange={(e) => onChange(e, record)}></Checkbox>,
+      render: (record) => <Checkbox defaultChecked={record.isFullyRecieved}
+                                    onChange={(e) => onChange(e, record)}></Checkbox>,
     },
     {
       title: 'Action',
       dataIndex: '',
       key: 'action',
-      render: (record) => <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>,
+      render: (record) =>
+        <>
+          <Button id={record.id} onClick={() => handleEdit(record.id)}>Edit</Button>
+          <Button id={record.id} onClick={() => handleDelete(record.id)}>Delete</Button>
+        </>
     },
   ];
 
@@ -98,7 +117,7 @@ const MyComponent = () => {
   const [loading, setLoading] = useState(false);
 
   const expandedRowRender = (record) => (
-    <p style={{ margin: 0 }}>{record.description}</p>
+    <p style={{margin: 0}}>{record.description}</p>
   );
 
   const rowExpandable = (record) => record.name !== 'Not Expandable';
@@ -111,24 +130,24 @@ const MyComponent = () => {
   };
   return (
     <Spin spinning={loading}>
-    <LayoutContentWrapper>
-      <LayoutContent>
-        <Button type="primary" onClick={handleAdd} >Add new</Button>
-        <Modal title="Cargo Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
-          <CargoForm setIsModalOpen={setIsModalOpen} record={record}></CargoForm>
-        </Modal>
-        <Table
-          columns={columns}
-          scroll={{ x: "max-content"}}
-          rowKey={(record) => record.id}
-          expandable={{
-            expandedRowRender,
-            rowExpandable,
-          }}
-          dataSource={data}
-        />
-      </LayoutContent>
-    </LayoutContentWrapper>
+      <LayoutContentWrapper>
+        <LayoutContent>
+          <Button type="primary" onClick={handleAdd}>Add new</Button>
+          <Modal title="Cargo Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
+            <CargoForm setIsModalOpen={setIsModalOpen} record={record}></CargoForm>
+          </Modal>
+          <Table
+            columns={columns}
+            scroll={{x: "max-content"}}
+            rowKey={(record) => record.id}
+            expandable={{
+              expandedRowRender,
+              rowExpandable,
+            }}
+            dataSource={data}
+          />
+        </LayoutContent>
+      </LayoutContentWrapper>
     </Spin>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import {Input, Button,  Space,  Form, DatePicker, Switch} from "antd";
+import {Input, Button, Space, Form, DatePicker, Switch} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
@@ -66,7 +66,7 @@ const MyComponent = (props) => {
     form.resetFields();
   };
 
-  return(
+  return (
     <>
       <Space style={{width: "100%"}} direction="vertical">
         <Form
@@ -95,7 +95,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <DatePicker />
+            <DatePicker/>
           </Form.Item>
           <Form.Item
             name="dateSent"
@@ -106,7 +106,7 @@ const MyComponent = (props) => {
               },
             ]}
           >
-            <DatePicker />
+            <DatePicker/>
           </Form.Item>
           <Form.Item
             name="feePackage"
@@ -151,7 +151,7 @@ const MyComponent = (props) => {
             ]}
             valuePropName="checked"
           >
-            <Switch >is Fully Received</Switch>
+            <Switch>is Fully Received</Switch>
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
@@ -168,3 +168,4 @@ const MyComponent = (props) => {
 }
 
 export default MyComponent;
+

@@ -6,10 +6,21 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   const allCargos = await prisma.cargo.findMany();
-
   res.send(allCargos);
 });
 
+//Deleting functionality
+router.delete("/", async(req, res) => {
+  const deletedCargo = await prisma.cargo.delete({
+    where: {
+      id: parseInt(req.query.id)
+    }
+  })
+  const allCargos = await prisma.cargo.findMany();
+  res.send(allCargos);
+})
+
+//Sending functionality
 router.post("/", async(req, res) => {
   try {
     const {description, dateArrived, dateSent,feePackage, valueCargo, logisticFee, isFullyRecieved} = req.body;
@@ -31,7 +42,7 @@ router.post("/", async(req, res) => {
   }
 })
 
-
+//Editing functionality
 router.put("/", async (req, res) => {
   const record = await prisma.cargo.update({
     where: {
