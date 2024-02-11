@@ -1,6 +1,5 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-//import { getCargoFromSheet } from "../scripts/googleSheets";
+import {PrismaClient} from "@prisma/client";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -24,7 +23,7 @@ router.delete("/", async (req, res) => {
     },
   });
 
-  // Step 2: Fetch all products after deletion
+  // Step 2: Fetch all sales after deletion
   const allSales = await prisma.sale.findMany();
   res.send(allSales);
 });
@@ -34,7 +33,7 @@ router.get("/all", async (req, res) => {
   res.send(all);
 });
 
-router.post("/", async(req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {date, note, amount, unit, priceUSD, paymentMethod, status} = req.body;
     const newSale = await prisma.sale.create({
@@ -50,7 +49,7 @@ router.post("/", async(req, res) => {
     })
     console.log("Created successfully Sale records", newSale);
     res.json(newSale);
-  } catch(err) {
+  } catch (err) {
     console.log("Error while creating data", err);
   }
 })
@@ -71,3 +70,5 @@ router.put("/", async (req, res) => {
 
 // Export the router
 export default router;
+
+

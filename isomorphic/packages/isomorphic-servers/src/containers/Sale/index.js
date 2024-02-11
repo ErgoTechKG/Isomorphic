@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
 import LayoutContent from '@iso/components/utility/layoutContent';
-import { Table, Modal, Button, Input, Space } from 'antd';
+import {Table, Modal, Button, Input, Space} from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
 import FinancialTransactionForm from './Form';
 import moment from 'moment';
-import { SearchOutlined } from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+
 const MyComponent = () => {
 
   const [searchText, setSearchText] = useState("");
@@ -28,7 +29,9 @@ const MyComponent = () => {
   const [record, setRecord] = useState(null);
   const clickEdit = (recordId) => {
     setIsModalOpen(true);
-    let selectedRecord = data.find(i => {return i.id === recordId})
+    let selectedRecord = data.find(i => {
+      return i.id === recordId
+    })
     setRecord(selectedRecord);
   };
 
@@ -43,12 +46,12 @@ const MyComponent = () => {
   }
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
+                       setSelectedKeys,
+                       selectedKeys,
+                       confirm,
+                       clearFilters,
+                       close,
+                     }) => (
       <div
         style={{
           padding: 8,
@@ -72,7 +75,7 @@ const MyComponent = () => {
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined/>}
             size="small"
             style={{
               width: 90,
@@ -124,9 +127,9 @@ const MyComponent = () => {
     onFilter: (value, record) => {
       return record[dataIndex]
         ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
         : false;
     },
     onFilterDropdownOpenChange: (visible) => {
@@ -230,7 +233,7 @@ const MyComponent = () => {
   ];
 
   const expandedRowRender = (record) => (
-    <p style={{ margin: 0 }}>{record.description}</p>
+    <p style={{margin: 0}}>{record.description}</p>
   );
 
   const rowExpandable = (record) => record.name !== 'Not Expandable';
@@ -242,9 +245,9 @@ const MyComponent = () => {
     setIsModalOpen(true);
   };
   return (
-    <LayoutContentWrapper >
+    <LayoutContentWrapper>
       <LayoutContent>
-        <Button type="primary" onClick={handleAdd} >Add new Sale</Button>
+        <Button type="primary" onClick={handleAdd}>Add new Sale</Button>
         <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
           <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
         </Modal>
@@ -263,3 +266,5 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
+
+

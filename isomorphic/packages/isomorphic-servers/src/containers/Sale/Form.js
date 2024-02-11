@@ -22,11 +22,6 @@ const MyComponent = (props) => {
     },
   };
 
-
-  const handleChange = (e) => {
-    console.log(e);
-  };
-
   const onFinish = async (values) => {
     // Convert incomeUSD and expenseUSD to Float or set them to null if they're not valid numbers
     const priceUSD = parseFloat(values.priceUSD);
@@ -166,3 +161,4 @@ const MyComponent = (props) => {
 };
 
 export default MyComponent;
+
