@@ -176,12 +176,6 @@ router.post("/temporary-upload", async (req, res) => {
   res.json(record);
 });
 
-router.use("/product", productRouter);
-router.use("/cargo", cargoRouter);
-router.use("/roll", rollRouter);
-router.use("/sale", saleRouter);
-router.use("/client", clientRouter);
-router.use("/dashboard", dashboardRouter);
 
 router.use("/product", productRouter);
 router.use("/cargo", cargoRouter);

@@ -5,7 +5,7 @@ import { Table, Modal, Button, Checkbox, Spin} from 'antd';
 import axios from 'axios';
 import jwtConfig from '@iso/config/jwt.config';
 import axiosConfig from '../../library/helpers/axios';
-import FinancialTransactionForm from './Form';
+import CargoForm from './Form';
 import moment from 'moment';
 const MyComponent = () => {
   const [data, setData] = useState([]);
@@ -49,6 +49,11 @@ const MyComponent = () => {
       title: 'dateArrived',
       dataIndex: 'dateArrived',
       key: 'dateArrived',
+    },
+    {
+      title: 'feePackage',
+      dataIndex: 'feePackage',
+      key: 'feePackage',
     },
     {
       title: 'valueCargo',
@@ -109,8 +114,8 @@ const MyComponent = () => {
     <LayoutContentWrapper>
       <LayoutContent>
         <Button type="primary" onClick={handleAdd} >Add new</Button>
-        <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
-          <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
+        <Modal title="Cargo Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
+          <CargoForm setIsModalOpen={setIsModalOpen} record={record}></CargoForm>
         </Modal>
         <Table
           columns={columns}

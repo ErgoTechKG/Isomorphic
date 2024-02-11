@@ -1,168 +1,170 @@
-import React, { useState, useEffect } from "react";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Select, Space, DatePicker, InputNumber } from "antd";
+import React from "react";
+import {Input, Button,  Space,  Form, DatePicker, Switch} from "antd";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
 import axiosConfig from "../../library/helpers/axios";
 
-const App = () => {
+const MyComponent = (props) => {
   const [form] = Form.useForm();
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
+  };
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+
+
+  const handleChange = (e) => {
+    console.log(e);
+  };
+
   const onFinish = async (values) => {
-    console.log("Received values of form:", values);
-
-    const response = await axios.post(`${jwtConfig.fetchUrlSecret}cargo`,values, axiosConfig).catch(function (error) {
-      console.log(error)
-    });
-    if(response && response.data && response.status === 200) {
-      console.log('response', response)
-    }
-  };
-  const [prodcutsData, setProductsData] = useState([]);
-  const [prodcutData, setProductData] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${jwtConfig.fetchUrlSecret}product/all`,
+    console.log(props.recordId);
+    const feePackage = parseFloat(values.feePackage);
+    const valueCargo = parseFloat(values.valueCargo);
+    const logisticFee = parseFloat(values.logisticFee);
+    const newRoll = {...values, feePackage, valueCargo, logisticFee}
+    if (props.record && props.record.id) {
+      const response = await axios
+        .put(
+          `${jwtConfig.fetchUrlSecret}cargo?id=${props.record.id}`,
+          newRoll,
           axiosConfig
-        ); // Replace with your actual API endpoint
-       
-        setProductsData(response.data.map(i => ({value:i.id, 
-        label:`${i.codeChina}-${i.codeKent}-${i.codeKent0}`})));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        //setLoading(false); // Set loading to false after data is fetched (including error cases)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
       }
-    };
-
-    fetchData();
-  }, []);
-  
-  const handleChange = async (value) => {
-    console.log(value); // { value: "lucy", key: "lucy", label: "Lucy (101)" }
-
-    try {
-      const response = await axios.get(
-        `${jwtConfig.fetchUrlSecret}product?id=${value}`,
-        axiosConfig
-      ); // Replace with your actual API endpoint
-     console.log('product data', response.data)
-     setProductData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      //setLoading(false); // Set loading to false after data is fetched (including error cases)
+    } else {
+      const response = await axios
+        .post(
+          `${jwtConfig.fetchUrlSecret}cargo`,
+          newRoll,
+          axiosConfig
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+      if (response && response.data && response.status === 200) {
+        props.setIsModalOpen(false);
+      }
     }
+  }
+
+
+  const onReset = () => {
+    form.resetFields();
   };
 
-  return (
-    <Form
-      form={form}
-      name="dynamic_form_complex"
-      onFinish={onFinish}
-      style={{
-        maxWidth: 600,
-      }}
-      autoComplete="off"
-    >
-      <Form.Item
-        name="date"
-        label="Date"
-        rules={[
-          {
-            required: true,
-            message: "Missing Date",
-          },
-        ]}
-      >
-        <DatePicker />
-      </Form.Item>
-      <Form.Item
-        name="product"
-        label="Product"
-        rules={[
-          {
-            required: true,
-            message: "Missing Product",
-          },
-        ]}
-      >
-        <Select
-          showSearch
-          placeholder="Select a product"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          onChange={handleChange}
-          options={prodcutsData}
-        />
-      </Form.Item>
-      <Form.List name="rolls">
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map((field) => (
-              <Space key={field.key} align="baseline">
-                <Form.Item
-                  noStyle
-                  shouldUpdate={(prevValues, curValues) =>
-                    prevValues.amount !== curValues.amount ||
-                    prevValues.sights !== curValues.sights
-                  }
-                >
-                  {() => (
-                    <Form.Item
-                      {...field}
-                      label="Amount"
-                      name={[field.name, "amount"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing Amount",
-                        },
-                      ]}
-                    >
-                       <InputNumber />
-                    </Form.Item>
-                  )}
-                </Form.Item>
-                <Form.Item
-                  {...field}
-                  label="Color#"
-                  name={[field.name, "color"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Missing color",
-                    },
-                  ]}
-                >
-                  <InputNumber />
-                </Form.Item>
-                <MinusCircleOutlined onClick={() => remove(field.name)} />
-              </Space>
-            ))}
+  return(
+    <>
+      <Space style={{width: "100%"}} direction="vertical">
+        <Form
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          {...layout}
+        >
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Description"/>
+          </Form.Item>
+          <Form.Item
+            name="dateArrived"
+            label="Date Arrived"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker />
+          </Form.Item>
+          <Form.Item
+            name="dateSent"
+            label="Date Sent"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker />
+          </Form.Item>
+          <Form.Item
+            name="feePackage"
+            label="Fee Package"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Fee Package"/>
+          </Form.Item>
+          <Form.Item
+            name="valueCargo"
+            label="Value Cargo"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Value Cargo"/>
+          </Form.Item>
+          <Form.Item
+            name="logisticFee"
+            label="Logistic Fee"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Logistic Fee"/>
+          </Form.Item>
+          <Form.Item
+            name="isFullyRecieved"
+            label="Is Fully Received"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+            valuePropName="checked"
+          >
+            <Switch >is Fully Received</Switch>
+          </Form.Item>
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <Button htmlType="button" onClick={onReset}>
+              Reset
+            </Button>
+          </Form.Item>
+        </Form>
+      </Space>
+    </>
+  )
+}
 
-            <Form.Item>
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                block
-                icon={<PlusOutlined />}
-              >
-                Add rolls
-              </Button>
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
-export default App;
+export default MyComponent;
