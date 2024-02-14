@@ -23,7 +23,7 @@ model User {
   password  String
   role      UserRole @default(VISITOR)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   profile   Profile?
 }
 
@@ -65,7 +65,7 @@ model Product {
   priceHitory     PriceHistory[]
   imageURL        String[]
   createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  updatedAt       DateTime       @updatedAt @default(now())
   note            String?
   currentPrice    Float?         @default(0)
   isPluff         Boolean?       @default(false)
@@ -92,12 +92,15 @@ model Variables {
   name      String
   value     Float    @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Roll {
   id       Int     @id @default(autoincrement())
   kentCode String?
+  codeChina String?
+  nameChinese String?
+  nameRussian String?
   amount   Float?  @default(0)
   unit     String?
   rbg      String?
@@ -124,7 +127,7 @@ model Cargo {
 
 model Finance {
   id         Int              @id @default(autoincrement())
-  date       DateTime
+  date       DateTime @default(now())
   incomeUSD  Float?
   incomeSom  Float?
   expenseUSD Float?

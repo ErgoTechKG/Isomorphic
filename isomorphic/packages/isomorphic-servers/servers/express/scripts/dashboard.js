@@ -165,6 +165,7 @@ async function fetchProductsMap() {
     products.forEach((product) => {
       productsMap.set(product.codeKent, {
         nameChinese: product.nameChinese,
+        nameRussian: product.nameRussian,
         codeChina: product.codeChina,
       });
     });
@@ -190,6 +191,7 @@ async function getNamesAndCalculateSoldOutRatios() {
           total: 0,
           soldOut: 0,
           nameChinese: product.nameChinese,
+          nameRussian: product.nameRussian,
           codeChina: product.codeChina,
         };
       }
@@ -209,6 +211,7 @@ async function getNamesAndCalculateSoldOutRatios() {
         kentCode: kentCode,
         total: data.total,
         Chinesename: data.nameChinese,
+        Russianname: data.nameRussian,
         codeChina: data.codeChina,
         ratio: `${ratio.toFixed(2) * 100}%`,
       };
@@ -269,6 +272,7 @@ async function fetchProductNames(rollGroups) {
         },
         select: {
           nameChinese: true,
+          nameRussian: true,
           codeChina: true,
           // You may include other fields if needed
         },
@@ -276,6 +280,7 @@ async function fetchProductNames(rollGroups) {
 
       productNames[kentCode] = {
         count: rollGroups[kentCode],
+        nameRussian: product.nameRussian,
         nameChinese: product.nameChinese,
         codeChina: product.codeChina,
       };

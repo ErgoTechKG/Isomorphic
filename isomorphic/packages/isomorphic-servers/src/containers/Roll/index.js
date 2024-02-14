@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
-import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
-import LayoutContent from '@iso/components/utility/layoutContent';
+import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
+import LayoutContent from "@iso/components/utility/layoutContent";
 
 import Highlighter from "react-highlight-words";
-import axios from 'axios';
-import jwtConfig from '@iso/config/jwt.config';
-import axiosConfig from '../../library/helpers/axios';
+import axios from "axios";
+import jwtConfig from "@iso/config/jwt.config";
+import axiosConfig from "../../library/helpers/axios";
 const originData = [];
 for (let i = 0; i < 100; i++) {
   originData.push({
@@ -51,15 +51,12 @@ const EditableCell = ({
   );
 };
 const App = () => {
-
-
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  
+
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.id === editingKey;
   const edit = (record) => {
@@ -101,10 +98,26 @@ const App = () => {
       title: "id",
       dataIndex: "id",
       editable: false,
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: "kentCode",
       dataIndex: "kentCode",
+      editable: true,
+    },
+    {
+      title: "codeChina",
+      dataIndex: "codeChina",
+      editable: true,
+    },
+    {
+      title: "nameRussian",
+      dataIndex: "nameRussian",
+      editable: true,
+    },
+    {
+      title: "nameChinese",
+      dataIndex: "nameChinese",
       editable: true,
     },
     {
@@ -167,11 +180,34 @@ const App = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}roll/all`, axiosConfig); // Replace with your actual API endpoint
-        console.log('response', response)
-        setData(response.data);
+        const [rolls, products] = await Promise.all([
+          axios.get(`${jwtConfig.fetchUrlSecret}roll/all`, axiosConfig),
+          axios.get(`${jwtConfig.fetchUrlSecret}product/all`, axiosConfig),
+        ]);
+
+        // console.log("roll", rolls);
+        // console.log("products", products);
+
+        const updatedRolls = rolls.data.map((roll) => {
+          const product = products.data.find(
+            (product) => product.codeKent == roll.kentCode
+          );
+          if (product) {
+            const updatedRoll = {
+              ...roll,
+              codeChina: product.codeChina,
+              nameChinese: product.nameChinese,
+              nameRussian: product.nameRussian,
+            };
+            return updatedRoll;
+          }
+
+          return roll;
+        });
+
+        setData(updatedRolls);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
