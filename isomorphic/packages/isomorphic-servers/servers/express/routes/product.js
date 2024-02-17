@@ -181,6 +181,8 @@ router.get("/all", async (req, res) => {
     res.send(result);
   } catch (error) {
     console.error("Error retrieving products:", error);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
@@ -195,6 +197,8 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
@@ -211,6 +215,8 @@ router.put("/", async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
@@ -221,6 +227,8 @@ router.get("/generateCode", async (req, res) => {
     res.send(newProductID);
   } catch (err) {
     console.log("error", err);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
@@ -236,6 +244,8 @@ router.post("/generateCodeValidation", async (req, res) => {
     res.send("ok");
   } catch (err) {
     console.log("error", err);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 

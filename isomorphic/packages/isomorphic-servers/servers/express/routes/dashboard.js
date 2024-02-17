@@ -32,6 +32,8 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error("Error processing request:", error);
     res.status(500).send("Internal Server Error");
+  } finally {
+    await prisma.$disconnect();
   }
 });
 

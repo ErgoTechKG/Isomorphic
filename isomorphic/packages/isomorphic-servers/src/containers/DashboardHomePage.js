@@ -113,7 +113,7 @@ const MyComponent = React.memo(() => {
           `${jwtConfig.fetchUrlSecret}dashboard`,
           axiosConfig
         ); // Replace with your actual API endpoint
-
+        console.log('response.data.', response.data)
         const sale = response.data.finances.find((i) => i.cat == "SALES")._sum;
 
         const receiptTotal = total(sale);
@@ -161,7 +161,7 @@ const MyComponent = React.memo(() => {
         // console.log("cost pie CAHART", JSON.stringify(shopCostDetails));
         // console.log("investTotal", investTotal);
         // console.log("cargoTotal", cargoTotal);
-
+        console.log('response.data', response.data)
         const totalSaleAccount = response.data.profits.reduce(
           (acc, curr) => acc + parseFloat(curr.saleAmount),
           0

@@ -7,10 +7,15 @@ const router = express.Router();
 
 // Define routes for /api/product here
 router.get("/all", async (req, res) => {
-  const rolls = await prisma.roll.findMany();
-  res.send(rolls);
+  try {
+    const rolls = await prisma.roll.findMany();
+    res.send(rolls);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
-
 
 // // Define routes for /api/product here
 // router.get("/bulk", async (req, res) => {
@@ -25,57 +30,68 @@ router.get("/all", async (req, res) => {
 
 // Define routes for /api/product here
 router.delete("/", async (req, res) => {
-  console.log(req.query)
-  const deletedProduct = await prisma.product.delete({
-    where: {
-      id: parseInt(req.query.id),
-    },
-  });
+  try {
+    console.log(req.query);
+    const deletedProduct = await prisma.product.delete({
+      where: {
+        id: parseInt(req.query.id),
+      },
+    });
 
-  // Step 2: Fetch all products after deletion
-  const allProducts = await prisma.product.findMany();
+    // Step 2: Fetch all products after deletion
+    const allProducts = await prisma.product.findMany();
 
-  res.send(allProducts);
+    res.send(allProducts);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
 
-router.get("/all", async (req, res) => {
-  
-});
+router.get("/all", async (req, res) => {});
 
 router.post("/", async (req, res) => {
+  try {
+    const cargo = await prisma.cargo.upsert({
+      where: { dateArrived: req.body.date },
+      update: {}, // No update operation since we just want to fetch the ID if it exists
+      create: { dateArrived: req.body.date },
+    });
 
-  console.log('received from frontend', req.body,req.query)
-  const cargo = await prisma.cargo.upsert({
-    where: { dateArrived: req.body.date },
-    update: {}, // No update operation since we just want to fetch the ID if it exists
-    create: { dateArrived: req.body.date  }
-  });
-
-  const rolls = await prisma.cargo.create({
-    data: {
-      name: 'Alice',
-      email: 'alice@example.com',
-    },
-  })
-  console.log(cargo.id);
-  res.send("post product");
-
+    const rolls = await prisma.cargo.create({
+      data: {
+        name: "Alice",
+        email: "alice@example.com",
+      },
+    });
+    console.log(cargo.id);
+    res.send("post product");
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
-
 
 router.put("/", async (req, res) => {
-  console.log('req.body', req.body)
-  const record = await prisma.roll.update({
-    where: {
-      id: req.body.id  // Assuming id is an integer; adapt as needed
-    },
-    data: req.body
-  });
+  try {
+    console.log("req.body", req.body);
+    const record = await prisma.roll.update({
+      where: {
+        id: req.body.id, // Assuming id is an integer; adapt as needed
+      },
+      data: req.body,
+    });
 
-  const rolls = await prisma.roll.findMany();
-  res.send(rolls);
+    const rolls = await prisma.roll.findMany();
+    res.send(rolls);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
-
 
 // Export the router
 export default router;

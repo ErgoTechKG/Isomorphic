@@ -244,6 +244,7 @@ async function fetchNonSoldRolls() {
 }
 
 async function groupRollsByKentCode(rolls) {
+  console.log("rolls", rolls);
   try {
     const rollGroups = rolls.reduce((acc, roll) => {
       acc[roll.kentCode] = (acc[roll.kentCode] || 0) + 1;
@@ -289,11 +290,15 @@ async function fetchProductNames(rollGroups) {
   }
 }
 async function analyzeNonSoldRolls() {
-  const [nonSoldRolls, groupedRolls, productDetails] = await Promise.all([
-    fetchNonSoldRolls(),
-    groupRollsByKentCode(nonSoldRolls),
-    fetchProductNames(groupedRolls),
-  ]);
+  // Fetch non-sold rolls
+  const nonSoldRolls = await fetchNonSoldRolls();
+
+  // Group non-sold rolls by Kent Code
+  const groupedRolls = await groupRollsByKentCode(nonSoldRolls);
+
+  // Fetch product names using the grouped rolls
+  const productDetails = await fetchProductNames(groupedRolls);
+  console.log(nonSoldRolls, groupedRolls, productDetails)
   return productDetails;
 }
 
