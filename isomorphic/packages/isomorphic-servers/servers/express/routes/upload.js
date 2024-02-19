@@ -35,7 +35,6 @@ router.post('/', upload.single('file'), async (req, res) => {
       fileName: uploadedFile.originalname,
       data: req.file.buffer,
     });
-    console.log('done', fileInfo.data)
     res.status(200).json(fileInfo.data);
   } catch (error) {
     console.error('Error uploading file to Backblaze B2:', error);
@@ -45,7 +44,6 @@ router.post('/', upload.single('file'), async (req, res) => {
 
 router.delete('/',  async (req, res) => {
   const deleteFile = req;
-  console.log('delete, req', req.body, req.query)
   try {
 
     const response = await b2.deleteFileVersion(req.query);

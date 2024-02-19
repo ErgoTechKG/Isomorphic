@@ -8,32 +8,49 @@ const router = express.Router();
 
 // Define routes for /api/product here
 router.get("/", async (req, res) => {
-  const idInt = parseInt(req.query.id);
-  console.log(req.query);
-  const result = await prisma.client.findUnique({
-    id: idInt,
-  });
-  res.send(result);
+  try {
+    const idInt = parseInt(req.query.id);
+    console.log(req.query);
+    const result = await prisma.client.findUnique({
+      id: idInt,
+    });
+    res.send(result);
+  } catch (error) {
+    console.error("Error calculating profits:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
 
 // Define routes for /api/product here
 router.delete("/", async (req, res) => {
-  console.log(req.query);
-  const deletedClient = await prisma.client.delete({
-    where: {
-      id: parseInt(req.query.id),
-    },
-  });
+  try {
+    const deletedClient = await prisma.client.delete({
+      where: {
+        id: parseInt(req.query.id),
+      },
+    });
 
-  // Step 2: Fetch all products after deletion
-  const allClients = await prisma.client.findMany();
+    // Step 2: Fetch all products after deletion
+    const allClients = await prisma.client.findMany();
 
-  res.send(allClients);
+    res.send(allClients);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
 
 router.get("/all", async (req, res) => {
-  const allClients = await prisma.client.findMany();
-  res.send(allClients);
+  try {
+    const allClients = await prisma.client.findMany();
+    res.send(allClients);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -51,21 +68,25 @@ router.post("/", async (req, res) => {
     res.json(record);
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      error: "An error occurred while fetching Client records.",
-    });
+  } finally {
+    await prisma.$disconnect();
   }
 });
 
 router.put("/", async (req, res) => {
-  console.log("req.body", req.body);
-  const record = await prisma.client.update({
-    where: {
-      id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
-    },
-    data: req.body,
-  });
-  res.send(record);
+  try {
+    const record = await prisma.client.update({
+      where: {
+        id: parseInt(req.query.id), // Assuming id is an integer; adapt as needed
+      },
+      data: req.body,
+    });
+    res.send(record);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 });
 
 // Export the router
