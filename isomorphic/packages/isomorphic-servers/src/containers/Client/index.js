@@ -82,11 +82,13 @@ const MyComponent = () => {
     },
   ];
 
-  const expandedRowRender = (record) => (
-    <p style={{ margin: 0 }}>{record.description}</p>
-  );
+  //   const expandedRowRender = (record) => (
+  //     <p style={{ margin: 0 }}>
+  //       {record.description != null || "" ? record.description : "No description"}
+  //     </p>
+  //   );
 
-  const rowExpandable = (record) => record.name !== "Not Expandable";
+  //   const rowExpandable = (record) => record.name !== "Not Expandable";
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -113,11 +115,11 @@ const MyComponent = () => {
         </Modal>
         <Table
           columns={columns}
-          rowKey={(record) => record.id}
-          expandable={{
-            expandedRowRender,
-            rowExpandable,
-          }}
+          //   rowKey={(record) => record.id}
+          //   expandable={{
+          //     expandedRowRender,
+          //     rowExpandable,
+          //   }}
           dataSource={data}
         />
       </LayoutContent>

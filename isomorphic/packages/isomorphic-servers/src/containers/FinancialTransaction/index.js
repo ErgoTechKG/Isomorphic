@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import LayoutContentWrapper from '@iso/components/utility/layoutWrapper';
-import LayoutContent from '@iso/components/utility/layoutContent';
-import {Table, Modal, Button} from 'antd';
-import axios from 'axios';
-import jwtConfig from '@iso/config/jwt.config';
-import axiosConfig from '../../library/helpers/axios';
-import FinancialTransactionForm from './FinancialTransaction2';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
+import LayoutContent from "@iso/components/utility/layoutContent";
+import { Table, Modal, Button } from "antd";
+import axios from "axios";
+import jwtConfig from "@iso/config/jwt.config";
+import axiosConfig from "../../library/helpers/axios";
+import FinancialTransactionForm from "./FinancialTransaction2";
+import moment from "moment";
 
 const MyComponent = () => {
   const [data, setData] = useState([]);
@@ -14,30 +14,35 @@ const MyComponent = () => {
   const [record, setRecord] = useState(null);
   const clickEdit = (recordId) => {
     setIsModalOpen(true);
-    let selectedRecord = data.find(i => {
-      return i.id === recordId
-    })
+    let selectedRecord = data.find((i) => {
+      return i.id === recordId;
+    });
     setRecord(selectedRecord);
   };
 
   const handleDeleteFinance = async (recordId) => {
     try {
-      const result = await axios.delete(`${jwtConfig.fetchUrlSecret}financialTransactions?id=${recordId}`,
-        axiosConfig)
+      const result = await axios.delete(
+        `${jwtConfig.fetchUrlSecret}financialTransactions?id=${recordId}`,
+        axiosConfig
+      );
       setData(result.data);
     } catch (err) {
       console.log("Fetching data error: ", err);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${jwtConfig.fetchUrlSecret}financialTransactions/all`, axiosConfig); // Replace with your actual API endpoint
-        console.log('data', response.data)
+        const response = await axios.get(
+          `${jwtConfig.fetchUrlSecret}financialTransactions/all`,
+          axiosConfig
+        ); // Replace with your actual API endpoint
+        console.log("data", response.data);
         setData(response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -46,71 +51,91 @@ const MyComponent = () => {
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: "date",
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
       render: (record) => {
-        return moment(record.date).format('MM/DD/YYYY')
-      }
+        return moment(record.date).format("MM/DD/YYYY");
+      },
     },
     {
-      title: 'incomeUSD',
+      title: "incomeUSD",
       render: (record) => {
-        return record.incomeUSD
-      }
+        return record.incomeUSD;
+      },
     },
     {
-      title: 'incomeSom',
+      title: "incomeSom",
       render: (record) => {
-        return record.incomeSom
-      }
+        return record.incomeSom;
+      },
     },
     {
-      title: 'expenseUSD',
+      title: "expenseUSD",
       render: (record) => {
-        return record.expenseUSD
-      }
+        return record.expenseUSD;
+      },
     },
     {
-      title: 'expenseSom',
+      title: "expenseSom",
       render: (record) => {
-        return record.expenseSom
-      }
+        return record.expenseSom;
+      },
     },
     {
-      title: 'Action',
-      dataIndex: '',
-      key: 'action',
-      render: (record) =>
+      title: "Action",
+      dataIndex: "",
+      key: "action",
+      render: (record) => (
         <>
-          <Button id={record.id} onClick={() => clickEdit(record.id)}>Edit</Button>
-          <Button id={record.id} onClick={() => handleDeleteFinance(record.id)}>Delete</Button>
-        </>,
+          <Button id={record.id} onClick={() => clickEdit(record.id)}>
+            Edit
+          </Button>
+          <Button id={record.id} onClick={() => handleDeleteFinance(record.id)}>
+            Delete
+          </Button>
+        </>
+      ),
     },
   ];
 
   const expandedRowRender = (record) => (
-    <p style={{margin: 0}}>{record.note}</p>
+    <p style={{ margin: 0 }}>
+      {record.note !== null || record.note !== ""
+        ? record.note
+        : "No description"}
+    </p>
   );
 
-  const rowExpandable = (record) => record.name !== 'Not Expandable';
+  const rowExpandable = (record) => record.name !== "Not Expandable";
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const handleAdd = () => {
-    setRecord(null)
+    setRecord(null);
     setIsModalOpen(true);
   };
   return (
     <LayoutContentWrapper>
       <LayoutContent>
-        <Button type="primary" onClick={handleAdd}>Add new</Button>
-        <Modal title="Financial Transaction Form" open={isModalOpen} onCancel={handleCancel} footer={null}>
-          <FinancialTransactionForm setIsModalOpen={setIsModalOpen} record={record}></FinancialTransactionForm>
+        <Button type="primary" onClick={handleAdd}>
+          Add new
+        </Button>
+        <Modal
+          title="Financial Transaction Form"
+          open={isModalOpen}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <FinancialTransactionForm
+            setIsModalOpen={setIsModalOpen}
+            record={record}
+            records={data}
+          ></FinancialTransactionForm>
         </Modal>
         <Table
           columns={columns}

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Table,
+  Typography,
+} from "antd";
 import LayoutContentWrapper from "@iso/components/utility/layoutWrapper";
 import LayoutContent from "@iso/components/utility/layoutContent";
-
+import FinancialTransactionForm from "./Form";
 import Highlighter from "react-highlight-words";
 import axios from "axios";
 import jwtConfig from "@iso/config/jwt.config";
@@ -68,6 +77,16 @@ const App = () => {
     });
     setEditingKey(record.id);
   };
+
+  const expandedRowRender = (record) => (
+    <p style={{ margin: 0 }}>
+      {record.note != null || record.note !== ""
+        ? record.note
+        : "No description"}
+    </p>
+  );
+
+  const rowExpandable = (record) => record.name !== "Not Expandable";
   const cancel = () => {
     setEditingKey("");
   };
@@ -216,9 +235,32 @@ const App = () => {
     fetchData();
   }, [isModalOpen]);
 
+  //   const handleCancel = () => {
+  //     setIsModalOpen(false);
+  //   };
+
+  //   const handleAdd = () => {
+  //     // setRecord(null);
+  //     setIsModalOpen(true);
+  //   };
+
   return (
     <LayoutContentWrapper>
       <LayoutContent>
+        {/* <Button type="primary" onClick={handleAdd}>
+          Add new
+        </Button>
+        <Modal
+          title="Financial Transaction Form"
+          open={isModalOpen}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <FinancialTransactionForm
+            setIsModalOpen={setIsModalOpen}
+            // record={record}
+          ></FinancialTransactionForm>
+        </Modal> */}
         <Form form={form} component={false}>
           <Table
             components={{
@@ -233,6 +275,11 @@ const App = () => {
             pagination={{
               onChange: cancel,
             }}
+            // rowKey={(record) => record.id}
+            // expandable={{
+            //   expandedRowRender,
+            //   rowExpandable,
+            // }}
           />
         </Form>
       </LayoutContent>
