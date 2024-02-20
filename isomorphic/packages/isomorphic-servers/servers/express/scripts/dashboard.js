@@ -296,14 +296,13 @@ async function fetchProductNames(rollGroups) {
 }
 async function analyzeNonSoldRolls() {
   // Fetch non-sold rolls
-  const nonSoldRolls = await fetchNonSoldRolls();
+  const [nonSoldRolls, groupedRolls, productDetails] = await Promise.all([
+    fetchNonSoldRolls(),
+    groupRollsByKentCode(nonSoldRolls), // Group non-sold rolls by Kent Code
+    fetchProductNames(groupedRolls), // Fetch product names using the grouped rolls
+  ]);
 
-  // Group non-sold rolls by Kent Code
-  const groupedRolls = await groupRollsByKentCode(nonSoldRolls);
-
-  // Fetch product names using the grouped rolls
-  const productDetails = await fetchProductNames(groupedRolls);
-  console.log(nonSoldRolls, groupedRolls, productDetails)
+  console.log(nonSoldRolls, groupedRolls, productDetails);
   return productDetails;
 }
 
