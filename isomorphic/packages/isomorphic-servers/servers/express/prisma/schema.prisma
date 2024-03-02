@@ -73,7 +73,7 @@ model Product {
   isKentSample    Boolean?       @default(false)
   staff           String?
   client          String?
-  description     String?        @db.VarChar(1000)
+  description     String?        
   isPopular       Boolean?       @default(false)
   priceUpdated    Float?         @default(0)
 }

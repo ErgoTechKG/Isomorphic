@@ -24,7 +24,7 @@ async function getFinances() {
   //console.log('financeData', financeData);
 }
 
-// // Example usage
+// Example usage
 // getFinances()
 //   .then((data) => {
 //     console.log(data);

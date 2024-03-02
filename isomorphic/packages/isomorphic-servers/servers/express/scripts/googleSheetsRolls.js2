@@ -11,8 +11,8 @@ async function getSheetData() {
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
 
-  const spreadsheetId = "1Rb_IIGTLAlDpuRu8Eg8gcpFlJyxDbjDcC0JN7vHo4KI";
-  const range = "2!A1:G";
+  const spreadsheetId = "1kgDDTznP_oBNYfntAEt8_HLS07sXP20rVS5ZyuERu9k";
+  const range = "19!A1:G";
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
@@ -41,9 +41,9 @@ async function getCargoFromSheet() {
         amount: parseFloat(item[1]), // Assuming amount is a float
         rbg: item[2], // Assuming rbg is a typo for rgb
         unit: item[3],
-        cargoId: parseInt(item[4]), // Assuming cargoId is an integer
-        cost: item[5]?parseInt(item[5]):null,
-        saleId: parseInt(item[6])
+        cargoId: 104,
+        cost: parseFloat(item[5]),
+        saleId: item[4]?parseInt(item[4]):null,
       }));
       
   
